@@ -60,6 +60,7 @@ export default {
       schema: this.schema,
       values: this.values,
       formId: this.formId,
+      isDesign: this.isDesign,
       fieldErrors: this.fieldErrors,
     };
   },
@@ -67,6 +68,7 @@ export default {
     schema: { type: Object, require: true }, // 表单的字段描述
     values: { type: Object, default: () => ({}) }, // 表单的值
     form: { type: Object, default: () => ({}) }, // 表单布局
+    isDesign: { type: Boolean, default: false }, // 是否是设计模式
   },
   data() {
     return {

@@ -5,13 +5,13 @@
 </template>
 
 <script>
-import Layout from "../layout";
-
 export default {
   name: "default",
-  components: [Layout],
   props: {
     fields: { type: Array, default: () => [] },
+  },
+    beforeCreate: function () {
+    this.$options.components.Layout = () => import("../layout.vue");
   },
 };
 </script>

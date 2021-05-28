@@ -31,15 +31,12 @@ export default {
     this.$options.components.Layout = () => import("../layout.vue");
   },
   methods: {
-    clickTab() {
-      console.log(123);
-    },
+    clickTab() {},
   },
 };
 </script>
 
 <style lang="scss">
 .tab-wrapper {
-
 }
 </style>

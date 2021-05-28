@@ -222,6 +222,51 @@ export default {
             step: 100,
           },
           {
+            widget: "grid",
+            title: "栅格布局",
+            isClicked: false,
+            fields: [
+              [
+                {
+                  name: "switch",
+                  disabled: false,
+                  width: 40, // 宽度
+                  activeColor: "#13ce66", // 激活背景颜色
+                  inactiveColor: "#ff4949", // 取消背景颜色
+                  activeText: "路飞", // 激活文本
+                  inactiveText: "索隆", // 取消文本
+                  activeValue: true, // 打开的值，支持Boolean, String或Number
+                  inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                  activeIconClass: "",
+                  inactiveIconClass: "",
+                },
+                {
+                  name: "slider",
+                  clearable: true,
+                  minimum: 0,
+                  maximum: 1000,
+                  step: 100,
+                },
+                {
+                  name: "slider",
+                  clearable: true,
+                  minimum: 0,
+                  maximum: 1000,
+                  step: 100,
+                },
+              ],
+              [
+                {
+                  name: "slider",
+                  clearable: true,
+                  minimum: 0,
+                  maximum: 1000,
+                  step: 100,
+                },
+              ],
+            ],
+          },
+          {
             widget: "tabs",
             title: "网络配置",
             enabled: true,
