@@ -24,7 +24,7 @@
       <!-- 分组 -->
       <div v-else>
         <el-option-group
-          v-for="group in enumDict"
+          v-for="group in field.options"
           :key="group.label"
           :label="group.label"
         >

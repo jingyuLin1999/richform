@@ -1,5 +1,6 @@
 <template>
-  <div :class="['grid-layout', form.grid ? 'grid-layout-border ' : '']">
+  <div :class="['grid-layout', form.grid ? 'grid-layout-border' : '']">
+    <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
     <div
       class="grid-column"
       v-for="(columnItem, index) in gridItem.fields"
@@ -7,13 +8,38 @@
     >
       <layout :layout="columnItem"></layout>
     </div>
+    <!--拖拽-->
+    <span
+      class="design-draggable design-handle-move"
+      v-if="isDesign && gridItem.isClicked"
+    >
+      <i class="el-icon-rank design-handle-move"></i>
+    </span>
+    <!--复制-->
+    <span
+      class="design-copy"
+      @click="onCopyItem(schema)"
+      v-if="isDesign && gridItem.isClicked"
+    >
+      <i class="el-icon-document-copy"></i>
+    </span>
+    <!--删除-->
+    <span
+      class="design-delete"
+      @click="onDeleteItem(schema)"
+      v-if="isDesign && gridItem.isClicked"
+    >
+      <i class="el-icon-delete"></i>
+    </span>
   </div>
 </template>
 
 <script>
+import DesignMixin from "../utils/designMixin";
 export default {
   name: "grid-layout",
   inject: ["form"],
+  mixins: [DesignMixin],
   props: {
     gridItem: { type: Object, default: () => ({}) },
   },
@@ -28,14 +54,31 @@ export default {
 .grid-layout {
   display: flex;
   margin-top: 5px;
+  position: relative;
   box-sizing: border-box;
-  padding: 5px;
+  .drag-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
   .grid-column {
     width: 100%;
-    margin-right: -4px;
+    min-height: 62px;
+    padding: 7px;
+    box-sizing: border-box;
+  }
+  .grid-column:not(:last-child) {
+    border-right: 1px solid $form-border-color;
+  }
+  .grid-column:last-child {
+    border-right: 1px solid $form-border-color;
   }
 }
 .grid-layout-border {
+  box-sizing: border-box;
   border: 1px solid $form-border-color;
+  border-right: 0;
 }
 </style>

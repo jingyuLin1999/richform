@@ -23,10 +23,7 @@ layout下的每个obj存放每个子组件的属性
 表单设计器
 -->
 <template>
-  <form
-    :class="['richform-component', form.border ? 'form-border' : '']"
-    :id="formId"
-  >
+  <form :class="['richform', form.border ? 'form-border' : '']" :id="formId">
     <perfect-scrollbar>
       <!-- 增加一些按钮 -->
       <auto-layout v-if="isAutoLayout" :schema="schema"></auto-layout>
@@ -68,12 +65,13 @@ export default {
     schema: { type: Object, require: true }, // 表单的字段描述
     values: { type: Object, default: () => ({}) }, // 表单的值
     form: { type: Object, default: () => ({}) }, // 表单布局
-    isDesign: { type: Boolean, default: false }, // 是否是设计模式
+    isDesign: { type: Boolean, default: true }, // 是否是设计模式
   },
   data() {
     return {
       formId: Math.random().toString(15).slice(2, 15),
       fieldErrors: {}, // 字段错误信息收集
+      lastClicked: {}, // 记录最后的点击事件
     };
   },
   mounted() {
@@ -92,12 +90,23 @@ export default {
     },
     _registerEvents() {
       eventbus.$on(`${this.formId}:field:change`, this.onFieldValueChange);
+      eventbus.$on(`${this.formId}:design:clicked`, this.onDesignClicked);
     },
     _unregisterEvents() {
       eventbus.$off(`${this.formId}:field:change`);
     },
     onFieldValueChange(fieldName, value) {
       this.$set(this.values, fieldName, value);
+    },
+    onDesignClicked(clicked) {
+      if (clicked == this.lastClicked) clicked.isClicked = !clicked.isClicked;
+      else {
+        // 取消上次出发的点击事件
+        this.$set(this.lastClicked, "isClicked", false);
+        // 设置当前点击事件
+        this.$set(clicked, "isClicked", true);
+      }
+      this.lastClicked = clicked;
     },
   },
   beforeDestroy() {
@@ -108,7 +117,8 @@ export default {
 
 <style lang="scss">
 @import "./vars.scss";
-.richform-component {
+@import "./utils/design.scss";
+.richform {
   height: 100%;
   font-size: $form-font-size;
   padding: 10px;

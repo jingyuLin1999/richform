@@ -1,8 +1,9 @@
 import eventbus from "./eventbus";
 export default {
+    inject: ["formId", "isDesign"],
     data() {
         return {
-            designValid: true
+            designValid: true,
         }
     },
     created() {
@@ -13,7 +14,7 @@ export default {
     methods: {
         emit() {
             if (arguments.length > 0) {
-                arguments[0] = `${this.form.id}:${arguments[0]}`;
+                arguments[0] = `${this.formId}:${arguments[0]}`;
                 eventbus.$emit(...arguments);
             }
         },
@@ -38,22 +39,18 @@ export default {
         },
         // 项目点击事件
         onClickedItem(item) {
-            if (!this.isDesignModel(item)) return;
+            if (!this.isDesign) return;
             this.emit("design:clicked", item);
         },
         // 项目删除动作
         onDeleteItem(item) {
-            if (!this.isDesignModel(item)) return;
+            if (!this.isDesign) return;
             this.emit("design:deleteItem", item.designId);
         },
         // 复制
         onCopyItem(item) {
-            if (!this.isDesignModel(item)) return;
+            if (!this.isDesign) return;
             this.emit("design:copyItem", item);
-        },
-        // 判断是否未设计模式的item
-        isDesignModel(item) {
-            return Object.keys(item).includes("designId") ? true : false;
         },
         // 拖拽参数配置
         getDragOptions() {
@@ -61,12 +58,12 @@ export default {
                 group: "formdesign", // 两个draggable要相互拖拽必须相同
                 sort: true, // 是否允许排序
                 disabled: false,
-                animation: 200, // 过度
+                animation: 100, // 过度
                 easing: "cubic-bezier(1, 0, 0, 1)", // 动画效果
-                // handle: ".design-handle-move", // 可拖拽类，用于限定区域
-                // dragClass: "design-sortable-drag", // 排序背景显示
+                handle: ".design-handle-move", // 可拖拽类，用于限定区域
+                dragClass: "design-sortable-drag", // 排序背景显示
                 ghostClass: "design-draggable-ghost",
-                // emptyInsertThreshold: 600, // 首个拖进来占位
+                emptyInsertThreshold: 80, // 首个拖进来占位
                 invertSwap: false,
                 direction: 'vertical',
                 swapThreshold: 0.5,

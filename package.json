@@ -11,8 +11,10 @@
     "ajv-i18n": "^4.0.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
+    "jquery": "^3.6.0",
     "ramda": "^0.27.1",
     "vue": "^2.6.11",
+    "vue-router": "^3.5.1",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3"
   },

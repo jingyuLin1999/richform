@@ -9,6 +9,7 @@
         form.labelInline ? 'label-inline' : '',
         form.grid ? 'field-border' : '',
       ]"
+      @click="onClickedItem(field)"
     >
       <div
         :class="[
@@ -19,7 +20,7 @@
         ]"
         :style="{ width: form.labelWidth }"
       >
-        <div class="label-title">{{ field.title  || fieldSchema.title }}</div>
+        <div class="label-title">{{ fieldTitle }}</div>
         <span class="label-suffix" v-if="form.labelSuffix">:</span>
         <el-tooltip
           v-if="fieldSchema.description"
@@ -52,17 +53,41 @@
         </div>
       </div>
     </div>
-    <!-- 设计时的一些按钮 -->
-    <div class="design-tools"></div>
+    <!--拖拽-->
+    <span
+      class="design-draggable design-handle-move"
+      v-if="isDesign && field.isClicked"
+    >
+      <i class="el-icon-rank design-handle-move"></i>
+    </span>
+    <!--复制-->
+    <span
+      class="design-copy"
+      @click="onCopyItem(schema)"
+      v-if="isDesign && field.isClicked"
+    >
+      <i class="el-icon-document-copy"></i>
+    </span>
+    <!--删除-->
+    <span
+      class="design-delete"
+      @click="onDeleteItem(schema)"
+      v-if="isDesign && field.isClicked"
+    >
+      <i class="el-icon-delete"></i>
+    </span>
   </div>
 </template>
 
 <script>
-import AJV, { localize as localizeErrors } from "./utils/validator";
 import eventbus from "./utils/eventbus";
+import DesignMixin from "./utils/designMixin";
+import AJV, { localize as localizeErrors } from "./utils/validator";
+
 export default {
   name: "field",
-  inject: ["values", "schema", "formId", "fieldErrors", "form"],
+  inject: ["values", "schema", "fieldErrors", "form", "isDesign"],
+  mixins: [DesignMixin],
   props: {
     field: { type: Object, default: () => ({}) }, // 布局字段
   },
@@ -77,12 +102,16 @@ export default {
   computed: {
     asyncComponent() {
       let widget = this.field.widget || this.fieldSchema.widget;
-      if(!widget) return;
+      if (!widget) return;
       return () => ({
         component: import(`./widgets/${widget}`),
         delay: 200,
         timeout: 3000,
       });
+    },
+    fieldTitle() {
+      this.pickSchema();
+      return this.field.title || this.fieldSchema.title;
     },
   },
   methods: {
