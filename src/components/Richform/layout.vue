@@ -60,6 +60,9 @@ export default {
 <style lang="scss">
 @import "./vars.scss";
 .layout {
+  .active-design {
+    border: 3px solid #409eff;
+  }
   padding-right: 0;
   > .field-border-top:first-child {
     border-top: 1px solid $form-border-color;

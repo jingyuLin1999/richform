@@ -22,7 +22,12 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 <template>
   <div class="rich-form-app">
     <!-- {{ form.layout }} -->
-    <RichForm :schema="schema" :form="form" :values="values"></RichForm>
+    <RichForm
+      :schema="schema"
+      :form="form"
+      :values="values"
+      :isDesign="true"
+    ></RichForm>
     <textarea v-model="values.select"></textarea>
   </div>
 </template>
@@ -80,7 +85,7 @@ export default {
             widget: "switch",
           },
           slider: {
-            type: "string",
+            type: "number",
             title: "滑块",
             widget: "slider",
             description: "滑块测试",
@@ -102,6 +107,11 @@ export default {
               },
             },
           },
+          transfer: {
+            title: "穿梭框",
+            widget: "transfer",
+            type: "array",
+          },
         },
       },
       values: {
@@ -110,9 +120,9 @@ export default {
       },
       form: {
         border: true, // 显示边框
-        grid: true, // 表单内部栅栏
+        grid: false, // 表单内部栅栏
         labelSuffix: true, // 字段标题后缀内容，默认' : '
-        labelWidth: "120px", // 标签宽度,默认50px
+        labelWidth: "100px", // 标签宽度,默认50px
         validator: "input", // submit
         labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
         labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
@@ -222,47 +232,61 @@ export default {
             step: 100,
           },
           {
+            name: "transfer",
+            options: [
+              {
+                key: 1,
+                label: `备选项1`,
+              },
+              {
+                key: 2,
+                label: `备选项2`,
+              },
+            ],
+          },
+          {
             widget: "grid",
             title: "栅格布局",
+            showTitle: true,
             isClicked: false,
             fields: [
               [
-                // {
-                //   name: "switch",
-                //   disabled: false,
-                //   width: 40, // 宽度
-                //   activeColor: "#13ce66", // 激活背景颜色
-                //   inactiveColor: "#ff4949", // 取消背景颜色
-                //   activeText: "路飞", // 激活文本
-                //   inactiveText: "索隆", // 取消文本
-                //   activeValue: true, // 打开的值，支持Boolean, String或Number
-                //   inactiveValue: false, // 关闭的值，支持Boolean, String或Number
-                //   activeIconClass: "",
-                //   inactiveIconClass: "",
-                // },
-                // {
-                //   name: "slider",
-                //   clearable: true,
-                //   minimum: 0,
-                //   maximum: 1000,
-                //   step: 100,
-                // },
-                // {
-                //   name: "slider",
-                //   clearable: true,
-                //   minimum: 0,
-                //   maximum: 1000,
-                //   step: 100,
-                // },
+                {
+                  name: "switch",
+                  disabled: false,
+                  width: 40, // 宽度
+                  activeColor: "#13ce66", // 激活背景颜色
+                  inactiveColor: "#ff4949", // 取消背景颜色
+                  activeText: "路飞", // 激活文本
+                  inactiveText: "索隆", // 取消文本
+                  activeValue: true, // 打开的值，支持Boolean, String或Number
+                  inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                  activeIconClass: "",
+                  inactiveIconClass: "",
+                },
+                {
+                  name: "slider",
+                  clearable: true,
+                  minimum: 0,
+                  maximum: 1000,
+                  step: 100,
+                },
+                {
+                  name: "slider",
+                  clearable: true,
+                  minimum: 0,
+                  maximum: 1000,
+                  step: 100,
+                },
               ],
               [
-                // {
-                //   name: "slider",
-                //   clearable: true,
-                //   minimum: 0,
-                //   maximum: 1000,
-                //   step: 100,
-                // },
+                {
+                  name: "slider",
+                  clearable: true,
+                  minimum: 0,
+                  maximum: 1000,
+                  step: 100,
+                },
               ],
               [],
             ],

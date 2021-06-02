@@ -32,7 +32,7 @@ export default {
         showPassword: false, // 密码框
         prefixIcon: "", // 当type等于text有效。前置图标 el-icon-search
         suffixIcon: "", // 当type等于text有效。后置图标 el-icon-date
-        rows: 2, // 当type等于textarea有效
+        rows: 4, // 当type等于textarea有效
         autosize: true, // 当type等于textarea有效。根据内容自动设置高度，也可接受一个对象 { minRows: 2, maxRows: 4}
         prepend: "", // 当type等于text有效。
         append: "", // 当type等于text有效。

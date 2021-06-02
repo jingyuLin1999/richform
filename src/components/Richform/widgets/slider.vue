@@ -1,22 +1,23 @@
 <template>
   <!--     :format-tooltip="formatTooltip" -->
-  <el-slider
-    class="widget-slider"
-    v-model="value"
-    :disabled="field.disabled"
-    :show-tooltip="field.showTooltip"
-    :min="field.minimum"
-    :max="field.maximum"
-    :step="field.step"
-    :height="field.height"
-    :vertical="field.vertical"
-    :show-stops="field.showStop"
-    :show-input="field.showInput"
-    :input-size="field.inputSize"
-    :show-input-controls="field.showInputControls"
-    :range="field.showRange"
-    :marks="field.marks"
-  ></el-slider>
+  <div class="widget-slider">
+    <el-slider
+      v-model="value"
+      :disabled="field.disabled"
+      :show-tooltip="field.showTooltip"
+      :min="field.minimum"
+      :max="field.maximum"
+      :step="field.step"
+      :height="field.height"
+      :vertical="field.vertical"
+      :show-stops="field.showStop"
+      :show-input="field.showInput"
+      :input-size="field.inputSize"
+      :show-input-controls="field.showInputControls"
+      :range="field.showRange"
+      :marks="field.marks"
+    ></el-slider>
+  </div>
 </template>
 
 <script>
@@ -46,8 +47,9 @@ export default {
 </script>
 
 <style lang="scss">
-.select-widget-wrapper {
+.widget-slider {
   width: 100%;
+  padding: 0 8px;
   > .select-widget {
     width: 100%;
   }

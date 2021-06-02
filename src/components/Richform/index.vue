@@ -25,8 +25,11 @@ layout下的每个obj存放每个子组件的属性
 <template>
   <form :class="['richform', form.border ? 'form-border' : '']" :id="formId">
     <perfect-scrollbar>
+      <div class="no-ready" v-if="noReady()">
+        <div>表单未初始化</div>
+      </div>
       <!-- 增加一些按钮 -->
-      <auto-layout v-if="isAutoLayout" :schema="schema"></auto-layout>
+      <auto-layout v-else-if="isAutoLayout" :schema="schema"></auto-layout>
       <form-layout
         v-else
         :schema="schema"
@@ -34,9 +37,6 @@ layout下的每个obj存放每个子组件的属性
         :values="values"
       >
       </form-layout>
-      <div class="no-ready">
-        <!-- <div>表单未初始化</div> -->
-      </div>
       <div class="error"></div>
       <!-- 增加一些按钮 -->
     </perfect-scrollbar>
@@ -65,13 +65,13 @@ export default {
     schema: { type: Object, require: true }, // 表单的字段描述
     values: { type: Object, default: () => ({}) }, // 表单的值
     form: { type: Object, default: () => ({}) }, // 表单布局
-    isDesign: { type: Boolean, default: true }, // 是否是设计模式
+    isDesign: { type: Boolean, default: false }, // 是否是设计模式
   },
   data() {
     return {
       formId: Math.random().toString(15).slice(2, 15),
       fieldErrors: {}, // 字段错误信息收集
-      lastClicked: {}, // 记录最后的点击事件
+      lastClicked: {}, // 记录最后的点击事件，用于取消事件
     };
   },
   mounted() {
@@ -88,25 +88,37 @@ export default {
     load() {
       this._registerEvents();
     },
+    noReady() {
+      return (
+        Object.keys(this.schema).length == 0 &&
+        Object.keys(this.form).length == 0
+      );
+    },
+    onFieldValueChange(fieldName, value) {
+      this.$set(this.values, fieldName, value);
+    },
+    onDesignClicked(clicked) {
+      if (clicked == this.lastClicked) {
+        clicked.isClicked = !clicked.isClicked;
+        clicked.activeDesign = !clicked.activeDesign;
+      } else {
+        // 取消上次出发的点击事件
+        this.$set(this.lastClicked, "isClicked", false);
+        this.$set(this.lastClicked, "activeDesign", false);
+        // 设置当前点击事件
+        this.$set(clicked, "isClicked", true);
+        this.$set(clicked, "activeDesign", true);
+      }
+      this.lastClicked = clicked;
+      // 表单设计器
+      this.$emit("designItem", clicked);
+    },
     _registerEvents() {
       eventbus.$on(`${this.formId}:field:change`, this.onFieldValueChange);
       eventbus.$on(`${this.formId}:design:clicked`, this.onDesignClicked);
     },
     _unregisterEvents() {
       eventbus.$off(`${this.formId}:field:change`);
-    },
-    onFieldValueChange(fieldName, value) {
-      this.$set(this.values, fieldName, value);
-    },
-    onDesignClicked(clicked) {
-      if (clicked == this.lastClicked) clicked.isClicked = !clicked.isClicked;
-      else {
-        // 取消上次出发的点击事件
-        this.$set(this.lastClicked, "isClicked", false);
-        // 设置当前点击事件
-        this.$set(clicked, "isClicked", true);
-      }
-      this.lastClicked = clicked;
     },
   },
   beforeDestroy() {
@@ -121,12 +133,21 @@ export default {
 .richform {
   height: 100%;
   font-size: $form-font-size;
-  padding: 10px;
   .ps {
-    height: 1210px;
+    height: 1000px;
+  }
+  .no-ready {
+    width: 100%;
+    height: 100%;
+    color: $color;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 .form-border {
+  padding: 10px;
   border: 1px solid $form-border-color;
 }
 </style>

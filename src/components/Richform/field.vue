@@ -8,6 +8,7 @@
         'field',
         form.labelInline ? 'label-inline' : '',
         form.grid ? 'field-border' : '',
+        field.activeDesign ? 'active-design' : '',
       ]"
       @click="onClickedItem(field)"
     >
@@ -15,10 +16,12 @@
         :class="[
           'title-wrapper',
           form.labelAlign == 'right' ? 'label-right' : '',
-          !form.labelInline ? 'label-vert' : 'label-hori',
-          form.grid && form.labelInline ? 'label-border' : '',
+          form.labelInline ? 'label-hori' : 'label-vert',
         ]"
-        :style="{ width: form.labelWidth }"
+        :style="{
+          'min-height': form.grid && form.labelInline ? '45px' : '26px',
+          width: form.labelInline ? form.labelWidth : '100%',
+        }"
       >
         <div class="label-title">{{ fieldTitle }}</div>
         <span class="label-suffix" v-if="form.labelSuffix">:</span>
@@ -37,6 +40,7 @@
           'field-mask',
           'field-value',
           !form.labelInline ? 'field-value-vert' : 'field-value-hori',
+          form.grid && form.labelInline ? 'label-border' : '',
         ]"
       >
         <component
@@ -152,8 +156,29 @@ export default {
         // 生产默认值
         this.values,
         this.field.name,
-        defaultValue ? defaultValue : null
+        defaultValue ? defaultValue : this.friendValue(this.fieldSchema.type)
       );
+    },
+    friendValue(type) {
+      let value = null;
+      switch (type) {
+        case "string":
+          value = "";
+          break;
+        case "array":
+          value = [];
+          break;
+        case "object":
+          value = {};
+          break;
+        case "boolean":
+          value = false;
+          break;
+        case "number":
+          value = 0;
+          break;
+      }
+      return value;
     },
     validateField(fieldName, schema, value) {
       if (!Object.keys(schema).length) return;
@@ -188,7 +213,6 @@ export default {
     border-top: 0;
   }
   > .field {
-    width: 100%;
     align-items: center;
     position: relative;
     > .title-wrapper {
@@ -216,31 +240,25 @@ export default {
     // 标签右边
     > .label-border {
       position: relative;
-    }
-    > .label-border::after {
-      content: "";
-      position: absolute;
-      width: 1px;
-      top: 0px;
-      right: 0px;
-      height: 100%;
-      background: $form-border-color;
+      border-left: 1px solid $form-border-color;
     }
     // 控制标签和字段垂直显示
     > .label-vert {
-      margin-bottom: 6px;
+      justify-content: flex-start;
+      padding: 3px 0;
     }
     > .label-hori {
-      min-height: 64px;
+      // min-height: 40px;
     }
     > .field-mask {
       width: 100%;
     }
     > .field-value {
-      position: relative;
+      display: flex;
+      align-items: center;
       box-sizing: border-box;
-      // 边框,不能改成margin否则会溢出
-      padding: 10px 10px 14px 10px;
+      min-height: 45px; // 这个值需要和style中的值同步
+      padding: 0 3px; // 边框,不能改成margin否则会溢出
       > .error-message {
         font-size: 12px;
         height: 13px;
