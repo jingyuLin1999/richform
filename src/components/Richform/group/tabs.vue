@@ -1,6 +1,6 @@
 <!-- 标签页 --->
 <template>
-  <div class="tab-wrapper">
+  <div :class="['tab-wrapper', tabsItem.activeDesign ? 'active-design' : '']">
     <!-- 点击区域，不影响tabs -->
     <div
       v-if="isDesign"
@@ -70,6 +70,7 @@ export default {
 <style lang="scss">
 .tab-wrapper {
   position: relative;
+  box-sizing: border-box;
   > .design-no-tabs {
     width: 100%;
     height: 40px;

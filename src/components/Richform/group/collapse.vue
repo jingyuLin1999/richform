@@ -1,7 +1,11 @@
 <!-- 折叠面板 -->
 <template>
   <div
-    :class="['collapse-wrapper', form.grid ? 'collapse-wrapper-border ' : '']"
+    :class="[
+      'collapse-wrapper',
+      form.grid ? 'collapse-wrapper-border ' : '',
+      collapse.activeDesign ? 'active-design' : '',
+    ]"
   >
     <!-- 避免出发缩收 -->
     <div

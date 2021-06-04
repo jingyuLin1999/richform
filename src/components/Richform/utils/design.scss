@@ -12,7 +12,6 @@
         background: #409eff;
         text-align: center;
         cursor: pointer;
-        z-index: 999;
     }
     .design-draggable {
         left: 0;
@@ -33,6 +32,7 @@
     // 拖拽过程配置
     .design-draggable-ghost {
         border-top: 5px solid #f56c6c;
+        width: 100%;
     }
     .design-sortable-drag {
         background: #f4dec9;

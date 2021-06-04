@@ -21,7 +21,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    <!-- {{ form.layout }} -->
+    <!-- {{ values }} -->
     <RichForm
       :schema="schema"
       :form="form"
@@ -120,7 +120,7 @@ export default {
       },
       form: {
         border: true, // 显示边框
-        grid: false, // 表单内部栅栏
+        grid: true, // 表单内部栅栏
         labelSuffix: true, // 字段标题后缀内容，默认' : '
         labelWidth: "100px", // 标签宽度,默认50px
         validator: "input", // submit
@@ -141,6 +141,7 @@ export default {
         ],
         layout: [
           {
+            title: "名称对方",
             widget: "input",
             name: "input",
           },
@@ -160,6 +161,7 @@ export default {
             ],
           },
           {
+            title: "下拉选框B",
             widget: "select",
             name: "selectB",
             options: [
@@ -175,6 +177,7 @@ export default {
           },
           {
             widget: "radio",
+            title: "单选",
             name: "radioA",
             isGroup: true,
             isButton: false,
@@ -202,6 +205,8 @@ export default {
           },
           {
             name: "inputnumber",
+            widget: "inputnumber",
+            title: "计数器",
             disabled: true,
             step: 1, // 步数
             min: undefined,
@@ -213,6 +218,8 @@ export default {
           },
           {
             name: "switch",
+            title: "开关",
+            widget: "switch",
             disabled: false,
             width: 40, // 宽度
             activeColor: "#13ce66", // 激活背景颜色
@@ -225,14 +232,18 @@ export default {
             inactiveIconClass: "",
           },
           {
+            widget: "slider",
             name: "slider", // 对应的schema键值,必选,唯一
+            title: "滑块",
             clearable: true,
             minimum: 0,
             maximum: 1000,
             step: 100,
           },
           {
+            title: "穿梭框",
             name: "transfer",
+            widget: "transfer",
             options: [
               {
                 key: 1,
@@ -252,6 +263,8 @@ export default {
             fields: [
               [
                 {
+                  title: "开关",
+                  widget: "switch",
                   name: "switch",
                   disabled: false,
                   width: 40, // 宽度
@@ -265,6 +278,8 @@ export default {
                   inactiveIconClass: "",
                 },
                 {
+                  title: "滑块",
+                  widget: "slider",
                   name: "slider",
                   clearable: true,
                   minimum: 0,
@@ -272,6 +287,8 @@ export default {
                   step: 100,
                 },
                 {
+                  title: "滑块",
+                  widget: "slider",
                   name: "slider",
                   clearable: true,
                   minimum: 0,
@@ -281,6 +298,8 @@ export default {
               ],
               [
                 {
+                  title: "滑块",
+                  widget: "slider",
                   name: "slider",
                   clearable: true,
                   minimum: 0,
@@ -302,6 +321,7 @@ export default {
                 icon: "",
                 fields: [
                   {
+                    title: "输入框",
                     widget: "input",
                     name: "input",
                   },
@@ -312,6 +332,7 @@ export default {
                     expand: true,
                     fields: [
                       {
+                        title: "单选",
                         widget: "radio",
                         name: "radioB",
                         isGroup: true,
@@ -339,6 +360,7 @@ export default {
                         ],
                       },
                       {
+                        title: "输入框",
                         widget: "input",
                         name: "input",
                       },
@@ -354,6 +376,7 @@ export default {
                   {
                     widget: "input",
                     name: "selectA",
+                    title: "输入框13",
                   },
                 ],
               },
@@ -366,10 +389,12 @@ export default {
             expand: true,
             fields: [
               {
+                title: "输入框",
                 widget: "input",
                 name: "input",
               },
               {
+                title: "输入框",
                 widget: "input",
                 name: "input",
               },

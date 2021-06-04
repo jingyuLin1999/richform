@@ -1,8 +1,14 @@
 <template>
-  <div :class="['grid-layout', form.grid ? 'grid-layout-border' : '']">
+  <div
+    :class="[
+      'grid-layout',
+      form.grid ? 'grid-layout-border' : '',
+      gridItem.activeDesign ? 'active-design' : '',
+    ]"
+  >
     <div class="grid-title" v-if="gridItem.showTitle">{{ gridItem.title }}</div>
+    <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
     <div class="gird-content">
-      <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
       <div
         :class="[
           'grid-column',
@@ -14,30 +20,30 @@
       >
         <layout :layout="columnItem"></layout>
       </div>
-      <!--拖拽-->
-      <span
-        class="design-draggable design-handle-move"
-        v-if="isDesign && gridItem.isClicked"
-      >
-        <i class="el-icon-rank design-handle-move"></i>
-      </span>
-      <!--复制-->
-      <span
-        class="design-copy"
-        @click="onCopyItem(schema)"
-        v-if="isDesign && gridItem.isClicked"
-      >
-        <i class="el-icon-document-copy"></i>
-      </span>
-      <!--删除-->
-      <span
-        class="design-delete"
-        @click="onDeleteItem(schema)"
-        v-if="isDesign && gridItem.isClicked"
-      >
-        <i class="el-icon-delete"></i>
-      </span>
     </div>
+    <!--拖拽-->
+    <span
+      class="design-draggable design-handle-move"
+      v-if="isDesign && gridItem.isClicked"
+    >
+      <i class="el-icon-rank design-handle-move"></i>
+    </span>
+    <!--复制-->
+    <span
+      class="design-copy"
+      @click="onCopyItem(schema)"
+      v-if="isDesign && gridItem.isClicked"
+    >
+      <i class="el-icon-document-copy"></i>
+    </span>
+    <!--删除-->
+    <span
+      class="design-delete"
+      @click="onDeleteItem(schema)"
+      v-if="isDesign && gridItem.isClicked"
+    >
+      <i class="el-icon-delete"></i>
+    </span>
   </div>
 </template>
 
@@ -60,6 +66,16 @@ export default {
 @import "../vars.scss";
 .grid-layout {
   margin-top: 5px;
+  position: relative;
+  .drag-wrapper {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
   .grid-title {
     padding: 3px;
   }
@@ -67,13 +83,6 @@ export default {
     display: flex;
     position: relative;
     box-sizing: border-box;
-    .drag-wrapper {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      box-sizing: border-box;
-    }
     .grid-column {
       width: 100%;
       min-height: 62px;

@@ -25,17 +25,12 @@ layout下的每个obj存放每个子组件的属性
 <template>
   <form :class="['richform', form.border ? 'form-border' : '']" :id="formId">
     <perfect-scrollbar>
-      <div class="no-ready" v-if="noReady()">
-        <div>表单未初始化</div>
-      </div>
       <!-- 增加一些按钮 -->
-      <auto-layout v-else-if="isAutoLayout" :schema="schema"></auto-layout>
-      <form-layout
-        v-else
-        :schema="schema"
-        :layout="form.layout"
-        :values="values"
-      >
+      <!-- <auto-layout v-else-if="isAutoLayout" :schema="schema"></auto-layout> -->
+      <form-layout :schema="schema" :layout="form.layout" :values="values">
+        <!-- <div class="no-ready" v-if="noReady()">
+          <div>表单未初始化</div>
+        </div> -->
       </form-layout>
       <div class="error"></div>
       <!-- 增加一些按钮 -->
@@ -62,7 +57,7 @@ export default {
     };
   },
   props: {
-    schema: { type: Object, require: true }, // 表单的字段描述
+    schema: { type: Object, default: () => ({}) }, // 表单的字段描述
     values: { type: Object, default: () => ({}) }, // 表单的值
     form: { type: Object, default: () => ({}) }, // 表单布局
     isDesign: { type: Boolean, default: false }, // 是否是设计模式
@@ -98,6 +93,7 @@ export default {
       this.$set(this.values, fieldName, value);
     },
     onDesignClicked(clicked) {
+      if (!this.isDesign) return;
       if (clicked == this.lastClicked) {
         clicked.isClicked = !clicked.isClicked;
         clicked.activeDesign = !clicked.activeDesign;
@@ -134,7 +130,7 @@ export default {
   height: 100%;
   font-size: $form-font-size;
   .ps {
-    height: 1000px;
+    height: 800px;
   }
   .no-ready {
     width: 100%;

@@ -37,8 +37,8 @@
       </div>
       <div
         :class="[
-          'field-mask',
           'field-value',
+          isDesign ? 'field-mask' : '',
           !form.labelInline ? 'field-value-vert' : 'field-value-hori',
           form.grid && form.labelInline ? 'label-border' : '',
         ]"
@@ -135,6 +135,7 @@ export default {
         .split(".")
         .join(".properties.")
         .split(".");
+      if (Object.keys(this.schema).length == 0) return; // schema不是必须的
       let schemaObj = this.schema.properties;
       for (let index = 0; index < schemaKeys.length; index++) {
         let key = schemaKeys[index];
@@ -202,7 +203,6 @@ export default {
 @import "./vars.scss";
 .field-wrapper {
   position: relative;
-  margin-right: 5px;
   color: $field-font-color;
   // 控制标签和字段是否在一行显示
   > .label-inline {
@@ -250,8 +250,19 @@ export default {
     > .label-hori {
       // min-height: 40px;
     }
+    // 设计模式，开启遮罩
     > .field-mask {
       width: 100%;
+      position: relative;
+    }
+    > .field-mask::before {
+      content: "";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 9999;
+      left: 0;
+      top: 0;
     }
     > .field-value {
       display: flex;
@@ -259,6 +270,7 @@ export default {
       box-sizing: border-box;
       min-height: 45px; // 这个值需要和style中的值同步
       padding: 0 3px; // 边框,不能改成margin否则会溢出
+      width: 100%;
       > .error-message {
         font-size: 12px;
         height: 13px;

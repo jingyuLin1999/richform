@@ -1,21 +1,20 @@
 <template>
-  <div class="input-widget">
-    <el-input
-      v-model="value"
-      :type="field.type"
-      :placeholder="field.placeholder"
-      :disabled="field.disabled"
-      :clearable="field.clearable"
-      :show-password="field.showPassword"
-      :prefix-icon="field.prefixIcon"
-      :suffix-icon="field.suffixIcon"
-      :rows="field.rows"
-      :autosize="field.autosize"
-      :size="field.size"
-      :maxlength="field.maxLength"
-      :minlength="field.minLength"
-    ></el-input>
-  </div>
+  <el-input
+    class="input-widget"
+    v-model="value"
+    :type="field.type"
+    :placeholder="field.placeholder"
+    :disabled="field.disabled"
+    :clearable="field.clearable"
+    :show-password="field.showPassword"
+    :prefix-icon="field.prefixIcon"
+    :suffix-icon="field.suffixIcon"
+    :rows="field.rows"
+    :autosize="field.autosize"
+    :size="field.size"
+    :maxlength="field.maxLength"
+    :minlength="field.minLength"
+  ></el-input>
 </template>
 
 <script>
@@ -45,5 +44,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+.input-widget{
+  width: 100%;
+}
 </style>

@@ -58,12 +58,12 @@ export default {
                 group: "formdesign", // 两个draggable要相互拖拽必须相同
                 sort: true, // 是否允许排序
                 disabled: false,
-                animation: 100, // 过度
+                animation: 0, // 过度
                 easing: "cubic-bezier(1, 0, 0, 1)", // 动画效果
                 handle: ".design-handle-move", // 可拖拽类，用于限定区域
                 dragClass: "design-sortable-drag", // 排序背景显示
                 ghostClass: "design-draggable-ghost",
-                emptyInsertThreshold: 80, // 首个拖进来占位
+                emptyInsertThreshold: 120, // 首个拖进来占位
                 invertSwap: false,
                 direction: 'vertical',
                 swapThreshold: 0.5,
