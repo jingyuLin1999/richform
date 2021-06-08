@@ -3,12 +3,12 @@
 ## 主要功能
 * richform表单组件
     * 数据驱动
-    * 以JsonSchema格式为校验模板
+    * 校验规则采用标准的JsonSchema,[JsonSchema文档](https://github.com/jingyuLin1999/richform/blob/main/JSON-Schema.md)
     * 可拓展性，widgets下可自定义一些子组件
 * 表单设计器 
     * 基于richform表单的拓展，可动态设计表单
     * 表单设计所见即所得
-    * 最终获取RichForm的标准json数据
+    * 可设置字段属性和校验规则
 * 签核流程 
     * 基于RichForm和表单设计器的拓展
     * 流程配置。动态添加节点，设计各节点的签核顺序，串并联签核
