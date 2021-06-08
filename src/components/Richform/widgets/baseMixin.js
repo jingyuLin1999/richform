@@ -22,6 +22,9 @@ export default {
             set(value) {
                 this.changeValue(value)
             }
+        },
+        dict(){
+            this.field
         }
     },
     methods: {

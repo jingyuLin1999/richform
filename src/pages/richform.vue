@@ -26,7 +26,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :schema="schema"
       :form="form"
       :values="values"
-      :isDesign="true"
+      :isDesign="false"
     ></RichForm>
     <textarea v-model="values.select"></textarea>
   </div>
@@ -50,7 +50,7 @@ export default {
             type: "string",
             minLength: 5,
             widget: "input",
-            default: "我是schema设置的默认值，优先级小于values的值",
+            default: "当我的值等于：123456时，会改变下拉选项B的选项",
           },
           selectA: {
             title: "下拉选框A",
@@ -144,6 +144,7 @@ export default {
             title: "名称对方",
             widget: "input",
             name: "input",
+            type: "textarea",
           },
           {
             title: "下拉选框A", // 优先级小于shema中定义的title
@@ -164,6 +165,26 @@ export default {
             title: "下拉选框B",
             widget: "select",
             name: "selectB",
+            description: "我的选项依赖于【下拉选框A】",
+            dict: {
+              "selectA==选项1": [
+                {
+                  value: "选项1",
+                  label: "根据[下拉选框A]的值变化A",
+                },
+                {
+                  value: "选项2",
+                  label: "根据[下拉选框A]的值变化B",
+                },
+              ],
+              "selectA == 选项2": "http://localhost:8080/#/form-design",
+              "input == 123456": [
+                {
+                  value: "input等于123456",
+                  label: "input等于123456",
+                },
+              ],
+            },
             options: [
               {
                 value: "选项1",

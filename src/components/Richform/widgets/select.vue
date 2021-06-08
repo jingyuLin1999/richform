@@ -10,6 +10,7 @@
       :collapse-tags="field.collapseTags"
       :allow-create="field.allowCreate"
       :filterable="field.filterable"
+      :size="field.size"
     >
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
@@ -49,6 +50,7 @@ export default {
       return {
         isGroup: false, // 是否分组
         placeholder: "请选择",
+        size: "",
         disabled: false, // 说明：当该属性在字典中，则禁用对应的选项。若在field.disable则禁用整个选择器
         clearable: false, // 说明：可清空选项  注意：仅单选有效
         multiple: false, // 说明：是否支持多选

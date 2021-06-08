@@ -1,6 +1,12 @@
 import eventbus from "./eventbus";
 export default {
-    inject: ["formId", "isDesign"],
+    props: {
+        schema: { type: Object, default: () => ({}) },
+        values: { type: Object, default: () => ({}) },
+        form: { type: Object, default: () => ({}) },
+        isDesign: { type: Boolean, default: false },
+    },
+    inject: ["formId"],
     data() {
         return {
             designValid: true,
@@ -63,9 +69,9 @@ export default {
                 handle: ".design-handle-move", // 可拖拽类，用于限定区域
                 dragClass: "design-sortable-drag", // 排序背景显示
                 ghostClass: "design-draggable-ghost",
-                emptyInsertThreshold: 120, // 首个拖进来占位
+                emptyInsertThreshold: 220, // 首个拖进来占位
                 invertSwap: false,
-                direction: 'vertical',
+                // direction: 'vertical',
                 swapThreshold: 0.5,
             }
         }

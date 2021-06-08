@@ -6,9 +6,11 @@
       gridItem.activeDesign ? 'active-design' : '',
     ]"
   >
-    <div class="grid-title" v-if="gridItem.showTitle">{{ gridItem.title }}</div>
-    <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
+    <div class="grid-title" v-if="gridItem.showTitle">
+      {{ gridItem.title }}
+    </div>
     <div class="gird-content">
+      <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
       <div
         :class="[
           'grid-column',
@@ -18,7 +20,13 @@
         v-for="(columnItem, index) in gridItem.fields"
         :key="index"
       >
-        <layout :layout="columnItem"></layout>
+        <layout
+          :layout="columnItem"
+          :isDesign="isDesign"
+          :form="form"
+          :values="values"
+          :schema="schema"
+        ></layout>
       </div>
     </div>
     <!--拖拽-->
@@ -51,7 +59,6 @@
 import DesignMixin from "../utils/designMixin";
 export default {
   name: "grid-layout",
-  inject: ["form"],
   mixins: [DesignMixin],
   props: {
     gridItem: { type: Object, default: () => ({}) },
@@ -90,7 +97,7 @@ export default {
       box-sizing: border-box;
     }
     .grid-column-padding {
-      padding: 6px 0 6px 6px;
+      padding: 6px;
       border-top: 1px solid $form-border-color;
     }
     .grid-column-border:not(:last-child) {
@@ -104,6 +111,7 @@ export default {
 .grid-layout-border {
   box-sizing: border-box;
   border: 1px solid $form-border-color;
+  border-top: 0;
   border-right: 0;
 }
 </style>

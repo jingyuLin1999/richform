@@ -19,7 +19,8 @@ export const layout = [ // 布局模板数据
                 name: "1",
                 designId: new Date().getTime().toString(),
                 icon: "",
-                fields: []
+                fields: [
+                ]
             }
         ]
     },
@@ -117,3 +118,5 @@ export const widgets = [
         step: 100,
     }
 ]
+
+

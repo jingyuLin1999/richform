@@ -15,7 +15,13 @@
         :name="tab.name"
       >
         <div class="tab-container">
-          <layout :layout="tab.fields"></layout>
+          <layout
+            :layout="tab.fields"
+            :isDesign="isDesign"
+            :form="form"
+            :values="values"
+            :schema="schema"
+          ></layout>
         </div>
       </el-tab-pane>
     </el-tabs>

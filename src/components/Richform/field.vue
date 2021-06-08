@@ -3,12 +3,13 @@
 -->
 <template>
   <div :class="['field-wrapper', form.grid ? 'field-border-top' : '']">
+    <!-- https://github.com/SortableJS/Vue.Draggable/issues/1008#issuecomment-782545024 -->
     <div
       :class="[
         'field',
         form.labelInline ? 'label-inline' : '',
         form.grid ? 'field-border' : '',
-        field.activeDesign ? 'active-design' : '',
+        field.activeDesign && isDesign ? 'active-design' : '',
       ]"
       @click="onClickedItem(field)"
     >
@@ -26,8 +27,8 @@
         <div class="label-title">{{ fieldTitle }}</div>
         <span class="label-suffix" v-if="form.labelSuffix">:</span>
         <el-tooltip
-          v-if="fieldSchema.description"
-          :content="fieldSchema.description"
+          v-if="fieldSchema.description || field.description"
+          :content="fieldSchema.description || field.description"
           class="field-question"
           placement="bottom"
           effect="light"
@@ -84,16 +85,21 @@
 </template>
 
 <script>
+import { isUrl, loadDict } from "./utils";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
-  inject: ["values", "schema", "fieldErrors", "form", "isDesign"],
+  inject: ["fieldErrors", "dependencies"],
   mixins: [DesignMixin],
   props: {
+    schema: { type: Object, default: () => ({}) },
     field: { type: Object, default: () => ({}) }, // 布局字段
+    isDesign: { type: Boolean, default: false },
+    form: { type: Object, default: () => ({}) },
+    values: { type: Object, default: () => ({}) },
   },
   data() {
     return {
@@ -122,12 +128,37 @@ export default {
     load() {
       this.pickSchema();
       this.createValue();
+      this.pickDependencies();
     },
     emit() {
       // 全局总线
       if (arguments.length > 0) {
         arguments[0] = `${this.formId}:${arguments[0]}`;
         eventbus.$emit(...arguments);
+      }
+    },
+    // 收集依赖关系
+    async pickDependencies() {
+      // 赋值初始值
+      if (!this.dependencies[this.field.name])
+        this.dependencies[this.field.name] = [];
+      if (!this.field.hasOwnProperty("dict") || this.field.length == 0) return;
+      if (typeof this.field.dict == "string" && isUrl(this.field.dict)) {
+        // dict字段是url则直接获取数据，并赋值给options
+        // TODO 未调试
+        let options = await loadDict(this.field.dict);
+        this.$set(this.field, "options", options);
+      } else if (Object.keys(this.field.dict).length > 0) {
+        for (let key in this.field.dict) {
+          let dictItem = this.field.dict[key];
+          let dictKeyVal = key.split("==");
+          if (this.dependencies[dictKeyVal[0].trim()])
+            this.dependencies[dictKeyVal[0].trim()].push({
+              keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
+              dictValue: dictItem,
+              field: this.field,
+            });
+        }
       }
     },
     pickSchema() {
@@ -160,6 +191,49 @@ export default {
         defaultValue ? defaultValue : this.friendValue(this.fieldSchema.type)
       );
     },
+    validateField(fieldName, schema, value) {
+      if (!Object.keys(schema).length) return;
+      let valid = AJV.validate(schema, value);
+      if (valid || !value) {
+        this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
+      } else {
+        localizeErrors(AJV.errors); // 将错误信息转化成中文
+        this.$set(this.fieldErrors, fieldName, AJV.errors[0].message); // 将错误信息添加到错误池中
+      }
+    },
+    // 对依赖本字段的字典进行派发
+    async dispatchOptions(fieldName, value) {
+      let dicts = this.dependencies[fieldName];
+      if (!Array.isArray(dicts) || !dicts.length) return;
+      for (let index = 0; index < dicts.length; index++) {
+        let dictItem = dicts[index];
+        if (dictItem.keyValue == value) {
+          this.$set(this.values, dictItem.field.name, null);
+          if (
+            typeof dictItem.dictValue == "string" &&
+            isUrl(dictItem.dictValue)
+          ) {
+            let options = [];
+            try {
+              // 若是url则发起http请求获取字典
+              options = await loadDict(dictItem.dictValue);
+            } catch (e) {
+              console.error(e);
+            }
+            this.$set(dictItem.field, "options", options);
+          } else if (Array.isArray(dictItem.dictValue)) {
+            // 若是数组，则直接赋值给options
+            this.$set(dictItem.field, "options", dictItem.dictValue);
+          } else {
+          }
+        }
+      }
+    },
+    onChange(fieldName, value, schema) {
+      this.validateField(fieldName, schema, value);
+      this.dispatchOptions(fieldName, value);
+      this.emit("field:change", fieldName, value);
+    },
     friendValue(type) {
       let value = null;
       switch (type) {
@@ -180,20 +254,6 @@ export default {
           break;
       }
       return value;
-    },
-    validateField(fieldName, schema, value) {
-      if (!Object.keys(schema).length) return;
-      let valid = AJV.validate(schema, value);
-      if (valid || !value) {
-        this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
-      } else {
-        localizeErrors(AJV.errors); // 将错误信息转化成中文
-        this.$set(this.fieldErrors, fieldName, AJV.errors[0].message); // 将错误信息添加到错误池中
-      }
-    },
-    onChange(fieldName, value, schema) {
-      this.validateField(fieldName, schema, value);
-      this.emit("field:change", fieldName, value);
     },
   },
 };
@@ -241,6 +301,7 @@ export default {
     > .label-border {
       position: relative;
       border-left: 1px solid $form-border-color;
+      padding: 8px 3px; // 错误占位符
     }
     // 控制标签和字段垂直显示
     > .label-vert {
@@ -271,6 +332,7 @@ export default {
       min-height: 45px; // 这个值需要和style中的值同步
       padding: 0 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
+      position: relative;
       > .error-message {
         font-size: 12px;
         height: 13px;
@@ -278,7 +340,8 @@ export default {
         color: #e83030;
         position: absolute;
         left: 0;
-        bottom: 0px;
+        bottom: -10px;
+        z-index: 999;
       }
     }
     // 当是上下布局时，取消padding-top

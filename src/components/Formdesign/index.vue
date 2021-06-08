@@ -1,11 +1,22 @@
 <template>
   <div class="form-design">
-    <div class="design-header">表单设计器</div>
+    <div class="design-header">
+      <h1 class="title">表单设计器</h1>
+      <div class="tools">
+        <i class="el-icon-document-add tool" @click="onSubmit"> 生产JSON</i>
+        <div class="tool" @click="onPreview">
+          <i class="el-icon-view" v-if="isDesign"> 预览</i>
+          <i class="el-icon-setting" v-else> 设计</i>
+        </div>
+        <i class="el-icon-s-promotion tool" @click="onSubmit"> 保存</i>
+      </div>
+    </div>
     <div class="design-content">
       <split-layout
         first-panel-size="210px"
         last-panel-size="280px"
         :hasLastPanel="true"
+        :lastPanelCanResize="false"
       >
         <template slot="first">
           <!-- 基本组件 -->
@@ -48,20 +59,30 @@
         <template slot="center">
           <RichForm
             class="design-canvas"
-            :schema="schema"
-            :form="form"
-            :values="values"
-            :isDesign="true"
+            :schema="design.schema"
+            :form="design.form"
+            :values="design.values"
+            :isDesign="isDesign"
+            @designItem="clickedField"
           ></RichForm
         ></template>
         <template slot="last">
           <el-tabs v-model="activeTabName" @tab-click="onTabClick">
-            <el-tab-pane label="属性配置" name="attribute" class="design-tab"
-              >用户管理</el-tab-pane
-            >
-            <el-tab-pane label="校验规则" name="rules" class="design-tab"
-              >配置管理</el-tab-pane
-            >
+            <el-tab-pane label="属性配置" name="attribute" class="design-tab">
+              <RichForm
+                :schema="attribute.schema"
+                :form="attribute.form"
+                :values="attribute.values"
+                :isDesign="false"
+              ></RichForm>
+            </el-tab-pane>
+            <el-tab-pane label="校验规则" name="rules" class="design-tab">
+              <RichForm
+                :schema="rules.schema"
+                :form="rules.form"
+                :values="rules.values"
+              ></RichForm
+            ></el-tab-pane>
           </el-tabs>
         </template>
       </split-layout>
@@ -73,23 +94,45 @@
 import RichForm from "../Richform";
 import Draggable from "vuedraggable";
 import SplitLayout from "../SplitLayout";
-import { layout, widgets } from "./meta";
+import { layout, widgets } from "./meta/layout";
 export default {
   components: { Draggable, SplitLayout, RichForm },
   data() {
     return {
-      form: {
-        border: true, // 显示边框
-        grid: true, // 表单内部栅栏
-        labelSuffix: true, // 字段标题后缀内容，默认' : '
-        labelWidth: "100px", // 标签宽度,默认50px
-        validator: "input", // submit
-        labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
-        labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
-        layout: [],
+      isDesign: true,
+      designItem: {}, // 触发的item
+      design: {
+        // 设计模式
+        form: {
+          border: true, // 显示边框
+          grid: true, // 表单内部栅栏
+          labelSuffix: true, // 字段标题后缀内容，默认' : '
+          labelWidth: "100px", // 标签宽度,默认50px
+          validator: "input", // submit
+          labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
+          labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
+          layout: [],
+        },
+        values: {},
+        schema: {
+          $schema: "http://json-schema.org/draft-07/schema#",
+          title: "表单设计器",
+          description: "form design",
+          type: "object",
+          properties: {},
+        },
       },
-      values: {},
-      schema: {},
+      rules: {
+        form: {},
+        values: {},
+        schema: {},
+      },
+      attribute: {
+        // 属性配置
+        form: {},
+        values: {},
+        schema: {},
+      },
       activeTabName: "attribute",
       layoutMeta: layout,
       widgetsMeta: widgets,
@@ -106,6 +149,7 @@ export default {
           pull: "clone", // 克隆方式拖拽出去
           put: false, // 禁止拖拽回来
           ghostClass: "design-field-ghost",
+          dragClass: "design-sortable-drag", // 排序背景显示
         },
         sort: false, // 禁止排序
       };
@@ -113,12 +157,46 @@ export default {
     onTabClick(tab, event) {
       // console.log(tab, event);
     },
+    async clickedField(item) {
+      try {
+        this.designItem = item;
+        let { attribute, rules } = await import(
+          `./meta/${item.widget.toLowerCase()}`
+        );
+        this.setAttribute(item, attribute);
+        this.setRules(item, rules);
+      } catch (e) {
+        this.$set(this.attribute, "form", {});
+        console.warn("加载表单字段元数据错误：" + e);
+      }
+    },
+    setAttribute(item, attribute) {
+      let attributeMeta = JSON.parse(JSON.stringify(attribute));
+      let assignValues = Object.assign({}, attributeMeta.values, item);
+      for (let key in assignValues) {
+        this.$set(item, key, assignValues[key]);
+      }
+      this.$set(this.attribute, "values", item);
+      this.$set(this.attribute, "form", attributeMeta.form);
+    },
+    setRules(item, rules) {
+      // TODO schema由数据库字段生成
+      let rulesMeta = JSON.parse(JSON.stringify(rules));
+      this.$set(this.design.schema.properties, item.name, this.rules.values);
+      this.$set(this.rules, "form", rulesMeta.form);
+    },
     // 布局克隆前预设处理
     cloneDragField(dragItem) {
       let newdragItem = JSON.parse(JSON.stringify(dragItem));
       newdragItem.designId = Math.random().toString(16).slice(2, 14);
+      newdragItem.name = newdragItem.name + newdragItem.designId;
       return newdragItem;
     },
+    onPreview() {
+      this.$set(this.designItem, "activeField", false);
+      this.$set(this.$data, "isDesign", !this.isDesign);
+    },
+    onSubmit() {},
   },
 };
 </script>
@@ -128,17 +206,37 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  .design-sortable-drag {
+    background: #f00;
+  }
   .el-tabs__item {
     width: 140px;
     text-align: center;
   }
-
   > .design-header {
     height: 55px;
-    line-height: 55px;
     padding: 0 10px;
     color: #fff;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background: linear-gradient(90deg, #1179f4 45%, #079dc8, #01b3ac);
+    .title {
+      margin: 0;
+      padding: 0;
+      font-size: 19px;
+      height: 55px;
+      line-height: 55px;
+    }
+    .tools {
+      display: flex;
+      font-size: 14px;
+      > .tool {
+        cursor: pointer;
+        margin-left: 10px;
+      }
+    }
   }
   > .design-content {
     height: 100%;

@@ -19,7 +19,13 @@
           <span class="collapse-title">{{ collapse.title }}</span>
         </template>
         <div class="collapse-container">
-          <layout :layout="collapse.fields"></layout>
+          <layout
+            :layout="collapse.fields"
+            :isDesign="isDesign"
+            :form="form"
+            :values="values"
+            :schema="schema"
+          ></layout>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -53,7 +59,6 @@
 import DesignMixin from "../utils/designMixin";
 export default {
   name: "collapse",
-  inject: ["form", "isDesign"],
   mixins: [DesignMixin],
   props: {
     collapse: { type: Object, default: () => ({}) },

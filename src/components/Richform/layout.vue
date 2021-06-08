@@ -7,23 +7,60 @@
   >
     <template v-for="(item, index) in layout">
       <!-- 数组做循环 -->
-      <field-group v-if="Array.isArray(item)" :key="index" :fields="item" />
+      <field-group
+        v-if="Array.isArray(item)"
+        :key="index"
+        :fields="item"
+        :schema="schema"
+        :values="values"
+        :form="form"
+      />
       <!-- 标签页 -->
       <template v-else-if="typeof item == 'object' && item.widget == 'tabs'">
-        <field-tabs :key="index" :tabsItem="item"></field-tabs>
+        <field-tabs
+          :key="index"
+          :schema="schema"
+          :values="values"
+          :form="form"
+          :tabsItem="item"
+          :isDesign="isDesign"
+        ></field-tabs>
       </template>
       <!-- 栅格布局 -->
       <template v-else-if="typeof item == 'object' && item.widget == 'grid'">
-        <field-grid :key="index" :gridItem="item"></field-grid>
+        <field-grid
+          :key="index"
+          :collapse="item"
+          :schema="schema"
+          :values="values"
+          :form="form"
+          :gridItem="item"
+          :isDesign="isDesign"
+        ></field-grid>
       </template>
       <!-- 折叠面板 -->
       <template
         v-else-if="typeof item == 'object' && item.widget == 'collapse'"
       >
-        <field-collapse :key="index" :collapse="item"></field-collapse>
+        <field-collapse
+          :key="index"
+          :collapse="item"
+          :schema="schema"
+          :values="values"
+          :form="form"
+          :isDesign="isDesign"
+        ></field-collapse>
       </template>
       <!-- 普通字段 -->
-      <field v-else :key="index" :field="item"></field>
+      <field
+        v-else
+        :key="index"
+        :field="item"
+        :schema="schema"
+        :values="values"
+        :form="form"
+        :isDesign="isDesign"
+      ></field>
     </template>
   </draggable>
 </template>
@@ -39,7 +76,6 @@ import DragMixin from "./utils/designMixin";
 
 export default {
   name: "layout",
-  inject: ["isDesign"],
   mixins: [DragMixin],
   components: {
     FieldTabs,
@@ -50,10 +86,13 @@ export default {
     Draggable,
   },
   props: {
+    form: { type: Object, default: () => ({}) },
     schema: { type: Object, default: () => ({}) },
-    layout: { type: Array, default: () => [] },
     values: { type: Object, default: () => ({}) },
+    layout: { type: Array, default: () => [] },
+    isDesign: { type: Boolean, default: false },
   },
+  methods: {},
 };
 </script>
 
