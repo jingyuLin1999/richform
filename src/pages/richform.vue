@@ -21,12 +21,20 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    <!-- {{ values }} -->
+    <!-- {{ schema }} -->
+    <el-button
+      size="small"
+      type="success"
+      @click="hooks.validate()"
+      :style="{ 'margin-bottom': '3px' }"
+      >外部校验</el-button
+    >
     <RichForm
       :schema="schema"
       :form="form"
       :values="values"
       :isDesign="false"
+      :hooks="hooks"
     ></RichForm>
     <textarea v-model="values.select"></textarea>
   </div>
@@ -38,6 +46,7 @@ export default {
   components: { RichForm },
   data() {
     return {
+      hooks: {},
       schema: {
         $schema: "http://json-schema.org/draft-07/schema#",
         title: "设备属性",
@@ -51,6 +60,7 @@ export default {
             minLength: 5,
             widget: "input",
             default: "当我的值等于：123456时，会改变下拉选项B的选项",
+            require: true,
           },
           selectA: {
             title: "下拉选框A",
@@ -122,16 +132,28 @@ export default {
         border: true, // 显示边框
         grid: true, // 表单内部栅栏
         labelSuffix: true, // 字段标题后缀内容，默认' : '
-        labelWidth: "100px", // 标签宽度,默认50px
+        labelWidth: "110px", // 标签宽度,默认50px
         validator: "input", // submit
         labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
         labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
         actions: [
+          //声明显示在下方和动作按钮
           {
             name: "changeLang", // 按键的唯一标识符
             type: "primary", // 按键类型,默认为primary，具体可见element button
             title: "语言", // 按键的文字
             icon: "el-icon-star-off", // 按键图标 具体可见element icon
+            right: true, // 如果=true，则显示在右侧
+            visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
+            tips: "提示信息", // 鼠标悬浮在按键的提示信息
+            top: true, // 是否在上面, false则在下面
+            size: "medium", // medium / small / mini, 若未指明，则等同于form.size
+          },
+          {
+            name: "submit", // 按键的唯一标识符
+            type: "info", // 按键类型,默认为primary，具体可见element button
+            title: "提交", // 按键的文字
+            icon: "", // 按键图标 具体可见element icon
             right: true, // 如果=true，则显示在右侧
             visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
             tips: "提示信息", // 鼠标悬浮在按键的提示信息

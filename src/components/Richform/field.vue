@@ -20,12 +20,20 @@
           form.labelInline ? 'label-hori' : 'label-vert',
         ]"
         :style="{
-          'min-height': form.grid && form.labelInline ? '45px' : '26px',
+          'min-height': form.grid && form.labelInline ? '55px' : '26px',
           width: form.labelInline ? form.labelWidth : '100%',
         }"
       >
-        <div class="label-title">{{ fieldTitle }}</div>
-        <span class="label-suffix" v-if="form.labelSuffix">:</span>
+        <div
+          :class="['label-title', fieldSchema.require ? 'required-field' : '']"
+        >
+          {{ fieldTitle }}
+        </div>
+        <span
+          class="label-suffix"
+          v-if="form.labelSuffix && Object.keys(this.field).length > 0"
+          >:</span
+        >
         <el-tooltip
           v-if="fieldSchema.description || field.description"
           :content="fieldSchema.description || field.description"
@@ -49,6 +57,7 @@
           :schema="fieldSchema"
           :values="values"
           :field="field"
+          :fieldErrors="fieldErrors"
           @change="onChange"
         />
         <!-- 错误信息 -->
@@ -92,7 +101,7 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
-  inject: ["fieldErrors", "dependencies"],
+  inject: ["dependencies", "requireds"],
   mixins: [DesignMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -100,6 +109,7 @@ export default {
     isDesign: { type: Boolean, default: false },
     form: { type: Object, default: () => ({}) },
     values: { type: Object, default: () => ({}) },
+    fieldErrors: { type: Object, default: () => ({}) },
   },
   data() {
     return {
@@ -127,6 +137,7 @@ export default {
   methods: {
     load() {
       this.pickSchema();
+      this.pickRequireds();
       this.createValue();
       this.pickDependencies();
     },
@@ -162,11 +173,17 @@ export default {
       }
     },
     pickSchema() {
+      // schema不是必须的或无field就无法查找
+      if (
+        Object.keys(this.schema).length == 0 ||
+        !Object.keys(this.field).length
+      )
+        return;
       let schemaKeys = this.field.name
         .split(".")
         .join(".properties.")
         .split(".");
-      if (Object.keys(this.schema).length == 0) return; // schema不是必须的
+
       let schemaObj = this.schema.properties;
       for (let index = 0; index < schemaKeys.length; index++) {
         let key = schemaKeys[index];
@@ -175,6 +192,11 @@ export default {
         else return null;
       }
       this.fieldSchema = schemaObj;
+    },
+    pickRequireds() {
+      if (!this.fieldSchema.require) return;
+      if (!this.requireds.includes(this.field.name))
+        this.requireds.push(this.field.name);
     },
     createValue() {
       // TODO 提供两种模式，树型结构或普通结构
@@ -193,7 +215,16 @@ export default {
     },
     validateField(fieldName, schema, value) {
       if (!Object.keys(schema).length) return;
-      let valid = AJV.validate(schema, value);
+      let require = [];
+      if (schema.require) require.push(fieldName);
+      const schemab = {
+        type: "object",
+        properties: {
+          [fieldName]: schema,
+        },
+        required: require,
+      };
+      let valid = AJV.validate(schemab, this.values);
       if (valid || !value) {
         this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
       } else {
@@ -264,6 +295,13 @@ export default {
 .field-wrapper {
   position: relative;
   color: $field-font-color;
+  .required-field::before {
+    content: "*";
+    color: #f56c6c;
+    margin-right: 0.2em;
+    font-family: Verdana, Arial, Tahoma;
+    font-weight: 400;
+  }
   // 控制标签和字段是否在一行显示
   > .label-inline {
     display: flex;
@@ -329,7 +367,7 @@ export default {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      min-height: 45px; // 这个值需要和style中的值同步
+      min-height: 55px; // 这个值需要和style中的值同步
       padding: 0 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
       position: relative;
@@ -340,7 +378,7 @@ export default {
         color: #e83030;
         position: absolute;
         left: 0;
-        bottom: -10px;
+        bottom: -8px;
         z-index: 999;
       }
     }
@@ -348,6 +386,16 @@ export default {
     > .field-value-vert {
       padding-top: 1px;
       padding-left: 4px;
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 3px;
+      > .error-message {
+        bottom: -1px;
+      }
+    }
+    // 去除element自带的margin-bottom
+    .el-form-item {
+      margin: 0;
     }
   }
 }

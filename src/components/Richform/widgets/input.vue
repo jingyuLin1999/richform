@@ -1,6 +1,10 @@
 <template>
   <el-input
-    class="input-widget"
+    :class="[
+      'input-widget',
+      'el-form-item',
+      fieldErrors[field.name] ? 'is-error' : '',
+    ]"
     v-model="value"
     :type="field.type"
     :placeholder="field.placeholder"
@@ -45,7 +49,10 @@ export default {
 </script>
 
 <style lang="scss">
-.input-widget{
+.input-widget {
   width: 100%;
+  textarea {
+    margin: 5px 0 6px 0 !important;
+  }
 }
 </style>

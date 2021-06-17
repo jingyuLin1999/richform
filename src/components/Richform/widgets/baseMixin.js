@@ -3,6 +3,7 @@ export default {
         field: { type: Object, default: () => ({}) },
         schema: { type: Object, default: () => ({}) },
         values: { type: Object, default: () => ({}) },
+        fieldErrors: { type: Object, default: () => ({}) },
     },
     data() {
         return {
@@ -23,7 +24,7 @@ export default {
                 this.changeValue(value)
             }
         },
-        dict(){
+        dict() {
             this.field
         }
     },
