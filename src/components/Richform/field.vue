@@ -20,7 +20,7 @@
           form.labelInline ? 'label-hori' : 'label-vert',
         ]"
         :style="{
-          'min-height': form.grid && form.labelInline ? '55px' : '26px',
+          'min-height': form.grid && form.labelInline ? '47px' : '26px',
           width: form.labelInline ? form.labelWidth : '100%',
         }"
       >
@@ -97,12 +97,13 @@
 import { isUrl, loadDict } from "./utils";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
+import CommonMixin from "./utils/commonMixin";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
   inject: ["dependencies", "requireds"],
-  mixins: [DesignMixin],
+  mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
     field: { type: Object, default: () => ({}) }, // 布局字段
@@ -261,30 +262,9 @@ export default {
       }
     },
     onChange(fieldName, value, schema) {
+      this.emit("field:change", fieldName, value);
       this.validateField(fieldName, schema, value);
       this.dispatchOptions(fieldName, value);
-      this.emit("field:change", fieldName, value);
-    },
-    friendValue(type) {
-      let value = null;
-      switch (type) {
-        case "string":
-          value = "";
-          break;
-        case "array":
-          value = [];
-          break;
-        case "object":
-          value = {};
-          break;
-        case "boolean":
-          value = false;
-          break;
-        case "number":
-          value = 0;
-          break;
-      }
-      return value;
     },
   },
 };
@@ -367,7 +347,7 @@ export default {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      min-height: 55px; // 这个值需要和style中的值同步
+      min-height: 47px; // 这个值需要和style中的值同步
       padding: 0 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
       position: relative;
@@ -378,7 +358,7 @@ export default {
         color: #e83030;
         position: absolute;
         left: 0;
-        bottom: -8px;
+        bottom: -7px;
         z-index: 999;
       }
     }

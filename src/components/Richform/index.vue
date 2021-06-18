@@ -65,11 +65,13 @@ import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
 import eventbus from "./utils/eventbus";
 import { defaultForm } from "./utils/defaultData";
+import CommonMixin from "./utils/commonMixin";
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
+  mixins: [CommonMixin],
   components: { FormLayout, AutoLayout, PerfectScrollbar, Actions },
   props: {
     schema: { type: Object, default: () => ({}) }, // 表单的字段描述
@@ -154,6 +156,18 @@ export default {
     },
     onAction(action) {
       if (action.name == "submit" && !this.globalValidate()) return;
+      else if (action.name == "reset") {
+        for (let key in this.values) {
+          let type = Array.isArray(this.values[key])
+            ? "array"
+            : typeof this.values[key];
+          // 子组件用v-model监听的是computed的值
+          // 为了触发computed的set属性，需删除再赋值
+          this.$delete(this.values, key);
+          this.$set(this.values, key, this.friendValue(type));
+        }
+        return;
+      }
       this.$emit("action", action); // 外部可获取当前点击了哪个事件
     },
     // 全局校验

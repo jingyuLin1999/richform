@@ -1,22 +1,18 @@
 /**
- *
-        type: "text", // text，textarea
-        placeholder: "请输入内容",
-        disabled: false, // 禁用状态
-        clearable: true, //
-        showPassword: false, // 密码框
-        prefixIcon: "", // 当type等于text有效。前置图标 el-icon-search
-        suffixIcon: "", // 当type等于text有效。后置图标 el-icon-date
-        rows: 4, // 当type等于textarea有效
-        autosize: false, // 当type等于textarea有效。根据内容自动设置高度，也可接受一个对象 { minRows: 2, maxRows: 4}
-        prepend: "", // 当type等于text有效。
-        append: "", // 当type等于text有效。
-        size: "", // large、small 和 mini
-        maxLength: null,
-        minLength: null,
- *
+ 
+        isGroup: false, // 是否分组
+        placeholder: "请选择",
+        size: "",
+        disabled: false, // 说明：当该属性在字典中，则禁用对应的选项。若在field.disable则禁用整个选择器
+        clearable: false, // 说明：可清空选项  注意：仅单选有效
+        multiple: false, // 说明：是否支持多选
+        collapseTags: false, // 多选用tags显示
+        filterable: false, // 说明：搜索label
+        allowCreate: false, // 说明：是否允许创建条目,谨慎使用  注意：filterable为true时有效
  */
-import { baseForm, baseLayout } from "./base"
+
+import { baseForm, baseLayout } from "./base";
+
 export const attribute = {
     schema: {
 
@@ -26,53 +22,6 @@ export const attribute = {
         ...baseForm,
         layout: [
             ...baseLayout,
-            {
-                title: "类型",
-                widget: "select",
-                name: "type",
-                size: "small",
-                options: [
-                    {
-                        value: "text",
-                        label: "文本",
-                    },
-                    {
-                        value: "textarea",
-                        label: "多行文本框",
-                    },
-                ],
-            },
-            {
-                widget: "grid",
-                title: "栅格布局",
-                showTitle: false,
-                isClicked: false,
-                fields: [
-                    [
-                        {
-                            name: "clearable",
-                            title: "可清空",
-                            widget: "switch",
-                            width: 40, // 宽度
-                            activeColor: "#13ce66", // 激活背景颜色
-                            inactiveColor: "#ff4949", // 取消背景颜色
-                            activeValue: true, // 打开的值，支持Boolean, String或Number
-                            inactiveValue: false, // 关闭的值，支持Boolean, String或Number
-                        }
-                    ], [
-                        {
-                            name: "showPassword",
-                            title: "密码框",
-                            widget: "switch",
-                            width: 40, // 宽度
-                            activeColor: "#13ce66", // 激活背景颜色
-                            inactiveColor: "#ff4949", // 取消背景颜色
-                            activeValue: true, // 打开的值，支持Boolean, String或Number
-                            inactiveValue: false, // 关闭的值，支持Boolean, String或Number
-                        }
-                    ]
-                ]
-            },
             {
                 title: "尺寸",
                 widget: "select",
@@ -92,6 +41,66 @@ export const attribute = {
                         label: "迷你",
                     },
                 ],
+            },
+            {
+                widget: "grid",
+                showTitle: false,
+                isClicked: false,
+                fields: [
+                    [
+                        {
+                            name: "isGroup",
+                            title: "分组",
+                            widget: "switch",
+                            width: 40, // 宽度
+                            activeColor: "#13ce66", // 激活背景颜色
+                            inactiveColor: "#ff4949", // 取消背景颜色
+                            activeValue: true, // 打开的值，支持Boolean, String或Number
+                            inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                        }
+                    ], [
+                        {
+                            name: "disabled",
+                            title: "禁用",
+                            widget: "switch",
+                            width: 40, // 宽度
+                            activeColor: "#13ce66", // 激活背景颜色
+                            inactiveColor: "#ff4949", // 取消背景颜色
+                            activeValue: true, // 打开的值，支持Boolean, String或Number
+                            inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                        }
+                    ]
+                ]
+            },
+            {
+                widget: "grid",
+                showTitle: false,
+                isClicked: false,
+                fields: [
+                    [
+                        {
+                            name: "clearable",
+                            title: "可清空",
+                            widget: "switch",
+                            width: 40, // 宽度
+                            activeColor: "#13ce66", // 激活背景颜色
+                            inactiveColor: "#ff4949", // 取消背景颜色
+                            activeValue: true, // 打开的值，支持Boolean, String或Number
+                            inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                        }
+                    ], [
+                        {
+                            name: "multiple",
+                            title: "多选",
+                            widget: "switch",
+                            width: 40, // 宽度
+                            activeColor: "#13ce66", // 激活背景颜色
+                            inactiveColor: "#ff4949", // 取消背景颜色
+                            activeValue: true, // 打开的值，支持Boolean, String或Number
+                            inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                        }
+                    ]
+                ]
             },
         ],
     }

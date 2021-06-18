@@ -13,6 +13,15 @@ export default {
     mounted() {
         this.$setFieldAttr()
     },
+    // watch: {
+    //     values: {
+    //         handler() {
+    //             this.values;
+    //             console.log(45613)
+    //         },
+    //         deep: true
+    //     },
+    // },
     computed: {
         value: {
             get() {

@@ -11,3 +11,25 @@ export const baseForm = {
 export const baseValues = {
     title: "",
 }
+
+export const baseLayout = [
+    {
+        title: "名称",
+        name: "name",
+        size: "small",
+        widget: "input",
+        description: "对应数据库字段"
+    },
+    {
+        title: "标题",
+        name: "title",
+        size: "small",
+        widget: "input"
+    },
+    {
+        title: "占位符",
+        name: "placeholder",
+        size: "small",
+        widget: "input"
+    },
+]

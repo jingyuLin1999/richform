@@ -130,7 +130,7 @@ export default {
       },
       form: {
         border: true, // 显示边框
-        grid: true, // 表单内部栅栏
+        grid: false, // 表单内部栅栏
         labelSuffix: true, // 字段标题后缀内容，默认' : '
         labelWidth: "110px", // 标签宽度,默认50px
         validator: "input", // submit
@@ -139,9 +139,9 @@ export default {
         actions: [
           //声明显示在下方和动作按钮
           {
-            name: "changeLang", // 按键的唯一标识符
+            name: "reset", // 按键的唯一标识符
             type: "primary", // 按键类型,默认为primary，具体可见element button
-            title: "语言", // 按键的文字
+            title: "重置", // 按键的文字
             icon: "el-icon-star-off", // 按键图标 具体可见element icon
             right: true, // 如果=true，则显示在右侧
             visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
