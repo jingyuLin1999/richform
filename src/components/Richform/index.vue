@@ -160,6 +160,8 @@ export default {
         for (let key in this.values) {
           let type = Array.isArray(this.values[key])
             ? "array"
+            : this.values[key] == null
+            ? "null"
             : typeof this.values[key];
           // 子组件用v-model监听的是computed的值
           // 为了触发computed的set属性，需删除再赋值
@@ -172,6 +174,9 @@ export default {
     },
     // 全局校验
     globalValidate() {
+      // 未传入schema，无法校验，直接返回
+      if (!Object.keys(this.schema).length) return true;
+      // 开始校验
       const _this = this;
       this.fieldErrors = {};
       this.schema.required = this.requireds;

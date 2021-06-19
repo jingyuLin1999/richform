@@ -2,7 +2,11 @@
   <div class="select-widget-wrapper">
     <el-select
       v-model="value"
-      class="select-widget"
+      :class="[
+        'select-widget',
+        'el-form-item',
+        fieldErrors[field.name] ? 'is-error' : '',
+      ]"
       :placeholder="field.placeholder"
       :disabled="field.disabled"
       :clearable="field.clearable"

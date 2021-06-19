@@ -3,6 +3,9 @@ export default {
         friendValue(type) {
             let value = null;
             switch (type) {
+                case "null":
+                    value = null;
+                    break;
                 case "string":
                     value = "";
                     break;

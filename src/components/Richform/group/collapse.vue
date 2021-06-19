@@ -25,6 +25,7 @@
             :form="form"
             :values="values"
             :schema="schema"
+            :fieldErrors="fieldErrors"
           ></layout>
         </div>
       </el-collapse-item>

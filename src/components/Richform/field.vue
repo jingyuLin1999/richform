@@ -20,7 +20,7 @@
           form.labelInline ? 'label-hori' : 'label-vert',
         ]"
         :style="{
-          'min-height': form.grid && form.labelInline ? '47px' : '26px',
+          'min-height': form.grid && form.labelInline ? '50px' : '26px',
           width: form.labelInline ? form.labelWidth : '100%',
         }"
       >
@@ -347,7 +347,7 @@ export default {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      min-height: 47px; // 这个值需要和style中的值同步
+      min-height: 50px; // 这个值需要和style中的值同步
       padding: 0 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
       position: relative;
@@ -358,7 +358,7 @@ export default {
         color: #e83030;
         position: absolute;
         left: 0;
-        bottom: -7px;
+        bottom: -8px;
         z-index: 999;
       }
     }
