@@ -1,8 +1,12 @@
 <!--
   字段组件
+
 -->
 <template>
-  <div :class="['field-wrapper', form.grid ? 'field-border-top' : '']">
+  <div
+    v-if="!field.hide"
+    :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
+  >
     <!-- https://github.com/SortableJS/Vue.Draggable/issues/1008#issuecomment-782545024 -->
     <div
       :class="[
@@ -102,7 +106,7 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
-  inject: ["dependencies", "requireds"],
+  inject: ["dependencies", "requireds", "hideFields"],
   mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -141,6 +145,7 @@ export default {
       this.pickRequireds();
       this.createValue();
       this.pickDependencies();
+      this.pickHideFields();
     },
     emit() {
       // 全局总线
@@ -172,6 +177,18 @@ export default {
             });
         }
       }
+    },
+    // 字段依赖隐藏
+    pickHideFields() {
+      if (!this.field.hideRely) return; // 若不存在依赖，则无需收集
+      let hideItem = this.field.hideRely.split("==");
+      if (hideItem.length != 2) return;
+      if (!this.hideFields[hideItem[0].trim()])
+        this.hideFields[hideItem[0].trim()] = [];
+      this.hideFields[hideItem[0].trim()].push({
+        value: hideItem[1].trim(),
+        field: this.field,
+      });
     },
     pickSchema() {
       // schema不是必须的或无field就无法查找
@@ -261,10 +278,23 @@ export default {
         }
       }
     },
+    // 检查隐藏依赖
+    dispatchHide() {
+      for (let key in this.values) {
+        let hideFields = this.hideFields[key];
+        if (hideFields) {
+          for (let index = 0; index < hideFields.length; index++) {
+            let item = hideFields[index];
+            this.$set(item.field, "hide", item.value == this.values[key]);
+          }
+        }
+      }
+    },
     onChange(fieldName, value, schema) {
-      this.emit("field:change", fieldName, value);
       this.validateField(fieldName, schema, value);
+      this.emit("field:change", fieldName, value);
       this.dispatchOptions(fieldName, value);
+      this.dispatchHide();
     },
   },
 };

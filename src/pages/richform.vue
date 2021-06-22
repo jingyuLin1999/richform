@@ -21,7 +21,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    <!-- {{ schema }} -->
+    <!-- {{ values }} -->
     <el-button
       size="small"
       type="success"
@@ -79,6 +79,7 @@ export default {
             widget: "radio",
             type: "string",
             default: "单选框A",
+            description: "当我的值等于：单选框B,会隐藏第一项",
           },
           radioB: {
             title: "单选框B",
@@ -127,6 +128,7 @@ export default {
       values: {
         a: "",
         select: "",
+        map: "阳光",
       },
       form: {
         border: true, // 显示边框
@@ -167,6 +169,13 @@ export default {
             widget: "input",
             name: "input",
             type: "textarea",
+            hideRely: "radioA==单选框A",
+          },
+          {
+            title: "百度地图",
+            widget: "map",
+            name: "map",
+            description: "todo  错误Cannot set property 'pj' of undefined",
           },
           {
             title: "下拉选框A", // 优先级小于shema中定义的title

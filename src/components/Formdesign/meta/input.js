@@ -27,6 +27,12 @@ export const attribute = {
         layout: [
             ...baseLayout,
             {
+                title: "占位符",
+                name: "placeholder",
+                size: "small",
+                widget: "input"
+            },
+            {
                 title: "类型",
                 widget: "select",
                 name: "type",
@@ -39,6 +45,26 @@ export const attribute = {
                     {
                         value: "textarea",
                         label: "多行文本框",
+                    },
+                ],
+            },
+            {
+                title: "尺寸",
+                widget: "select",
+                name: "size",
+                size: "small",
+                options: [
+                    {
+                        value: "medium",
+                        label: "大",
+                    },
+                    {
+                        value: "small ",
+                        label: "中",
+                    },
+                    {
+                        value: "mini",
+                        label: "迷你",
                     },
                 ],
             },
@@ -73,26 +99,6 @@ export const attribute = {
                     ]
                 ]
             },
-            {
-                title: "尺寸",
-                widget: "select",
-                name: "size",
-                size: "small",
-                options: [
-                    {
-                        value: "medium",
-                        label: "大",
-                    },
-                    {
-                        value: "small ",
-                        label: "中",
-                    },
-                    {
-                        value: "mini",
-                        label: "迷你",
-                    },
-                ],
-            },
         ],
     }
 }
@@ -120,13 +126,26 @@ export const rules = {
                 name: "minLength",
                 widget: "inputnumber",
                 step: 1, // 步数
-                min: undefined,
-                max: undefined,
+                min: 0,
+                max: 255,
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
                 controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
                 size: "mini",
-            }
+            },
+            {
+                title: "最大长度",
+                name: "maxLength",
+                widget: "inputnumber",
+                step: 1, // 步数
+                min: 0,
+                max: 255,
+                stepStrictly: false, // 严格步数,只能输入 step 的倍数
+                precision: undefined, // 精度,设置计数器最小值
+                controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
+                size: "mini",
+            },
+
         ]
     }
 }

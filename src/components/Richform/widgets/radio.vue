@@ -51,7 +51,7 @@ export default {
         isButton: false,
         disabled: true,
         border: false,
-        size: "default", // medium / small / mini
+        size: "small", // medium / small / mini
         textColor: "", // 当isButton为true时有效
         fill: "", // 当isButton为true时有效
       };

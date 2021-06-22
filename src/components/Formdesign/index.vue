@@ -172,7 +172,7 @@ export default {
     },
     setAttribute(item, attribute) {
       let attributeMeta = JSON.parse(JSON.stringify(attribute));
-      let assignValues = Object.assign({}, attributeMeta.values, item);
+      let assignValues = Object.assign({}, item, attributeMeta.values);
       for (let key in assignValues) {
         this.$set(item, key, assignValues[key]);
       }

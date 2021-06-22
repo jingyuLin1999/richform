@@ -17,6 +17,7 @@
         widget: "input", // 当无schema时有效，和schema重复,
         title: "输入框", // 当无schema时有效，和schema重复,
         name: "mode.name",
+        hideRely: <字段名称name> == 'A', // 显示
         dict: "", // 字典url路径，优先级大于options,获取到的数据最终赋值给options
         options: [{},{}], // 下拉选框的选项
         default: "", // 提供默认值，优先级小于values的值
@@ -29,7 +30,10 @@ dict: {
   [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
   [<字段名name> == 'B']: [{},{}], // 
 }
-2、
+隐藏说明
+hideRely：<字段名称name> == 'A'
+
+
 
 二期目标
 表单设计器
@@ -38,7 +42,11 @@ dict: {
   <form :class="['richform', form.border ? 'form-border' : '']" :id="formId">
     <perfect-scrollbar :style="{ 'min-height': '120px' }">
       <!-- 顶部按钮 -->
-      <actions :actions="topActions" :isDesign="isDesign"></actions>
+      <actions
+        v-if="showBtns"
+        :actions="topActions"
+        :isDesign="isDesign"
+      ></actions>
       <!-- 核心布局 -->
       <form-layout
         :schema="schema"
@@ -50,7 +58,11 @@ dict: {
       >
       </form-layout>
       <!-- 底部按钮 -->
-      <actions :actions="buttomActions" :isDesign="isDesign"></actions>
+      <actions
+        v-if="showBtns"
+        :actions="buttomActions"
+        :isDesign="isDesign"
+      ></actions>
       <!-- 错误信息 -->
       <div class="no-ready" v-if="noReady()">
         <div>表单未初始化</div>
@@ -79,12 +91,14 @@ export default {
     form: { type: Object, default: () => ({}) }, // 表单布局
     isDesign: { type: Boolean, default: false }, // 是否是设计模式
     hooks: { type: Object, default: () => ({}) }, // 钩子，挂载一些函数或数据供外部使用
+    showBtns: { type: Boolean, default: true },
   },
   provide() {
     return {
       formId: this.formId,
       dependencies: this.dependencies,
       requireds: this.requireds,
+      hideFields: this.hideFields,
     };
   },
   data() {
@@ -95,6 +109,7 @@ export default {
       lastClicked: {}, // 记录最后的点击事件，用于取消事件
       defaultForm,
       requireds: [], // 收集必须字段
+      hideFields: {}, // 收集隐藏的字段
     };
   },
   mounted() {
@@ -125,6 +140,7 @@ export default {
     },
     initHooks() {
       this.hooks.validate = this.globalValidate;
+      this.hooks.reset = this.onReset;
     },
     noReady() {
       return Object.keys(this.form).length == 0;
@@ -157,20 +173,23 @@ export default {
     onAction(action) {
       if (action.name == "submit" && !this.globalValidate()) return;
       else if (action.name == "reset") {
-        for (let key in this.values) {
-          let type = Array.isArray(this.values[key])
-            ? "array"
-            : this.values[key] == null
-            ? "null"
-            : typeof this.values[key];
-          // 子组件用v-model监听的是computed的值
-          // 为了触发computed的set属性，需删除再赋值
-          this.$delete(this.values, key);
-          this.$set(this.values, key, this.friendValue(type));
-        }
+        this.onReset();
         return;
       }
       this.$emit("action", action); // 外部可获取当前点击了哪个事件
+    },
+    onReset() {
+      for (let key in this.values) {
+        let type = Array.isArray(this.values[key])
+          ? "array"
+          : this.values[key] == null
+          ? "null"
+          : typeof this.values[key];
+        // 子组件用v-model监听的是computed的值
+        // 为了触发computed的set属性，需删除再赋值
+        this.$delete(this.values, key);
+        this.$set(this.values, key, this.friendValue(type));
+      }
     },
     // 全局校验
     globalValidate() {
