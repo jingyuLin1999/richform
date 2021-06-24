@@ -6,6 +6,7 @@
       :values="values"
       :schema="schema"
       :fieldErrors="fieldErrors"
+              :hideFields="hideFields"
     ></layout>
   </div>
 </template>

@@ -62,6 +62,7 @@
           :values="values"
           :field="field"
           :fieldErrors="fieldErrors"
+          :hideFields="hideFields"
           @change="onChange"
         />
         <!-- 错误信息 -->
@@ -106,7 +107,7 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
-  inject: ["dependencies", "requireds", "hideFields"],
+  inject: ["dependencies", "requireds"],
   mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -115,6 +116,7 @@ export default {
     form: { type: Object, default: () => ({}) },
     values: { type: Object, default: () => ({}) },
     fieldErrors: { type: Object, default: () => ({}) },
+    hideFields: { type: Object, default: () => ({}) },
   },
   data() {
     return {
@@ -144,8 +146,6 @@ export default {
       this.pickSchema();
       this.pickRequireds();
       this.createValue();
-      this.pickDependencies();
-      this.pickHideFields();
     },
     emit() {
       // 全局总线
@@ -153,42 +153,6 @@ export default {
         arguments[0] = `${this.formId}:${arguments[0]}`;
         eventbus.$emit(...arguments);
       }
-    },
-    // 收集依赖关系
-    async pickDependencies() {
-      // 赋值初始值
-      if (!this.dependencies[this.field.name])
-        this.dependencies[this.field.name] = [];
-      if (!this.field.hasOwnProperty("dict") || this.field.length == 0) return;
-      if (typeof this.field.dict == "string" && isUrl(this.field.dict)) {
-        // dict字段是url则直接获取数据，并赋值给options
-        // TODO 未调试
-        let options = await loadDict(this.field.dict);
-        this.$set(this.field, "options", options);
-      } else if (Object.keys(this.field.dict).length > 0) {
-        for (let key in this.field.dict) {
-          let dictItem = this.field.dict[key];
-          let dictKeyVal = key.split("==");
-          if (this.dependencies[dictKeyVal[0].trim()])
-            this.dependencies[dictKeyVal[0].trim()].push({
-              keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
-              dictValue: dictItem,
-              field: this.field,
-            });
-        }
-      }
-    },
-    // 字段依赖隐藏
-    pickHideFields() {
-      if (!this.field.hideRely) return; // 若不存在依赖，则无需收集
-      let hideItem = this.field.hideRely.split("==");
-      if (hideItem.length != 2) return;
-      if (!this.hideFields[hideItem[0].trim()])
-        this.hideFields[hideItem[0].trim()] = [];
-      this.hideFields[hideItem[0].trim()].push({
-        value: hideItem[1].trim(),
-        field: this.field,
-      });
     },
     pickSchema() {
       // schema不是必须的或无field就无法查找
@@ -220,7 +184,9 @@ export default {
       // TODO 提供两种模式，树型结构或普通结构
       // 是否立即触发验证
       const defaultValue =
-        this.values[this.field.name] || this.fieldSchema.default;
+        this.values[this.field.name] ||
+        this.fieldSchema.default ||
+        this.field.default;
       if (defaultValue)
         // 若有默认值，则需要直接进行校验
         this.validateField(this.field.name, this.fieldSchema, defaultValue);
@@ -251,13 +217,13 @@ export default {
       }
     },
     // 对依赖本字段的字典进行派发
-    async dispatchOptions(fieldName, value) {
+    async dispatchOptions(fieldName) {
       let dicts = this.dependencies[fieldName];
       if (!Array.isArray(dicts) || !dicts.length) return;
       for (let index = 0; index < dicts.length; index++) {
         let dictItem = dicts[index];
-        if (dictItem.keyValue == value) {
-          this.$set(this.values, dictItem.field.name, null);
+        if (dictItem.keyValue == this.values[fieldName]) {
+          // this.$set(this.values, dictItem.field.name, null);
           if (
             typeof dictItem.dictValue == "string" &&
             isUrl(dictItem.dictValue)
@@ -278,23 +244,27 @@ export default {
         }
       }
     },
-    // 检查隐藏依赖
-    dispatchHide() {
+    // 根据values的字段进行派发动作
+    onDispatch() {
       for (let key in this.values) {
-        let hideFields = this.hideFields[key];
-        if (hideFields) {
-          for (let index = 0; index < hideFields.length; index++) {
-            let item = hideFields[index];
-            this.$set(item.field, "hide", item.value == this.values[key]);
-          }
+        this.dispatchHide(key);
+        this.dispatchOptions(key);
+      }
+    },
+    // 检查隐藏依赖
+    dispatchHide(key) {
+      let hideFields = this.hideFields[key];
+      if (hideFields) {
+        for (let index = 0; index < hideFields.length; index++) {
+          let item = hideFields[index];
+          this.$set(item.field, "hide", item.value == this.values[key]);
         }
       }
     },
     onChange(fieldName, value, schema) {
-      this.validateField(fieldName, schema, value);
       this.emit("field:change", fieldName, value);
-      this.dispatchOptions(fieldName, value);
-      this.dispatchHide();
+      this.validateField(fieldName, schema, value);
+      this.onDispatch();
     },
   },
 };

@@ -26,6 +26,7 @@
             :values="values"
             :schema="schema"
             :fieldErrors="fieldErrors"
+            :hideFields="hideFields"
           ></layout>
         </div>
       </el-collapse-item>

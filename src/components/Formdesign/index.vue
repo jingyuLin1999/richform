@@ -182,6 +182,7 @@ export default {
     setRules(item, rules) {
       // TODO schema由数据库字段生成
       let rulesMeta = JSON.parse(JSON.stringify(rules));
+      this.$set(this.rules, "values", rulesMeta.values);
       this.$set(this.design.schema.properties, item.name, this.rules.values);
       this.$set(this.rules, "form", rulesMeta.form);
     },

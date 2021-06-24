@@ -55,6 +55,7 @@ hideRely：<字段名称name> == 'A'
         :isDesign="isDesign"
         :form="form"
         :fieldErrors="fieldErrors"
+        :hideFields="hideFields"
       >
       </form-layout>
       <!-- 底部按钮 -->
@@ -98,7 +99,6 @@ export default {
       formId: this.formId,
       dependencies: this.dependencies,
       requireds: this.requireds,
-      hideFields: this.hideFields,
     };
   },
   data() {
@@ -116,11 +116,6 @@ export default {
     this.load();
   },
   computed: {
-    // 自动布局
-    isAutoLayout() {
-      // return this.form.layout.length == 0;
-      return false;
-    },
     friendForm() {
       return Object.assign({}, this.defaultForm, this.form);
     },
@@ -211,6 +206,24 @@ export default {
         });
       }
       return valid;
+    },
+    // 递归收集字段依赖隐藏
+    pickHideFields(layout, group = ["collapse", "grid", "tabs", "default"]) {
+      for (let index = 0; index < layout.length; index++) {
+        let item = layout[index];
+        if (group.include(item.widget)) this.pickHideFields(item[item.widget]);
+        else if (item.hideRely) {
+          let hideItem = this.field.hideRely.split("==");
+          if (hideItem.length != 2) return;
+          if (!this.hideFields[hideItem[0].trim()])
+            this.hideFields[hideItem[0].trim()] = [];
+          this.hideFields[hideItem[0].trim()].push({
+            key: this.field.name,
+            value: hideItem[1].trim(),
+            field: this.field,
+          });
+        }
+      }
     },
     // 注销eventbus
     _unregisterEvents() {

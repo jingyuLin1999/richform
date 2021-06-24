@@ -15,6 +15,7 @@
         :values="values"
         :form="form"
         :fieldErrors="fieldErrors"
+        :hideFields="hideFields"
       />
       <!-- 标签页 -->
       <template v-else-if="typeof item == 'object' && item.widget == 'tabs'">
@@ -26,6 +27,7 @@
           :tabsItem="item"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
+          :hideFields="hideFields"
         ></field-tabs>
       </template>
       <!-- 栅格布局 -->
@@ -39,6 +41,7 @@
           :gridItem="item"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
+          :hideFields="hideFields"
         ></field-grid>
       </template>
       <!-- 折叠面板 -->
@@ -53,6 +56,7 @@
           :form="form"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
+          :hideFields="hideFields"
         ></field-collapse>
       </template>
       <!-- 普通字段 -->
@@ -65,6 +69,7 @@
         :form="form"
         :isDesign="isDesign"
         :fieldErrors="fieldErrors"
+        :hideFields="hideFields"
       ></field>
     </template>
   </draggable>
@@ -97,6 +102,7 @@ export default {
     layout: { type: Array, default: () => [] },
     isDesign: { type: Boolean, default: false },
     fieldErrors: { type: Object, default: () => ({}) },
+    hideFields: { type: Object, default: () => ({}) },
   },
   methods: {},
 };

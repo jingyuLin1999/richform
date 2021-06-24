@@ -21,7 +21,9 @@ export const attribute = {
     schema: {
 
     },
-    values: {},
+    values: {
+
+    },
     form: {
         ...baseForm,
         layout: [
@@ -84,6 +86,7 @@ export const attribute = {
                             inactiveColor: "#ff4949", // 取消背景颜色
                             activeValue: true, // 打开的值，支持Boolean, String或Number
                             inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                            hideRely: "type==textarea",
                         }
                     ], [
                         {
@@ -95,6 +98,7 @@ export const attribute = {
                             inactiveColor: "#ff4949", // 取消背景颜色
                             activeValue: true, // 打开的值，支持Boolean, String或Number
                             inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                            hideRely: "type==textarea",
                         }
                     ]
                 ]
@@ -105,7 +109,11 @@ export const attribute = {
 
 export const rules = {
     schema: {},
-    values: {},
+    values: {
+        type: "string",
+        minLength: 0,
+        maxLength: 255
+    },
     form: {
         ...baseForm,
         layout: [

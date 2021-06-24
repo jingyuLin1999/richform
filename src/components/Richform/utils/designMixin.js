@@ -6,6 +6,7 @@ export default {
         form: { type: Object, default: () => ({}) },
         isDesign: { type: Boolean, default: false },
         fieldErrors: { type: Object, default: () => ({}) },
+        hideFields: { type: Object, default: () => ({}) },
     },
     inject: ["formId"],
     data() {

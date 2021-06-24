@@ -66,13 +66,13 @@ export default {
             title: "下拉选框A",
             widget: "select",
             type: "string",
-            default: "双皮奶",
+            default: "选项1",
           },
           selectB: {
             title: "下拉B依赖A",
             widget: "select",
             type: "string",
-            default: "双皮奶",
+            minLength: 1,
           },
           radioA: {
             title: "单选框A",
@@ -128,7 +128,7 @@ export default {
       values: {
         a: "",
         select: "",
-        map: "阳光",
+        map: "阳新花园城",
       },
       form: {
         border: true, // 显示边框
@@ -165,11 +165,17 @@ export default {
         ],
         layout: [
           {
+            title: "自定义插槽",
+            widget: "slot",
+            name: "slot",
+            html: "<a href='#'>richform你好</a><br>123",
+          },
+          {
             title: "名称对方",
             widget: "input",
             name: "input",
             type: "textarea",
-            hideRely: "radioA==单选框A",
+            hideRely: "radioA==单选框B",
           },
           {
             title: "百度地图",

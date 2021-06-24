@@ -1,27 +1,21 @@
+import { isUrl, loadDict } from "../utils";
 export default {
     props: {
         field: { type: Object, default: () => ({}) },
         schema: { type: Object, default: () => ({}) },
         values: { type: Object, default: () => ({}) },
         fieldErrors: { type: Object, default: () => ({}) },
+        hideFields: { type: Object, default: () => ({}) },
     },
     data() {
         return {
             updateValue: 0,
         }
     },
+    inject: ["dependencies"],
     mounted() {
-        this.$setFieldAttr()
+        this.load();
     },
-    // watch: {
-    //     values: {
-    //         handler() {
-    //             this.values;
-    //             console.log(45613)
-    //         },
-    //         deep: true
-    //     },
-    // },
     computed: {
         value: {
             get() {
@@ -38,6 +32,11 @@ export default {
         }
     },
     methods: {
+        load() {
+            this.$setFieldAttr();
+            this.pickHideFields();
+            this.pickDependencies();
+        },
         $setFieldAttr() {
             const defaultFieldAttr = this.defaultFieldAttr();
             let fieldAttr = Object.assign(defaultFieldAttr, this.field)
@@ -52,6 +51,66 @@ export default {
             // TODO 做一些友好值处理
             // 值的类型
             return this.values[this.field.name];
-        }
+        },
+        // 字段依赖隐藏
+        pickHideFields() {
+            if (!this.field.hideRely) return; // 若不存在依赖，则无需收集
+            let hideItem = this.field.hideRely.split("==");
+            if (hideItem.length != 2) return;
+            if (!this.hideFields[hideItem[0].trim()])
+                this.hideFields[hideItem[0].trim()] = [];
+            // 已存在则不需要重新收集
+            for (let key in this.hideFields) {
+                let hasExit = this.hideFields[key].find((item) => {
+                    if (item.key == this.field.name) {
+                        // 必须重新赋值，因为form的地址已经变了
+                        this.$set(item, 'field', this.field)
+                        return true;
+                    }
+                });
+                if (hasExit) return;
+            }
+            this.hideFields[hideItem[0].trim()].push({
+                key: this.field.name,
+                value: hideItem[1].trim(),
+                field: this.field,
+            });
+        },
+        // 收集依赖关系
+        async pickDependencies() {
+            // 赋值初始值
+            if (!this.dependencies[this.field.name])
+                this.dependencies[this.field.name] = [];
+            if (!this.field.hasOwnProperty("dict") || this.field.length == 0) return;
+            if (typeof this.field.dict == "string" && isUrl(this.field.dict)) {
+                // dict字段是url则直接获取数据，并赋值给options
+                // TODO 未调试
+                let options = await loadDict(this.field.dict);
+                this.$set(this.field, "options", options);
+            } else if (Object.keys(this.field.dict).length > 0) {
+                for (let key in this.field.dict) {
+                    let dictItem = this.field.dict[key];
+                    let dictKeyVal = key.split("==");
+                    if (this.dependencies[dictKeyVal[0].trim()]) {
+                        for (let key in this.dependencies) {
+                            let hasExit = this.dependencies[key].find((item) => {
+                                if (item.keyValue == this.field.name) {
+                                    // 必须重新赋值，因为form的地址已经变了
+                                    this.$set(item, 'field', this.field)
+                                    return true;
+                                }
+                            });
+                            if (hasExit) return;
+                        }
+                        this.dependencies[dictKeyVal[0].trim()].push({
+                            keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
+                            dictValue: dictItem,
+                            field: this.field,
+                        });
+                    }
+
+                }
+            }
+        },
     }
 }
