@@ -3,7 +3,7 @@
     <div class="design-header">
       <h1 class="title">表单设计器</h1>
       <div class="tools">
-        <i class="el-icon-document-add tool" @click="onSubmit"> 生产JSON</i>
+        <i class="el-icon-document-add tool" @click="onSubmit"> 生成JSON</i>
         <div class="tool" @click="onPreview">
           <i class="el-icon-view" v-if="isDesign"> 预览</i>
           <i class="el-icon-setting" v-else> 设计</i>

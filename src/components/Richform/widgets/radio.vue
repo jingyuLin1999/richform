@@ -14,17 +14,6 @@
       :fill="field.fill"
       v-model="value"
     >
-      <div v-if="!field.isButton">
-        <el-radio
-          v-for="radio in field.options"
-          :name="radio.name"
-          :key="radio.name"
-          :disabled="radio.disabled"
-          :border="radio.border"
-          :size="radio.size"
-          :label="radio.title"
-        ></el-radio>
-      </div>
       <div v-if="field.isButton">
         <el-radio-button
           v-for="radio in field.options"
@@ -35,6 +24,17 @@
           :size="radio.size"
           :label="radio.title"
         ></el-radio-button>
+      </div>
+      <div v-else>
+        <el-radio
+          v-for="radio in field.options"
+          :name="radio.name"
+          :key="radio.name"
+          :disabled="radio.disabled"
+          :border="radio.border"
+          :size="radio.size"
+          :label="radio.title"
+        ></el-radio>
       </div>
     </el-radio-group>
   </div>
@@ -52,8 +52,8 @@ export default {
         disabled: true,
         border: false,
         size: "small", // medium / small / mini
-        textColor: "", // 当isButton为true时有效
-        fill: "", // 当isButton为true时有效
+        textColor: "#fff", // 当isButton为true时有效
+        fill: "#409EFF", // 当isButton为true时有效
       };
     },
   },

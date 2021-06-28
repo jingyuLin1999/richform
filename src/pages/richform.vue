@@ -165,6 +165,65 @@ export default {
         ],
         layout: [
           {
+            title: "复选框",
+            name: "checkbox",
+            widget: "checkbox",
+            readOnly: false,
+            disabled: false,
+            isGroup: true,
+            isButton: false,
+            chooseAll: true,
+            size: "medium",
+            max: 10000,
+            min: 0,
+            default: [],
+            textColor: "#ff0000", // isButton为true或border为true有效
+            fill: "#0f0", // isButton为true或border为true有效
+            options: [
+              {
+                name: "checkboxA",
+                title: "复选框A",
+                disabled: false,
+                border: false,
+              },
+              {
+                name: "checkboxB",
+                title: "复选框B",
+                disabled: false,
+                border: false,
+              },
+              {
+                name: "checkboxC",
+                title: "复选框C",
+                disabled: false,
+                border: false,
+                defaultColor: "#f00",
+              },
+            ],
+          },
+          {
+            title: "树结构", // 树
+            widget: "tree",
+            name: "tree",
+            isShowCheckbox: true,
+            tree: [
+              {
+                id: 1,
+                label: "一级 1",
+                children: [
+                  {
+                    id: 2,
+                    label: "二级 1-1",
+                  },
+                ],
+              },
+              {
+                id: 3,
+                label: "三级 1-1-1",
+              },
+            ],
+          },
+          {
             title: "自定义插槽",
             widget: "slot",
             name: "slot",
@@ -182,6 +241,23 @@ export default {
             widget: "map",
             name: "map",
             description: "todo  错误Cannot set property 'pj' of undefined",
+          },
+          {
+            title: "下拉选框多选", // 优先级小于shema中定义的title
+            widget: "select",
+            name: "selectMultiple",
+            multiple: true,
+            filterable: true,
+            options: [
+              {
+                value: "选项1",
+                label: "黄金糕",
+              },
+              {
+                value: "选项2",
+                label: "双皮奶",
+              },
+            ],
           },
           {
             title: "下拉选框A", // 优先级小于shema中定义的title
@@ -238,12 +314,12 @@ export default {
             title: "单选",
             name: "radioA",
             isGroup: true,
-            isButton: false,
+            isButton: true,
             disabled: false,
             border: true,
-            size: "default",
-            textColor: "#f00",
-            fill: "#00f",
+            size: "small",
+            textColor: "#fff",
+            fill: "#409EFF",
             options: [
               {
                 name: "radioA",

@@ -182,6 +182,8 @@ export default {
     },
     createValue() {
       // TODO 提供两种模式，树型结构或普通结构
+      // 有值则不需要创建，即values的优先级大于default的值
+      if (this.values[this.field.name]) return;
       // 是否立即触发验证
       const defaultValue =
         this.values[this.field.name] ||

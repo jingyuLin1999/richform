@@ -14,11 +14,9 @@
 import { baseForm, baseLayout } from "./base";
 
 export const attribute = {
-    schema: {
-
-    },
+    schema: {},
     values: {
-        type: "string"
+        // type: "string"
     },
     form: {
         ...baseForm,
@@ -29,22 +27,6 @@ export const attribute = {
                 name: "placeholder",
                 size: "small",
                 widget: "input"
-            },
-            {
-                title: "类型",
-                widget: "select",
-                name: "type",
-                size: "small",
-                options: [
-                    {
-                        value: "string",
-                        label: "字符串",
-                    },
-                    {
-                        value: "array",
-                        label: "数组",
-                    },
-                ],
             },
             {
                 title: "尺寸",
@@ -62,7 +44,7 @@ export const attribute = {
                     },
                     {
                         value: "mini",
-                        label: "迷你",
+                        label: "小",
                     },
                 ],
             },
@@ -81,6 +63,7 @@ export const attribute = {
                             inactiveColor: "#ff4949", // 取消背景颜色
                             activeValue: true, // 打开的值，支持Boolean, String或Number
                             inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+                            description: "分组option结构特殊，具体请见element"
                         }
                     ], [
                         {
@@ -146,6 +129,10 @@ export const rules = {
                     {
                         value: "string",
                         label: "字符串",
+                    },
+                    {
+                        value: "array",
+                        label: "数组",
                     },
                 ],
             },
