@@ -1,44 +1,46 @@
 <template>
-  <draggable
-    class="draggable-list-widget"
-    v-bind="dragOptions()"
-    :list="value"
-    tag="dl"
-  >
-    <dd
-      class="draggable-list-item"
-      :key="item.name"
-      v-for="(item, index) of value"
-    >
-      <i
-        :class="[
-          'el-icon-s-operation',
-          'draggable-list-icon',
-          'list-handle-move',
-        ]"
-      ></i>
-      <el-input
-        class="input-wrapper"
-        v-for="(key, index) in Object.keys(item)"
-        :key="index"
-        v-model="item[key]"
-        :size="field.size"
-        :placeholder="key"
-      />
-      <i
-        v-if="field.showOperation && !field.atLeastOne"
-        :class="['el-icon-remove', 'delete-list-icon']"
-        @click="deleteItem(index)"
-      ></i>
-    </dd>
-    <div
-      v-show="field.showOperation"
-      class="draggable-list-add"
-      @click="addItem"
-    >
-      添加标签
-    </div>
-  </draggable>
+  <dl class="draggable-list-widget">
+    <draggable v-bind="dragOptions()" :list="value">
+      <dd
+        class="draggable-list-item"
+        v-for="(item, index) in value"
+        :key="item.id"
+      >
+        <i
+          :class="[
+            'el-icon-s-operation',
+            'draggable-list-icon',
+            'list-handle-move',
+          ]"
+        ></i>
+        <div
+          class="input-wrapper"
+          v-for="(key, index) in Object.keys(item)"
+          :key="index"
+        >
+          <el-input
+            v-if="key != 'id'"
+            v-model="item[key]"
+            :size="field.size"
+            :placeholder="key"
+          />
+        </div>
+        <i
+          v-if="field.showOperation"
+          :class="['el-icon-remove', 'delete-list-icon']"
+          @click="deleteItem(index)"
+        ></i>
+      </dd>
+
+      <div
+        v-show="field.showOperation"
+        class="draggable-list-add"
+        @click="addItem"
+      >
+        添加标签
+      </div>
+    </draggable>
+  </dl>
 </template>
 <script>
 import baseMixin from "./baseMixin";
@@ -47,8 +49,18 @@ export default {
   name: "DraggableListWidget",
   mixins: [baseMixin],
   components: { Draggable },
+  data() {
+    return {
+      id: 1,
+    };
+  },
   mounted() {
     if (this.field.atLeastOne && this.value.length == 0) this.addItem();
+    // 找出最大id
+    for (let key in this.value) {
+      let item = this.value[key];
+      this.id = item.id > this.id ? item.id : this.id;
+    }
   },
   methods: {
     // 定义一个规范化Schema的方法，用来为组件添加个性化的默认属性
@@ -60,24 +72,25 @@ export default {
         icon: "el-icon-circle-plus", // 添加图标
         showOperation: true, // 是否显示操作图标
         template: { label: "", value: "" },
-        atLeastOne: false, // 选项至少要有一个
+        atLeastOne: true, // 选项至少要有一个
       };
     },
     // 增加项目
     addItem() {
       let template = JSON.parse(JSON.stringify(this.field.template));
+      template.id = ++this.id;
       this.value.push(template);
     },
     // 删除项目
     deleteItem(index) {
-      if (this.value.length === 1) return;
+      if (this.value.length === 1 && this.field.atLeastOne) return;
       this.value.splice(index, 1);
     },
     // 拖拽配置
     dragOptions() {
       return {
         sort: true,
-        animation: 300,
+        animation: 200,
         ghostClass: "ghost",
         handle: ".list-handle-move",
         easing: "cubic-bezier(1, 0, 0, 1)",

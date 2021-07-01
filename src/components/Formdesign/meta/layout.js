@@ -45,12 +45,7 @@ export const widgets = [
         title: "下拉选框", // 优先级小于shema中定义的title
         widget: "select",
         name: "select",
-        options: [
-            {
-                value: "选项1",
-                label: "黄金糕",
-            }
-        ],
+        options: [],
     },
     {
         widget: "radio",

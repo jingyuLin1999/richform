@@ -19,8 +19,8 @@
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
         <el-option
-          v-for="option in field.options"
-          :key="option.value"
+          v-for="(option, index) in field.options"
+          :key="index"
           :label="option.label"
           :value="option.value"
           :disabled="option.disabled"
@@ -29,8 +29,8 @@
       <!-- 分组 -->
       <div v-else>
         <el-option-group
-          v-for="group in field.options"
-          :key="group.label"
+          v-for="(group, index) in field.options"
+          :key="index"
           :label="group.label"
         >
           <el-option
