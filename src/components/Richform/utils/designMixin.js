@@ -51,9 +51,20 @@ export default {
             this.emit("design:clicked", item);
         },
         // 项目删除动作
-        onDeleteItem(item) {
+        onDeleteItem(form, field) {
             if (!this.isDesign) return;
-            this.emit("design:deleteItem", item.designId);
+            this.iterationFind(form.layout, field)
+        },
+        // 递归查找并删除
+        iterationFind(obj, target) {
+            for (let key in obj) {
+                if (typeof obj[key] === "object" && obj[key] !== null) {
+                    if (JSON.stringify(obj[key]) == JSON.stringify(target)) {
+                        this.$delete(obj, key);
+                    }
+                    this.iterationFind(obj[key], target)
+                }
+            }
         },
         // 复制
         onCopyItem(item) {
@@ -71,7 +82,7 @@ export default {
                 handle: ".design-handle-move", // 可拖拽类，用于限定区域
                 dragClass: "design-sortable-drag", // 排序背景显示
                 ghostClass: "design-draggable-ghost",
-                emptyInsertThreshold: 220, // 首个拖进来占位
+                emptyInsertThreshold: 5, // 首个拖进来占位,该值不能太大，否则会发生抖动情况
                 invertSwap: false,
                 // direction: 'vertical',
                 swapThreshold: 0.5,

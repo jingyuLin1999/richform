@@ -18,7 +18,7 @@
       @change="onCheckAll"
       label="全选"
     ></el-checkbox>
-    <!-- 多个复选框，必须设置enumDict -->
+    <!-- 多个复选框，必须设置options -->
     <el-checkbox-group
       v-if="field.isGroup"
       v-model="value"

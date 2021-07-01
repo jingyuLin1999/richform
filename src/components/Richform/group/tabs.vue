@@ -45,7 +45,7 @@
     <!--删除-->
     <span
       class="design-delete"
-      @click="onDeleteItem(schema)"
+      @click="onDeleteItem(form, tabsItem)"
       v-if="isDesign && tabsItem.isClicked"
     >
       <i class="el-icon-delete"></i>

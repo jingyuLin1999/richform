@@ -49,7 +49,7 @@
     <!--删除-->
     <span
       class="design-delete"
-      @click="onDeleteItem(schema)"
+      @click="onDeleteItem(form, gridItem)"
       v-if="isDesign && gridItem.isClicked"
     >
       <i class="el-icon-delete"></i>

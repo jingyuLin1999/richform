@@ -1,4 +1,5 @@
 import { isUrl, loadDict } from "../utils";
+import CommonMixin from "../utils/commonMixin"
 export default {
     props: {
         field: { type: Object, default: () => ({}) },
@@ -13,6 +14,7 @@ export default {
         }
     },
     inject: ["dependencies"],
+    mixins: [CommonMixin],
     mounted() {
         this.load();
     },
@@ -36,6 +38,7 @@ export default {
             this.$setFieldAttr();
             this.pickHideFields();
             this.pickDependencies();
+            this.onDispatch()
         },
         $setFieldAttr() {
             const defaultFieldAttr = this.defaultFieldAttr();

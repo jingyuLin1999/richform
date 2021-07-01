@@ -49,7 +49,7 @@
     <!--删除-->
     <span
       class="design-delete"
-      @click="onDeleteItem(schema)"
+      @click="onDeleteItem(form, collapse)"
       v-if="isDesign && collapse.isClicked"
     >
       <i class="el-icon-delete"></i>

@@ -49,6 +49,12 @@ export const attribute = {
                 ],
             },
             {
+                title: "选项",
+                widget: "draggablelist",
+                name: "options",
+                default: []
+            },
+            {
                 widget: "grid",
                 showTitle: false,
                 isClicked: false,
@@ -116,7 +122,9 @@ export const attribute = {
 
 export const rules = {
     schema: {},
-    values: {},
+    values: {
+        type: "string"
+    },
     form: {
         ...baseForm,
         layout: [

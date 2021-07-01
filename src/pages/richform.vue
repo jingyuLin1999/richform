@@ -165,6 +165,32 @@ export default {
         ],
         layout: [
           {
+            title: "拖拽列表",
+            widget: "draggablelist",
+            name: "draggablelist",
+            default: []
+          },
+          {
+            title: "Ip输入框",
+            widget: "ipinput",
+            name: "ipinput",
+          },
+          {
+            title: "时间选择器",
+            widget: "timepicker",
+            name: "timepicker",
+          },
+          {
+            title: "评分",
+            widget: "rate",
+            name: "rate",
+          },
+          {
+            title: "颜色选择器",
+            widget: "colorpicker",
+            name: "colorpicker",
+          },
+          {
             title: "复选框",
             name: "checkbox",
             widget: "checkbox",
