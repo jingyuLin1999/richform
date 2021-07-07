@@ -168,7 +168,7 @@ export default {
             title: "拖拽列表",
             widget: "draggablelist",
             name: "draggablelist",
-            default: []
+            default: [],
           },
           {
             title: "Ip输入框",
@@ -262,12 +262,12 @@ export default {
             type: "textarea",
             hideRely: "radioA==单选框B",
           },
-          {
-            title: "百度地图",
-            widget: "map",
-            name: "map",
-            description: "todo  错误Cannot set property 'pj' of undefined",
-          },
+          // {
+          //   title: "百度地图",
+          //   widget: "map",
+          //   name: "map",
+          //   description: "todo  错误Cannot set property 'pj' of undefined",
+          // },
           {
             title: "下拉选框多选", // 优先级小于shema中定义的title
             widget: "select",

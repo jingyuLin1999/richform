@@ -19,7 +19,10 @@
           :key="index"
         >
           <el-input
-            v-if="key != 'id'"
+            v-if="
+              (key != 'id' && field.editKeys.length == 0) ||
+              field.editKeys.includes(key)
+            "
             v-model="item[key]"
             :size="field.size"
             :placeholder="key"
@@ -66,6 +69,7 @@ export default {
     // 定义一个规范化Schema的方法，用来为组件添加个性化的默认属性
     defaultFieldAttr() {
       return {
+        idKey: "id", // id的键值
         size: "small", // "mini/medium"
         title: "拖拽列表",
         showLabel: false,
@@ -73,12 +77,14 @@ export default {
         showOperation: true, // 是否显示操作图标
         template: { label: "", value: "" },
         atLeastOne: true, // 选项至少要有一个
+        editKeys: [], // 可编辑的键值
       };
     },
     // 增加项目
     addItem() {
       let template = JSON.parse(JSON.stringify(this.field.template));
-      template.id = ++this.id;
+      let key = ++this.id;
+      template[this.field.idKey] = key.toString();
       this.value.push(template);
     },
     // 删除项目

@@ -28,6 +28,7 @@
       :size="field.size"
       :text-color="field.textColor"
       :fill="field.fill"
+      @change="onCheckboxGroup"
     >
       <!-- 普通复选组 -->
       <div v-if="!field.isButton">
@@ -92,6 +93,10 @@ export default {
       let value = val ? checkOptions : [];
       this.changeValue(value);
       this.isIndeterminate = false;
+    },
+    onCheckboxGroup(value) {
+      this.checkAll = this.field.options.length == value.length;
+      this.isIndeterminate = this.checkAll ? false : true;
     },
   },
 };

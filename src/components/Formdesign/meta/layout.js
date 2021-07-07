@@ -17,10 +17,8 @@ export const layout = [ // 布局模板数据
             {
                 label: "标签页一",
                 name: "1",
-                designId: new Date().getTime().toString(),
                 icon: "",
-                fields: [
-                ]
+                fields: []
             }
         ]
     },

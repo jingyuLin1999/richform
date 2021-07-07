@@ -40,6 +40,7 @@ hideRely：<字段名称name> == 'A'
 -->
 <template>
   <form :class="['richform', form.border ? 'form-border' : '']" :id="formId">
+    <!-- {{values}} -->
     <perfect-scrollbar :style="{ 'min-height': '120px' }">
       <!-- 顶部按钮 -->
       <actions
@@ -141,6 +142,8 @@ export default {
       return Object.keys(this.form).length == 0;
     },
     onFieldValueChange(fieldName, value) {
+      // handle bug 实际值已经更新，但dom没有变化
+      this.$delete(this.values, fieldName);
       this.$set(this.values, fieldName, value);
     },
     onDesignClicked(clicked) {
@@ -206,24 +209,6 @@ export default {
         });
       }
       return valid;
-    },
-    // 递归收集字段依赖隐藏
-    pickHideFields(layout, group = ["collapse", "grid", "tabs", "default"]) {
-      for (let index = 0; index < layout.length; index++) {
-        let item = layout[index];
-        if (group.include(item.widget)) this.pickHideFields(item[item.widget]);
-        else if (item.hideRely) {
-          let hideItem = this.field.hideRely.split("==");
-          if (hideItem.length != 2) return;
-          if (!this.hideFields[hideItem[0].trim()])
-            this.hideFields[hideItem[0].trim()] = [];
-          this.hideFields[hideItem[0].trim()].push({
-            key: this.field.name,
-            value: hideItem[1].trim(),
-            field: this.field,
-          });
-        }
-      }
     },
     // 注销eventbus
     _unregisterEvents() {

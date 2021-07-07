@@ -114,6 +114,6 @@ export default {
 
                 }
             }
-        },
+        }
     }
 }
