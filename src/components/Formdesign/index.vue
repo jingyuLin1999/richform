@@ -67,7 +67,11 @@
           ></RichForm
         ></template>
         <template slot="last">
-          <el-tabs v-model="activeTabName" @tab-click="onTabClick">
+          <el-tabs
+            class="tab-attribute"
+            v-model="activeTabName"
+            @tab-click="onTabClick"
+          >
             <el-tab-pane label="属性配置" name="attribute" class="design-tab">
               <RichForm
                 :schema="attribute.schema"
@@ -97,6 +101,9 @@ import SplitLayout from "../SplitLayout";
 import { layout, widgets } from "./meta/layout";
 export default {
   components: { Draggable, SplitLayout, RichForm },
+  props: {
+    fields: { type: Array, default: () => [] }, // 表的字段
+  },
   data() {
     return {
       isDesign: true,
@@ -182,7 +189,11 @@ export default {
     setRules(item, rules) {
       // TODO schema由数据库字段生成
       let rulesMeta = JSON.parse(JSON.stringify(rules));
-      this.$set(this.rules, "values", rulesMeta.values);
+      let designRules = this.design.schema.properties;
+      let ruleValue = rulesMeta.values;
+      if (designRules[item.name])
+        Object.assign(ruleValue, designRules[item.name]);
+      this.$set(this.rules, "values", ruleValue);
       this.$set(this.design.schema.properties, item.name, this.rules.values);
       this.$set(this.rules, "form", rulesMeta.form);
     },
@@ -210,9 +221,12 @@ export default {
   .design-sortable-drag {
     background: #f00;
   }
-  .el-tabs__item {
-    width: 140px;
-    text-align: center;
+  // 修改属性配置elementUi tab的样式
+  .tab-attribute {
+    .el-tabs__item {
+      width: 135px;
+      text-align: center;
+    }
   }
   > .design-header {
     height: 55px;

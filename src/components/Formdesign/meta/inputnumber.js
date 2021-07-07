@@ -114,7 +114,30 @@ export const rules = {
     form: {
         ...baseForm,
         layout: [
-
+            {
+                title: "最小值",
+                name: "minimum",
+                widget: "inputnumber",
+                step: 1, // 步数
+                min: 0,
+                default: 0,
+                stepStrictly: false, // 严格步数,只能输入 step 的倍数
+                precision: undefined, // 精度,设置计数器最小值
+                controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
+                size: "mini",
+            },
+            {
+                title: "最大值",
+                name: "maximum",
+                widget: "inputnumber",
+                step: 1, // 步数
+                min: 0,
+                default: 255,
+                stepStrictly: false, // 严格步数,只能输入 step 的倍数
+                precision: undefined, // 精度,设置计数器最小值
+                controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
+                size: "mini",
+            },
         ]
     }
 }

@@ -53,20 +53,20 @@ export const widgets = [
         isButton: false,
         disabled: false,
         border: true,
-        size: "default",
-        textColor: "#f00",
-        fill: "#00f",
+        size: "small",
+        fill: "#409EFF",
+        textColor: "#fff",
         options: [
             {
-                name: "optionA",
                 title: "选项A",
+                name: "optionA",
                 disabled: false,
                 border: false,
                 size: "default",
             },
             {
-                name: "optionB",
                 title: "选项B",
+                name: "optionB",
                 disabled: false,
                 border: false,
                 size: "default",
@@ -84,7 +84,6 @@ export const widgets = [
         stepStrictly: false, // 严格步数,只能输入 step 的倍数
         precision: undefined, // 精度,设置计数器最小值
         controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-        size: "default",
     },
     {
         name: "switch",
@@ -93,11 +92,11 @@ export const widgets = [
         disabled: false,
         width: 40, // 宽度
         activeColor: "#13ce66", // 激活背景颜色
-        inactiveColor: "#ff4949", // 取消背景颜色
+        inactiveColor: "#ccc", // 取消背景颜色
         activeText: "路飞", // 激活文本
         inactiveText: "索隆", // 取消文本
-        activeValue: true, // 打开的值，支持Boolean, String或Number
-        inactiveValue: false, // 关闭的值，支持Boolean, String或Number
+        activeValue: 1, // 打开的值，支持Boolean, String或Number
+        inactiveValue: 2, // 关闭的值，支持Boolean, String或Number
         activeIconClass: "",
         inactiveIconClass: "",
     },
@@ -108,7 +107,7 @@ export const widgets = [
         clearable: true,
         minimum: 0,
         maximum: 1000,
-        step: 100,
+        step: 1,
     }
 ]
 

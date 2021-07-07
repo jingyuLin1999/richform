@@ -73,9 +73,12 @@ export default {
                 });
                 if (hasExit) return;
             }
+            let convertKey = ["true", "false"];
+            let value = hideItem[1].trim();
+
             this.hideFields[hideItem[0].trim()].push({
                 key: this.field.name,
-                value: hideItem[1].trim(),
+                value: convertKey.includes(value) ? JSON.parse(value) : value,
                 field: this.field,
             });
         },

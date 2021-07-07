@@ -19,10 +19,7 @@
           :key="index"
         >
           <el-input
-            v-if="
-              (key != 'id' && field.editKeys.length == 0) ||
-              field.editKeys.includes(key)
-            "
+            v-if="field.editKeys && field.editKeys.includes(key)"
             v-model="item[key]"
             :size="field.size"
             :placeholder="key"

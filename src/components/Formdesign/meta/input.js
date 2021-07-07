@@ -61,13 +61,29 @@ export const attribute = {
                         label: "大",
                     },
                     {
-                        value: "small ",
+                        value: "small",
                         label: "中",
                     },
                     {
                         value: "mini",
                         label: "小",
                     },
+                ],
+            },
+            {
+                title: "禁用",
+                widget: "select",
+                name: "disabled",
+                size: "small",
+                options: [
+                    {
+                        value: true,
+                        label: "是",
+                    },
+                    {
+                        value: false,
+                        label: "否",
+                    }
                 ],
             },
             {
@@ -83,7 +99,7 @@ export const attribute = {
                             widget: "switch",
                             width: 40, // 宽度
                             activeColor: "#13ce66", // 激活背景颜色
-                            inactiveColor: "#ff4949", // 取消背景颜色
+                            inactiveColor: "#ccc", // 取消背景颜色
                             activeValue: true, // 打开的值，支持Boolean, String或Number
                             inactiveValue: false, // 关闭的值，支持Boolean, String或Number
                             hideRely: "type==textarea",
@@ -95,7 +111,7 @@ export const attribute = {
                             widget: "switch",
                             width: 40, // 宽度
                             activeColor: "#13ce66", // 激活背景颜色
-                            inactiveColor: "#ff4949", // 取消背景颜色
+                            inactiveColor: "#ccc", // 取消背景颜色
                             activeValue: true, // 打开的值，支持Boolean, String或Number
                             inactiveValue: false, // 关闭的值，支持Boolean, String或Number
                             hideRely: "type==textarea",
@@ -137,7 +153,6 @@ export const rules = {
                 widget: "inputnumber",
                 step: 1, // 步数
                 min: 0,
-                max: 255,
                 default: 0,
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
@@ -151,7 +166,6 @@ export const rules = {
                 widget: "inputnumber",
                 step: 1, // 步数
                 min: 0,
-                max: 255,
                 default: 255,
                 stepStrictly: false, // 严格步数,只能输入 step 的倍数
                 precision: undefined, // 精度,设置计数器最小值
