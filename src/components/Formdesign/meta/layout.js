@@ -168,6 +168,25 @@ export const widgets = [
         widget: "timepicker",
         name: "timepicker",
     },
+    {
+        title: "日期选择器",
+        widget: "datetimepicker",
+        name: "datetimepicker",
+        type: "daterange", // year/month/date/dates/ week/datetime/datetimerange/ daterange/monthrange
+        readOnly: false,
+        disabled: false,
+        clearable: true, // 是否显示清除按钮
+        size: "", // medium / small / mini
+        editable: false, // 文本框可输入
+        placeholder: "请选择", // 单个
+        format: "", // 显示的格式,注意和type配套
+        valueFormat: "yyyy-MM-dd", // yyyy-MM-dd/timestamp 指定值的格式
+        arrowControl: true,
+        rangeSeparator: "至", // 选择范围时的分隔符
+        startPlaceholder: "开始时间",
+        endPlaceholder: "结束时间",
+        pickerOptions: {},
+    },
 ]
 
 
