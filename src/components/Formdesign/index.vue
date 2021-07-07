@@ -185,6 +185,7 @@ export default {
       }
       this.$set(this.attribute, "values", item);
       this.$set(this.attribute, "form", attributeMeta.form);
+      this.$set(this.attribute, "schema", attributeMeta.schema);
     },
     setRules(item, rules) {
       // TODO schema由数据库字段生成

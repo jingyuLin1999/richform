@@ -71,7 +71,6 @@ export default {
   methods: {
     defaultFieldAttr() {
       return {
-        readOnly: false,
         isGroup: false, // 为true时，options有效即多选框组生效,value必须为array
         isButton: false, // 功能：指明多选框组为按钮形式
         max: 10000, // 生效：多选框组  功能：规定可以选择的范围

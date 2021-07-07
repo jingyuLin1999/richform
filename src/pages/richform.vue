@@ -21,7 +21,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    <!-- {{ values }} -->
+    {{ values }}
     <el-button
       size="small"
       type="success"
@@ -117,11 +117,6 @@ export default {
                 enum: [1, 2, 3, 4, 5, 6, 7],
               },
             },
-          },
-          transfer: {
-            title: "穿梭框",
-            widget: "transfer",
-            type: "array",
           },
         },
       },
@@ -404,6 +399,8 @@ export default {
             title: "穿梭框",
             name: "transfer",
             widget: "transfer",
+            titles: ["Source1", "Target"], // 标题
+            default: [],
             options: [
               {
                 key: 1,

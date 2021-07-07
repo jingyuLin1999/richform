@@ -39,11 +39,11 @@ export default {
   methods: {
     defaultFieldAttr() {
       return {
-        isPicker: false, // 是否为 timepicker 时间任意。timeselect固定时间，由pickerOptions设定
-        readOnly: false,
-        disabled: false,
+        isPicker: true, // 是否为 timepicker 时间任意。timeselect固定时间，由pickerOptions设定
+        readOnly: false, // 只看
+        disabled: false, // 禁用
         clearable: true, // 是否显示清除按钮
-        size: "", // medium / small / mini
+        size: "small", // medium / small / mini
         editable: false, // 文本框可输入
         placeholder: "请选择", // 单个
         valueFormat: "HH:mm:ss",

@@ -13,7 +13,16 @@
             'list-handle-move',
           ]"
         ></i>
+        <!-- 字符串 -->
+        <el-input
+          v-if="typeof item == 'string'"
+          :size="field.size"
+          v-model="value[index]"
+          :placeholder="value[index]"
+        />
+        <!-- 对象 -->
         <div
+          v-else
           class="input-wrapper"
           v-for="(key, index) in Object.keys(item)"
           :key="index"
@@ -72,16 +81,22 @@ export default {
         showLabel: false,
         icon: "el-icon-circle-plus", // 添加图标
         showOperation: true, // 是否显示操作图标
-        template: { label: "", value: "" },
+        template: { label: "", value: "" }, // 新增模板
         atLeastOne: true, // 选项至少要有一个
-        editKeys: [], // 可编辑的键值
+        editKeys: ["label", "value"], // 可编辑的键值
       };
     },
     // 增加项目
     addItem() {
-      let template = JSON.parse(JSON.stringify(this.field.template));
-      let key = ++this.id;
-      template[this.field.idKey] = key.toString();
+      let template = null;
+      if (Object.keys(this.field.template).length > 0) {
+        template = JSON.parse(JSON.stringify(this.field.template));
+        let key = ++this.id;
+        template[this.field.idKey] = key.toString();
+      } else if (typeof this.field.template == "string")
+        template = this.field.template;
+      else if (Array.isArray(this.field.template))
+        template = JSON.parse(JSON.stringify(this.field.template));
       this.value.push(template);
     },
     // 删除项目

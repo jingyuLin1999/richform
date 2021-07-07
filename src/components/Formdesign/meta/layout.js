@@ -74,6 +74,34 @@ export const widgets = [
         ],
     },
     {
+        title: "复选框",
+        name: "checkbox",
+        widget: "checkbox",
+        readOnly: false,
+        disabled: false,
+        isGroup: true,
+        isButton: false,
+        chooseAll: true,
+        size: "medium",
+        max: 10000,
+        min: 0,
+        default: [],
+        options: [
+            {
+                title: "复选框A",
+                name: "checkboxA",
+                disabled: false,
+                border: false,
+            },
+            {
+                title: "复选框B",
+                name: "checkboxB",
+                disabled: false,
+                border: false,
+            }
+        ],
+    },
+    {
         name: "inputnumber",
         widget: "inputnumber",
         title: "计数器",
@@ -108,7 +136,38 @@ export const widgets = [
         minimum: 0,
         maximum: 1000,
         step: 1,
-    }
+    },
+    {
+        title: "颜色选择器",
+        widget: "colorpicker",
+        name: "colorpicker",
+    },
+    {
+        title: "评分",
+        widget: "rate",
+        name: "rate",
+    },
+    {
+        title: "穿梭框",
+        name: "transfer",
+        widget: "transfer",
+        default: [],
+        options: [
+            {
+                label: `备选项1`,
+                key: 1,
+            },
+            {
+                label: `备选项2`,
+                key: 2,
+            },
+        ],
+    },
+    {
+        title: "时间选择器",
+        widget: "timepicker",
+        name: "timepicker",
+    },
 ]
 
 

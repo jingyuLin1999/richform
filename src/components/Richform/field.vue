@@ -290,6 +290,7 @@ export default {
       width: 100%;
       position: relative;
     }
+    // 设计模式是否开启遮罩，暂时去掉
     > .field-mask::before {
       content: "";
       width: 100%;

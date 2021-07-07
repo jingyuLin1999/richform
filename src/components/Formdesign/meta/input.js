@@ -61,7 +61,7 @@ export const attribute = {
                         label: "大",
                     },
                     {
-                        value: "small",
+                        value: "small ",
                         label: "中",
                     },
                     {

@@ -29,7 +29,7 @@ export default {
         showAlpha: false,
         popperClass: "",
         colorFormat: "", //单位选项：hsl / hsv / hex / rgb 说明：写入 v-model 的颜色的格式
-        defaultColor: "#1278F6",
+        default: "#1278F6",
       };
     },
   },
