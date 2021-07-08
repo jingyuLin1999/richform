@@ -21,7 +21,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    {{ values }}
+    <!-- {{ values }} -->
     <el-button
       size="small"
       type="success"

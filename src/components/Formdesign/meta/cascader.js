@@ -45,11 +45,13 @@ export const attribute = {
                 title: "标签键值",
                 widget: "input",
                 name: "propLabel",
+                size: "small"
             },
             {
                 title: "值键值",
                 widget: "input",
                 name: "propValue",
+                size: "small"
             },
             {
                 widget: "grid",
@@ -126,6 +128,7 @@ export const attribute = {
                 title: "分隔符",
                 widget: "input",
                 name: "separator",
+                size: "small",
                 hideRely: "showAllLevels==false",
             },
             {
