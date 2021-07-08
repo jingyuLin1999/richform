@@ -187,6 +187,38 @@ export const widgets = [
         endPlaceholder: "结束时间",
         pickerOptions: {},
     },
+    {
+        title: "级联选择器",
+        widget: "cascader",
+        name: "cascader",
+        disabled: false,
+        placeholder: "",
+        filterable: true, // 搜索功能
+        clearable: true,
+        separator: "/", // 分隔符
+        showAllLevels: true, // 结果显示所以级别如：a/b/c
+        propValue: "value",
+        propLabel: "label",
+        expandTrigger: "hover", // 	click / hover
+        checkStrictly: false,
+        multiple: false, // 可通过 props.multiple = true 来开启多选模
+        options: [
+            {
+                value: "zhinan",
+                label: "指南",
+                children: [
+                    { value: "shejiyuanze", label: "设计原则" },
+                    { value: 'collapse', label: '折叠面板' }
+                ],
+            },
+        ],
+    },
+    {
+        title: "自定义文本",
+        widget: "slot",
+        name: "slot",
+        html: "你好，我是自定义文本",
+    },
 ]
 
 

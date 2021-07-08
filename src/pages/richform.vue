@@ -160,6 +160,29 @@ export default {
         ],
         layout: [
           {
+            title: "级联选择器",
+            widget: "cascader",
+            name: "cascader",
+            disabled: false,
+            placeholder: "",
+            filterable: true, // 搜索功能
+            clearable: true,
+            separator: "/", // 分隔符
+            showAllLevels: true, // 结果显示所以级别如：a/b/c
+            propValue: "value",
+            propLabel: "label",
+            expandTrigger: "hover", // 	click / hover
+            checkStrictly: false,
+            multiple: false, // 可通过 props.multiple = true 来开启多选模
+            options: [
+              {
+                value: "zhinan",
+                label: "指南",
+                children: [{ value: "shejiyuanze", label: "设计原则" }],
+              },
+            ],
+          },
+          {
             title: "日期选择器",
             widget: "datetimepicker",
             name: "datetimepicker",
@@ -246,7 +269,7 @@ export default {
             widget: "tree",
             name: "tree",
             isShowCheckbox: true,
-            tree: [
+            options: [
               {
                 id: 1,
                 label: "一级 1",

@@ -6,9 +6,16 @@
       v-model="filterText"
     >
     </el-input>
+    <el-input
+      v-if="field.showAddTemplate"
+      size="small"
+      placeholder="新增模板"
+      type="textarea"
+      v-model="field.template"
+    ></el-input>
     <el-tree
       ref="pefectTree"
-      :data="field.tree"
+      :data="value || field.options"
       :node-key="field.nodeKey"
       :default-expand-all="field.isExpandAll"
       :expand-on-click-node="false"
@@ -53,7 +60,7 @@
             placement="top-end"
             effect="light"
           >
-            <i class="el-icon-circle-plus-outline" @click="handleSibling()"></i>
+            <i class="el-icon-circle-plus-outline" @click="addSibling()"></i>
           </el-tooltip>
           <el-tooltip
             class="tool-item"
@@ -65,7 +72,7 @@
             placement="top-end"
             effect="light"
           >
-            <i class="el-icon-plus" @click="handleAdd(data, node)"></i>
+            <i class="el-icon-plus" @click="addNodeModal(data, node)"></i>
           </el-tooltip>
           <el-tooltip
             class="tool-item"
@@ -79,7 +86,7 @@
           >
             <i
               class="el-icon-edit-outline"
-              @click="handleEdit(data, node, $event)"
+              @click="editNodeModal(data, node, $event)"
             ></i>
           </el-tooltip>
           <el-tooltip
@@ -97,15 +104,52 @@
         </span>
       </span>
     </el-tree>
+    <!-- 弹窗 -->
+    <Modal
+      v-model="isModal"
+      :showFooter="true"
+      :title="modalTitle"
+      resize
+      :width="600"
+    >
+      <div
+        v-for="(key, index) in Object.keys(template)"
+        :key="index"
+        class="field-row"
+      >
+        <label v-if="key != 'children'" class="field-label">{{ key }}:</label>
+        <el-input
+          v-if="key != 'children'"
+          size="small"
+          v-model="template[key]"
+          required
+        ></el-input>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="isModal = false" size="mini">取 消</el-button>
+        <el-button type="primary" size="mini" @click="onSureBtn"
+          >确 定</el-button
+        >
+      </span>
+    </Modal>
   </div>
 </template>
 
 <script>
+import "xe-utils";
+import { Modal } from "vxe-table";
+import "vxe-table/lib/style.css";
 import baseMixin from "./baseMixin";
 export default {
   mixins: [baseMixin],
+  components: { Modal },
   data() {
     return {
+      isModal: false, // 弹出
+      modalTitle: "", // 标题
+      modalType: "", // add 和 edit模式
+      clickNode: {}, // 节点的数据
+      template: {},
       filterText: "",
     };
   },
@@ -120,27 +164,26 @@ export default {
   methods: {
     defaultFieldAttr() {
       return {
-        tree: [],
-        nodeKey: "id",
-        isDialogType: true,
-        defaultProps: {},
-        isExpandAll: true,
-        isShowCheckbox: false,
-        checkedKeys: [],
-        isShowSearch: false,
-        isShowIcon: true,
-        onlyClickLeaf: true,
+        options: [], // 树数据
+        nodeKey: "id", // 节点id
+        defaultProps: {}, // 字段对应关系
+        isExpandAll: true, // 展开全部
+        isShowCheckbox: false, // 显示复选框
+        checkedKeys: [], // 已经选择的key值
+        isShowSearch: false, // 开启搜索功能
+        isShowIcon: true, // 是否显示图标
+        onlyClickLeaf: true, // 仅仅枝叶可以单击
         editable: false,
         deletable: false,
-        deleteConfirm: false,
-        addable: false,
-        draggable: false,
+        addable: true,
+        draggable: false, // 开启拖拽
         addSibling: false,
         theme: "#409eff",
-        form: {},
         expandIcon: "el-icon-folder-opened",
         narrowIcon: "el-icon-folder",
         leafIcon: "el-icon-document",
+        template: `{ "id": null, "label": "" }`, // 节点模板
+        showAddTemplate: false, // 显示新增模板
       };
     },
     onCheckedNode() {
@@ -157,7 +200,6 @@ export default {
         this.changeValue(getCheckedKeys);
         return;
       }
-      //
       const checkedNode = treeRef.getCheckedNodes();
       this.changeValue(checkedNode);
     },
@@ -166,49 +208,58 @@ export default {
       return data[this.field.defaultProps.label].indexOf(value) !== -1;
     },
     async onRemoveNode(data, node) {
-      let newMenu = [];
-      if (this.deleteConfirm) {
-        this.$confirm("此操作将永久删除节点, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+      this.$confirm("此操作将永久删除节点, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          const parent = node.parent;
+          const children = parent.data.children || parent.data;
+          const index = children.findIndex((item) => item.id === data.id);
+          children.splice(index, 1);
         })
-          .then(async () => {
-            const { payload } = await this.deleteRequest(data);
-            newMenu = payload;
-          })
-          .catch(() => {});
-      } else {
-        const { payload } = await this.deleteRequest(data);
-        newMenu = payload;
-      }
-      if (Array.isArray(newMenu) && newMenu.length > 0)
-        this.$set(this.$data, "treeData", newMenu);
+        .catch(() => {});
     },
-    handleAdd(data, node) {
-      if (this.isOverMaxLevel(node)) return;
-      if (this.isDialogType) {
-        this.isModal = true;
-        this.modalTitle = "新增";
-        this.dialogEditModel = false;
-        this.$set(this.$data, "values", { pid: data.id });
-      } else this.addNode(data);
+    addNodeModal(data, node) {
+      this.isModal = true;
+      this.modalTitle = "新增";
+      this.modalType = "add";
+      this.clickNode = { data, node };
+      this.template = JSON.parse(this.field.template);
     },
-    // 是否超过最大层级数
-    isOverMaxLevel(node) {
-      return node.level + 1 >= this.maxLevel;
-    },
-    handleEdit(data, node, $event) {
-      if (this.isDialogType) {
-        this.isModal = true;
-        this.modalTitle = "编辑";
-        this.dialogEditModel = true;
-        let editData = JSON.parse(JSON.stringify(data));
-        this.$set(this.$data, "values", editData);
+    onSureBtn() {
+      switch (this.modalType) {
+        case "add":
+          this.addNode();
+          break;
+        case "edit":
+          this.editNode();
+          break;
       }
     },
-    // 增加兄弟节点
-    handleSibling() {
+    addNode() {
+      let { data, node } = this.clickNode;
+      if (!data.children) {
+        this.$set(data, "children", []);
+      }
+      data.children.push(this.template);
+      this.isModal = false;
+    },
+    editNodeModal(data, node) {
+      this.isModal = true;
+      this.modalTitle = "编辑";
+      this.modalType = "edit";
+      this.clickNode = { data, node };
+      this.template = JSON.parse(JSON.stringify(data));
+    },
+    editNode() {
+      for (let key in this.template) {
+        this.$set(this.clickNode.data, key, this.template[key]);
+      }
+      this.isModal = false;
+    },
+    addSibling() {
       this.isModal = true;
       this.dialogEditModel = false;
       this.values.pid = 0;
@@ -223,26 +274,21 @@ export default {
   border-radius: 0;
   padding: 2px 4px;
 }
-.el-dialog__header {
-  height: 100%;
-  background: var(--theme);
-  > .el-dialog__title {
-    color: #fff;
-  }
-  .el-dialog__close {
-    color: #fff;
-  }
-  .el-dialog__close:hover {
-    color: #fff !important;
-  }
-}
-// .el-tree-node:focus > .el-tree-node__content {
-//   color: var(--theme);
-// }
 // perfect-tree css
 .perfect-tree-wrapper {
-  background: #fff;
+  width: 100%;
   margin: 0 2px;
+  background: #fff;
+  .field-row {
+    display: flex;
+    margin-bottom: 3px;
+    align-items: center;
+    .field-label {
+      width: 60px;
+      text-align: right;
+      margin-right: 4px;
+    }
+  }
   .perfect-tree-title {
     height: 35px;
     line-height: 35px;

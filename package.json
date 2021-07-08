@@ -19,7 +19,9 @@
     "vue-baidu-map": "^0.21.22",
     "vue-router": "^3.5.1",
     "vue2-perfect-scrollbar": "^1.5.0",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "vxe-table": "^3.3.9",
+    "xe-utils": "^3.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

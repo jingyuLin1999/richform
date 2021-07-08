@@ -47,6 +47,7 @@ export const attribute = {
                 template: "",
                 default: [],
                 hideRely: "showText==false",
+                description: "个数和最大分值对应"
             },
             {
                 widget: "grid",
