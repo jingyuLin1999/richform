@@ -82,7 +82,7 @@ export default {
                 handle: ".design-handle-move", // 可拖拽类，用于限定区域
                 dragClass: "design-sortable-drag", // 排序背景显示
                 ghostClass: "design-draggable-ghost",
-                emptyInsertThreshold: 5, // 首个拖进来占位,该值不能太大，否则会发生抖动情况
+                emptyInsertThreshold: 6, // 首个拖进来占位,该值不能太大，否则会发生抖动情况
                 invertSwap: false,
                 // direction: 'vertical',
                 swapThreshold: 0.5,

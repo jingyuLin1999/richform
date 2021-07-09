@@ -17,8 +17,12 @@
     * 已签核状态显示
     * 错误处理
 
-## 用法
+## 预览
+[表单设计器](https://www.shandawang.com/richform/#/)  
 
+[完整功能](hhttps://www.shandawang.com/richform/#/form-design)  
+
+## 用法
 
 ## 项目运行
 ```
