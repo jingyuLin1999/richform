@@ -34,6 +34,12 @@
     .design-draggable-ghost {
         border-top: 5px solid #f56c6c;
     }
+    // https://github.com/SortableJS/Vue.Draggable/issues/1008#issuecomment-782545024
+    .base-component-item {
+        width: 100%;
+        display: inline-block;
+        text-indent: -9999px;
+    }
     .design-sortable-drag {
         background: #f4dec9;
     }

@@ -7,7 +7,6 @@
     v-if="!field.hide"
     :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
   >
-    <!-- https://github.com/SortableJS/Vue.Draggable/issues/1008#issuecomment-782545024 -->
     <div
       :class="[
         'field',

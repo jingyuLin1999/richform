@@ -1,8 +1,14 @@
 import { baseForm, baseLayout } from "./base"
 export const attribute = {
     schema: {
-        tabs: {
-            type: "array"
+        $schema: "http://json-schema.org/draft-07/schema#",
+        title: "设备属性",
+        description: "A product from Acme's catalog",
+        type: "object",
+        properties: {
+            tabs: {
+                type: "array"
+            }
         }
     },
     values: {
