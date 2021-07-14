@@ -26,5 +26,14 @@
     "xe-utils": "^3.3.0"
   },
   "author": "ljy",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jingyuLin1999/richform.git"
+  },
+  "keywords": [
+    "richform",
+    "form",
+    "formdesign"
+  ]
 }

@@ -85,6 +85,7 @@ import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
+  name: "RichForm",
   mixins: [CommonMixin],
   components: { FormLayout, AutoLayout, PerfectScrollbar, Actions },
   props: {

@@ -12,7 +12,7 @@ const routes = [
         path: '/',
         name: 'form-design',
         component: () => import('@/pages/form-design')
-    },
+    }
 ]
 
 const router = new VueRouter({

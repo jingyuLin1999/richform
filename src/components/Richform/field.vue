@@ -3,10 +3,7 @@
 
 -->
 <template>
-  <div
-    v-if="!field.hide"
-    :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
-  >
+  <div v-if="!field.hide" :class="['field-wrapper', form.grid ? 'field-border-top' : '']">
     <div
       :class="[
         'field',
@@ -27,16 +24,8 @@
           width: form.labelInline ? form.labelWidth : '100%',
         }"
       >
-        <div
-          :class="['label-title', fieldSchema.require ? 'required-field' : '']"
-        >
-          {{ fieldTitle }}
-        </div>
-        <span
-          class="label-suffix"
-          v-if="form.labelSuffix && Object.keys(this.field).length > 0"
-          >:</span
-        >
+        <div :class="['label-title', fieldSchema.require ? 'required-field' : '']">{{ fieldTitle }}</div>
+        <span class="label-suffix" v-if="form.labelSuffix && Object.keys(this.field).length > 0">:</span>
         <el-tooltip
           v-if="fieldSchema.description || field.description"
           :content="fieldSchema.description || field.description"
@@ -72,18 +61,11 @@
       </div>
     </div>
     <!--拖拽-->
-    <span
-      class="design-draggable design-handle-move"
-      v-if="isDesign && field.isClicked"
-    >
+    <span class="design-draggable design-handle-move" v-if="isDesign && field.isClicked">
       <i class="el-icon-rank design-handle-move"></i>
     </span>
     <!--复制-->
-    <span
-      class="design-copy"
-      @click="onCopyItem(schema)"
-      v-if="isDesign && field.isClicked"
-    >
+    <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && field.isClicked">
       <i class="el-icon-document-copy"></i>
     </span>
     <!--删除-->
@@ -114,11 +96,11 @@ export default {
     form: { type: Object, default: () => ({}) },
     values: { type: Object, default: () => ({}) },
     fieldErrors: { type: Object, default: () => ({}) },
-    hideFields: { type: Object, default: () => ({}) },
+    hideFields: { type: Object, default: () => ({}) }
   },
   data() {
     return {
-      fieldSchema: {}, // 字段的schema
+      fieldSchema: {} // 字段的schema
     };
   },
   mounted() {
@@ -129,15 +111,18 @@ export default {
       let widget = this.field.widget || this.fieldSchema.widget;
       if (!widget) return;
       return () => ({
-        component: import(`./widgets/${widget}`),
-        delay: 200,
-        timeout: 3000,
+        // to handle bug of after build error.
+        component: new Promise(async resolve => {
+          resolve(await require(`./widgets/${widget}`));
+        }),
+        delay: 2000,
+        timeout: 3000
       });
     },
     fieldTitle() {
       this.pickSchema();
       return this.field.title || this.fieldSchema.title;
-    },
+    }
   },
   methods: {
     load() {
@@ -204,9 +189,9 @@ export default {
       const schemab = {
         type: "object",
         properties: {
-          [fieldName]: schema,
+          [fieldName]: schema
         },
-        required: require,
+        required: require
       };
       let valid = AJV.validate(schemab, this.values);
       if (valid || !value) {
@@ -220,8 +205,8 @@ export default {
       this.emit("field:change", fieldName, value);
       this.validateField(fieldName, schema, value);
       this.onDispatch();
-    },
-  },
+    }
+  }
 };
 </script>
 
