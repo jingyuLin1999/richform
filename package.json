@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "product": "vue-cli-service build --target lib --name richform src/components/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

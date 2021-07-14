@@ -36,7 +36,6 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :isDesign="false"
       :hooks="hooks"
     ></RichForm>
-    <textarea v-model="values.select"></textarea>
   </div>
 </template>
 
