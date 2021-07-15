@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 
 function resolve(dir) {
@@ -46,4 +47,20 @@ module.exports = {
             // "xe-utils": "xe-utils"
         }
     },
+    // to handle element icon error in build. 
+    chainWebpack: config => {
+        config.module
+            .rule("fonts")
+            .test(/.(ttf|otf|eot|woff|woff2)$/)
+            .use("url-loader")
+            .loader("url-loader")
+            .tap(options => {
+                options = {
+                    // limit: 10000,
+                    name: '/static/fonts/[name].[ext]',
+                }
+                return options
+            })
+            .end()
+    }
 }

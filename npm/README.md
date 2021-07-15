@@ -39,7 +39,7 @@ import { RichForm, FormDesign } from "richform";
 export default {
   data() {
     return {
-        schema: {}, // 验证规则
+        schema: {}, // 验证规则，见JsonSchema文档
         values: {}, // 表单的值
         form: {
             border: true, // 显示边框
@@ -50,46 +50,47 @@ export default {
             labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
             labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
             actions: [
-            //声明显示在下方和动作按钮
-            {
-                name: "reset", // 按键的唯一标识符
-                type: "primary", // 按键类型,默认为primary，具体可见element button
-                title: "重置", // 按键的文字
-                icon: "el-icon-star-off", // 按键图标 具体可见element icon
-                right: true, // 如果=true，则显示在右侧
-                visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
-                tips: "提示信息", // 鼠标悬浮在按键的提示信息
-                top: true, // 是否在上面, false则在下面
-                size: "medium" // medium / small / mini, 若未指明，则等同于form.size
-            },
-            {
-                name: "submit", // 按键的唯一标识符
-                type: "info", // 按键类型,默认为primary，具体可见element button
-                title: "提交", // 按键的文字
-                icon: "", // 按键图标 具体可见element icon
-                right: true, // 如果=true，则显示在右侧
-                visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
-                tips: "提示信息", // 鼠标悬浮在按键的提示信息
-                top: true, // 是否在上面, false则在下面
-                size: "medium" // medium / small / mini, 若未指明，则等同于form.size
-            }],
-        },
-        layout: [
-            {
-                title: "名称对方",
-                widget: "input",
-                name: "input", // values的箭值，必须有
-                type: "text",
-            },
-           // 更多子组件请见widgets介绍，或者看完整功能
-        ]
+                //声明显示在下方和动作按钮
+                {
+                    name: "reset", // 按键的唯一标识符
+                    type: "primary", // 按键类型,默认为primary，具体可见element button
+                    title: "重置", // 按键的文字
+                    icon: "el-icon-star-off", // 按键图标 具体可见element icon
+                    right: true, // 如果=true，则显示在右侧
+                    visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
+                    tips: "提示信息", // 鼠标悬浮在按键的提示信息
+                    top: true, // 是否在上面, false则在下面
+                    size: "medium" // medium / small / mini, 若未指明，则等同于form.size
+                },
+                {
+                    name: "submit", // 按键的唯一标识符
+                    type: "info", // 按键类型,默认为primary，具体可见element button
+                    title: "提交", // 按键的文字
+                    icon: "", // 按键图标 具体可见element icon
+                    right: true, // 如果=true，则显示在右侧
+                    visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
+                    tips: "提示信息", // 鼠标悬浮在按键的提示信息
+                    top: true, // 是否在上面, false则在下面
+                    size: "medium" // medium / small / mini, 若未指明，则等同于form.size
+                }
+            ],
+            layout: [
+                {
+                    title: "名称对方",
+                    widget: "input",
+                    name: "input", // values的箭值，必须有
+                    type: "text",
+                },
+                // 更多子组件请见widgets介绍，或者看完整功能
+            ]
+        }
     }
   }
 }
 ```
 
 ## 特殊功能  
-1、依赖配置  
+1、字段依赖  
 ```js
 {
   title: "下拉选框B",
@@ -139,7 +140,7 @@ export default {
 ```
 
 ## 更多widgets配置详情  
-[请见源码](https://github.com/jingyuLin1999/richform.git)，目录src/pages/richform.vue的完整数据。 
+请见源码，目录src/pages/richform.vue的完整配置。 
 
 <br/>
 
