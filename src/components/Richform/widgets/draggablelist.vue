@@ -64,6 +64,7 @@ export default {
     };
   },
   mounted() {
+    if (!this.value) this.value = [];
     if (this.field.atLeastOne && this.value.length == 0) this.addItem();
     // 找出最大id
     for (let key in this.value) {
