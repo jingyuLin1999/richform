@@ -51,9 +51,18 @@ export default {
             this.$emit('change', this.field.name, value, this.schema)
         },
         friendValue() {
-            // TODO 做一些友好值处理
-            // 值的类型
-            return this.values[this.field.name];
+            // 做一些友好值处理
+            let friendValue = null;
+            let value = this.values[this.field.name];
+            try {
+                switch (this.schema.type) {
+                    case "array": friendValue = Array.isArray(value) ? value : JSON.parse(value); break;
+                    case "number": friendValue = typeof value == "number" ? value : parseInt(value); break;
+                }
+            } catch (e) {
+                console.error(`转换友好值错了：${e}`)
+            }
+            return friendValue || value;
         },
         // 字段依赖隐藏
         pickHideFields() {
@@ -114,7 +123,6 @@ export default {
                             field: this.field,
                         });
                     }
-
                 }
             }
         }

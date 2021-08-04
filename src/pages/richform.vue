@@ -35,6 +35,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :values="values"
       :isDesign="false"
       :hooks="hooks"
+      @action="formAction"
     ></RichForm>
   </div>
 </template>
@@ -60,6 +61,9 @@ export default {
             widget: "input",
             default: "当我的值等于：123456时，会改变下拉选项B的选项",
             require: true,
+          },
+          selectMultiple: {
+            type: "array",
           },
           selectA: {
             title: "下拉选框A",
@@ -123,6 +127,7 @@ export default {
         a: "",
         select: "",
         map: "阳新花园城",
+        selectMultiple: '["选项1","选项2"]',
       },
       form: {
         border: true, // 显示边框
@@ -528,6 +533,19 @@ export default {
                     widget: "collapse",
                     title: "信令服务器",
                     expand: true,
+                    actions: [
+                      {
+                        name: "hello", // 按键的唯一标识符
+                        type: "success", // 按键类型,默认为primary，具体可见element button
+                        title: "提交", // 按键的文字
+                        icon: "", // 按键图标 具体可见element icon
+                        right: true, // 如果=true，则显示在右侧
+                        visible: true, // 按键是否可见,同时满足readonly===false和设置为true才会显示,默认为true
+                        tips: "提示信息", // 鼠标悬浮在按键的提示信息
+                        top: false, // 是否在上面, false则在下面
+                        size: "medium", // medium / small / mini, 若未指明，则等同于form.size
+                      },
+                    ],
                     fields: [
                       {
                         title: "单选",
@@ -602,7 +620,11 @@ export default {
       },
     };
   },
-  methods: {},
+  methods: {
+    formAction(event) {
+      console.log(event.name);
+    },
+  },
 };
 </script>
 

@@ -7,7 +7,7 @@
       collapse.activeDesign ? 'active-design' : '',
     ]"
   >
-    <!-- 避免出发缩收 -->
+    <!-- 避免触发发缩收 -->
     <div
       v-if="isDesign"
       class="design-no-collapse"
@@ -16,7 +16,9 @@
     <el-collapse v-model="openCollapseName">
       <el-collapse-item :name="collapse.name" class="collapse-item">
         <template slot="title">
-          <span class="collapse-title">{{ collapse.title }}</span>
+          <span :style="collapse.style" class="collapse-title">{{
+            collapse.title
+          }}</span>
         </template>
         <div class="collapse-container">
           <layout
@@ -28,6 +30,7 @@
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"
           ></layout>
+          <actions v-if="Array.isArray(collapse.actions)" :actions="collapse.actions" :isDesign="isDesign"></actions>
         </div>
       </el-collapse-item>
     </el-collapse>
@@ -72,6 +75,7 @@ export default {
   },
   beforeCreate: function () {
     this.$options.components.Layout = () => import("../layout.vue");
+    this.$options.components.Actions = () => import("../actions.vue");
   },
   mounted() {
     this.openCollapse();

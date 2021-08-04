@@ -32,7 +32,6 @@ export default {
             for (let index = 0; index < dicts.length; index++) {
                 let dictItem = dicts[index];
                 if (dictItem.keyValue == this.values[fieldName]) {
-                    // this.$set(this.values, dictItem.field.name, null);
                     if (
                         typeof dictItem.dictValue == "string" &&
                         isUrl(dictItem.dictValue)
