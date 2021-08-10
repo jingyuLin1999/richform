@@ -31,7 +31,7 @@ export default {
             if (!Array.isArray(dicts) || !dicts.length) return;
             for (let index = 0; index < dicts.length; index++) {
                 let dictItem = dicts[index];
-                if (dictItem.keyValue == this.values[fieldName]) {
+                if (dictItem.keyValue == this.values[fieldName] || dictItem.keyValue == "any") {
                     if (
                         typeof dictItem.dictValue == "string" &&
                         isUrl(dictItem.dictValue)
@@ -39,7 +39,11 @@ export default {
                         let options = [];
                         try {
                             // 若是url则发起http请求获取字典
-                            options = await loadDict(dictItem.dictValue);
+                            const { payload } = await loadDict(dictItem.dictValue, { [fieldName]: this.values[fieldName] });
+                            if (Array.isArray(payload)) {
+                                options = payload;
+                                if (!payload.length) this.values[dictItem.field.name] = null; // 
+                            }
                         } catch (e) {
                             console.error(e);
                         }

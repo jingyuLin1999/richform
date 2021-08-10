@@ -15,7 +15,7 @@ export default {
     },
     inject: ["dependencies"],
     mixins: [CommonMixin],
-    mounted() {
+    created() {
         this.load();
     },
     computed: {

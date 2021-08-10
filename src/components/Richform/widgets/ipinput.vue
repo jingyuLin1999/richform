@@ -48,6 +48,9 @@ export default {
 
 <style lang="scss">
 .richform {
+  .ipinput-widget {
+    width: 100%;
+  }
   .layout {
     .field.error {
       input {

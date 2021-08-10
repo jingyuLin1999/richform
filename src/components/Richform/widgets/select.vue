@@ -61,6 +61,10 @@ export default {
         collapseTags: false, // 多选用tags显示
         filterable: false, // 说明：搜索label
         allowCreate: false, // 说明：是否允许创建条目,谨慎使用  注意：filterable为true时有效
+        defaultProp: {
+          label: "label",
+          value: "value",
+        },
       };
     },
   },

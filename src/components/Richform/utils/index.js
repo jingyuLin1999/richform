@@ -1,4 +1,4 @@
-import http from "./http"
+import request from "./http"
 
 export function isUrl(url) {
     let Exp = /^(https?:\/\/)([0-9a-z.]+)(:[0-9]+)?([/0-9a-z.]+)?(\?[0-9a-z&=]+)?(#[0-9-a-z]+)?/i;
@@ -6,7 +6,7 @@ export function isUrl(url) {
 }
 
 export function loadDict(url, data) {
-    return http({
+    return request({
         method: 'post',
         url,
         data,

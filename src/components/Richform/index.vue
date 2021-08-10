@@ -28,7 +28,8 @@
 dict: "http://localhost:8080/#/form-design",
 dict: {
   [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
-  [<字段名name> == 'B']: [{},{}], // 
+  [<字段名name> == 'B']: [{},{}], // options
+  [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
 }
 隐藏说明
 hideRely：<字段名称name> == 'A'

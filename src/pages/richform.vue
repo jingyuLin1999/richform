@@ -357,7 +357,7 @@ export default {
                   label: "根据[下拉选框A]的值变化B",
                 },
               ],
-              "selectA == 选项2": "http://localhost:8080/#/form-design",
+              "selectA == 选项2": "http://localhost:8080/form-design",
               "input == 123456": [
                 {
                   value: "input等于123456",
@@ -375,6 +375,21 @@ export default {
                 label: "双皮奶",
               },
             ],
+          },
+          {
+            title: "触发字典过滤",
+            widget: "input",
+            name: "factoryid",
+          },
+          {
+            title: "字典过滤",
+            widget: "select",
+            name: "dictTest",
+            dict: {
+              "factoryid == any":
+                "http://192.168.100.17:8080/manage/dict/getWorkshopByFactoryId.do",
+            },
+            options: [],
           },
           {
             widget: "radio",
