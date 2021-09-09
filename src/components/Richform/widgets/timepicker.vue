@@ -2,6 +2,7 @@
 <template>
   <div class="timepicker-widget">
     <el-time-picker
+      class="el-time"
       v-if="field.isPicker"
       v-model="value"
       :readonly="field.readOnly"
@@ -18,6 +19,7 @@
       :end-placeholder="field.endPlaceholder"
     ></el-time-picker>
     <el-time-select
+      class="el-time"
       v-else
       v-model="value"
       :picker-options="field.pickerOptions"
@@ -43,7 +45,7 @@ export default {
         readOnly: false, // 只看
         disabled: false, // 禁用
         clearable: true, // 是否显示清除按钮
-        size: "small", // medium / small / mini
+        size: "medium", // medium / small / mini
         editable: false, // 文本框可输入
         placeholder: "请选择", // 单个
         valueFormat: "HH:mm:ss",
@@ -63,3 +65,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.timepicker-widget {
+  width: 100%;
+  > .el-time {
+    width: 100%;
+  }
+}
+</style>

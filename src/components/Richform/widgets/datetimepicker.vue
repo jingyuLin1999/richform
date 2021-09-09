@@ -15,6 +15,7 @@
     :start-placeholder="field.startPlaceholder"
     :end-placeholder="field.endPlaceholder"
     :picker-options="field.pickerOptions"
+    :style="{ width: '100%' }"
   ></el-date-picker>
 </template>
 

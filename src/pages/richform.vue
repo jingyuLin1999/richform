@@ -128,11 +128,12 @@ export default {
         select: "",
         map: "阳新花园城",
         selectMultiple: '["选项1","选项2"]',
+        enddate: new Date("2020-12-09 18:38:54"),
       },
       form: {
         border: true, // 显示边框
         grid: false, // 表单内部栅栏
-        labelSuffix: true, // 字段标题后缀内容，默认' : '
+        labelSuffix: ":", // 字段标题后缀内容，默认' : '
         labelWidth: "110px", // 标签宽度,默认50px
         validator: "input", // submit
         labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
@@ -172,19 +173,31 @@ export default {
             filterable: true, // 搜索功能
             clearable: true,
             separator: "/", // 分隔符
-            showAllLevels: true, // 结果显示所以级别如：a/b/c
-            propValue: "value",
-            propLabel: "label",
-            expandTrigger: "hover", // 	click / hover
-            checkStrictly: false,
-            multiple: false, // 可通过 props.multiple = true 来开启多选模
+            showAllLevels: false, // 结果显示所以级别如：a/b/c
+            defaultProp: {
+              value: "value",
+              label: "bbb",
+              expandTrigger: "click", // 	click / hover
+              checkStrictly: true, // 父子节点不互相关联,可单选
+              multiple: false, // 可通过 props.multiple = true 来开启多选模
+            },
             options: [
               {
                 value: "zhinan",
-                label: "指南",
-                children: [{ value: "shejiyuanze", label: "设计原则" }],
+                bbb: "指南",
+                children: [{ value: "shejiyuanze", bbb: "设计原则" }],
               },
             ],
+          },
+          {
+            title: "结束日期",
+            name: "enddate",
+            isSlot: false,
+            sortable: true,
+            searchable: true,
+            widget: "datetimepicker",
+            pickerOptions: {},
+            type: "datetime"
           },
           {
             title: "日期选择器",
@@ -235,6 +248,7 @@ export default {
             title: "复选框",
             name: "checkbox",
             widget: "checkbox",
+            showTitle: true,
             readOnly: false,
             disabled: false,
             isGroup: true,
@@ -387,7 +401,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.17:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.13:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },

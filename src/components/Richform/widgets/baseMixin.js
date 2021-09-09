@@ -58,7 +58,9 @@ export default {
                 switch (this.schema.type) {
                     case "array": friendValue = Array.isArray(value) ? value : JSON.parse(value); break;
                     case "number": friendValue = typeof value == "number" ? value : parseInt(value); break;
+                    case "datetime": friendValue = new Date(value); break;
                 }
+                if (friendValue) this.values[this.field.name] = friendValue; // 有友好值，需要更新
             } catch (e) {
                 console.error(`转换友好值错了：${e}`)
             }

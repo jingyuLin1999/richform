@@ -21,8 +21,8 @@
         <el-option
           v-for="(option, index) in field.options"
           :key="index"
-          :label="option.label"
-          :value="option.value"
+          :label="option[field.defaultProp.label]"
+          :value="option[field.defaultProp.value]"
           :disabled="option.disabled"
         ></el-option>
       </div>
@@ -35,9 +35,9 @@
         >
           <el-option
             v-for="option in group.options"
-            :key="option.value"
-            :label="option.label"
-            :value="option.value"
+            :key="option[field.defaultProp.value]"
+            :label="option[field.defaultProp.label]"
+            :value="option[field.defaultProp.value]"
           ></el-option>
         </el-option-group>
       </div>
