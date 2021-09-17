@@ -96,12 +96,14 @@ export default {
     isDesign: { type: Boolean, default: false }, // 是否是设计模式
     hooks: { type: Object, default: () => ({}) }, // 钩子，挂载一些函数或数据供外部使用
     showBtns: { type: Boolean, default: true },
+    isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址
   },
   provide() {
     return {
       formId: this.formId,
       dependencies: this.dependencies,
       requireds: this.requireds,
+      isFriendValue: this.isFriendValue,
     };
   },
   data() {

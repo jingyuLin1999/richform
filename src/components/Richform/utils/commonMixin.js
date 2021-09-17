@@ -1,7 +1,7 @@
 import { isUrl, loadDict } from "./";
 export default {
     methods: {
-        friendValue(type) {
+        friendDefaultValue(type) {
             let value = null;
             switch (type) {
                 case "null":

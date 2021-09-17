@@ -13,7 +13,7 @@ export default {
             updateValue: 0,
         }
     },
-    inject: ["dependencies"],
+    inject: ["dependencies", "isFriendValue"],
     mixins: [CommonMixin],
     created() {
         this.load();
@@ -21,12 +21,17 @@ export default {
     computed: {
         value: {
             get() {
-                this.updateValue++; // 强制更新
-                let friendValue = { value: this.friendValue() }; // 必须改变地址，否则会出现无限循环
-                return friendValue.value;
+                if (this.isFriendValue) {
+                    this.updateValue++; // 强制更新
+                    let friendValue = { value: this.friendValue() }; // 必须改变地址，否则会出现无限循环
+                    return friendValue.value;
+                }
+                else return this.values[this.field.name];
             },
             set(value) {
-                this.changeValue(value)
+                if (this.isFriendValue)
+                    this.changeValue(value)
+                else this.values[this.field.name] = value
             }
         },
         dict() {

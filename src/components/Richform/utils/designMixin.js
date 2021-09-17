@@ -8,7 +8,7 @@ export default {
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
     },
-    inject: ["formId"],
+    inject: ["formId", "isFriendValue"],
     data() {
         return {
             designValid: true,

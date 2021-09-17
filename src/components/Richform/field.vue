@@ -191,9 +191,10 @@ export default {
         this.requireds.push(this.field.name);
     },
     createValue() {
+      if (!this.isFriendValue) return;
       // TODO 提供两种模式，树型结构或普通结构
       // 有值则不需要创建，即values的优先级大于default的值
-      if (this.values[this.field.name]) return;
+      if (this.values[this.field.name] != undefined) return;
       // 是否立即触发验证
       const defaultValue =
         this.values[this.field.name] ||
@@ -206,26 +207,32 @@ export default {
         // 生产默认值
         this.values,
         this.field.name,
-        defaultValue ? defaultValue : this.friendValue(this.fieldSchema.type)
+        defaultValue
+          ? defaultValue
+          : this.friendDefaultValue(this.fieldSchema.type)
       );
     },
     validateField(fieldName, schema, value) {
-      if (!Object.keys(schema).length) return;
-      let require = [];
-      if (schema.require) require.push(fieldName);
-      const schemab = {
-        type: "object",
-        properties: {
-          [fieldName]: schema,
-        },
-        required: require,
-      };
-      let valid = AJV.validate(schemab, this.values);
-      if (valid || !value) {
-        this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
-      } else {
-        localizeErrors(AJV.errors); // 将错误信息转化成中文
-        this.$set(this.fieldErrors, fieldName, AJV.errors[0].message); // 将错误信息添加到错误池中
+      try {
+        if (!Object.keys(schema).length) return;
+        let require = [];
+        if (schema.require) require.push(fieldName);
+        const schemaTemplate = {
+          type: "object",
+          properties: {
+            [fieldName]: schema,
+          },
+          required: require,
+        };
+        let valid = AJV.validate(schemaTemplate, this.values);
+        if (valid || !value) {
+          this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
+        } else {
+          localizeErrors(AJV.errors); // 将错误信息转化成中文
+          this.$set(this.fieldErrors, fieldName, AJV.errors[0].message); // 将错误信息添加到错误池中
+        }
+      } catch (e) {
+        console.error("单个字段验证错误了：" + e);
       }
     },
     onChange(fieldName, value, schema) {

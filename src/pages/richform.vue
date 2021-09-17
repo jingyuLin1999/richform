@@ -21,7 +21,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    <!-- {{ values }} -->
+    {{ values }}
     <el-button
       size="small"
       type="success"
@@ -128,7 +128,7 @@ export default {
         select: "",
         map: "阳新花园城",
         selectMultiple: '["选项1","选项2"]',
-        enddate: new Date("2020-12-09 18:38:54"),
+        enddate: "2020-12-09 18:38:54",
       },
       form: {
         border: true, // 显示边框
@@ -187,23 +187,25 @@ export default {
                 bbb: "指南",
                 children: [{ value: "shejiyuanze", bbb: "设计原则" }],
               },
+              {
+                value: "nihao",
+                bbb: "你好",
+              },
             ],
           },
           {
             title: "结束日期",
             name: "enddate",
-            isSlot: false,
-            sortable: true,
-            searchable: true,
             widget: "datetimepicker",
             pickerOptions: {},
-            type: "datetime"
+            valueFormat: "yyyy-MM-dd HH:mm:ss",
+            type: "datetime",
           },
           {
             title: "日期选择器",
             widget: "datetimepicker",
             name: "datetimepicker",
-            type: "daterange", // year/month/date/dates/ week/datetime/datetimerange/ daterange/monthrange
+            type: "datetimerange", // year/month/date/dates/ week/datetime/datetimerange/ daterange/monthrange
             readOnly: false,
             disabled: false,
             clearable: true, // 是否显示清除按钮
@@ -401,7 +403,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.13:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.12:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },
