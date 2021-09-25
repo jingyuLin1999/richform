@@ -12,3 +12,12 @@ export function loadDict(url, data) {
         data,
     })
 }
+
+// 将字符串转成对象,若转失败则直接返回源字符串
+export function strToObj(str) {
+    try {
+        return /^{.*}$/.test(str) || /^\[.*\]$/.test(str) ? JSON.parse(str) : str;
+    } catch {
+        return str
+    }
+}

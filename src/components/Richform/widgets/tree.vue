@@ -15,7 +15,7 @@
     ></el-input>
     <el-tree
       ref="pefectTree"
-      :data="value || field.options"
+      :data="field.options"
       :node-key="field.nodeKey"
       :default-expand-all="field.isExpandAll"
       :expand-on-click-node="false"
@@ -186,6 +186,7 @@ export default {
         showAddTemplate: false, // 显示新增模板
       };
     },
+    editNodeTitle(){},
     onCheckedNode() {
       // 当是多选框时，返回id
       if (this.field.isShowCheckbox) {

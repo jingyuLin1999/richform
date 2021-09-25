@@ -35,13 +35,6 @@ export default {
         append: null, //后置内容
       };
     },
-    toFieldValue(value) {
-      if (typeof value == "object") {
-        return JSON.stringify(value);
-      } else {
-        return value;
-      }
-    },
   },
 };
 </script>

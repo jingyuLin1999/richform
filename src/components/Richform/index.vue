@@ -96,7 +96,7 @@ export default {
     isDesign: { type: Boolean, default: false }, // 是否是设计模式
     hooks: { type: Object, default: () => ({}) }, // 钩子，挂载一些函数或数据供外部使用
     showBtns: { type: Boolean, default: true },
-    isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址
+    isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址，若需要转换类型，需要在shema中指明要转换的数据类型
   },
   provide() {
     return {
@@ -190,7 +190,7 @@ export default {
         // 子组件用v-model监听的是computed的值
         // 为了触发computed的set属性，需删除再赋值
         this.$delete(this.values, key);
-        this.$set(this.values, key, this.friendValue(type));
+        this.$set(this.values, key, this.friendDefaultValue(type));
       }
     },
     // 全局校验
@@ -204,6 +204,7 @@ export default {
       let valid = AJV.validate(this.schema, this.values);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
+        console.error("全局校验失败：" + AJV.errors);
         AJV.errors.map((errorItem) => {
           let fieldName = errorItem.dataPath
             .split(".")

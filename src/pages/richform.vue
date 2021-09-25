@@ -403,7 +403,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.12:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.19:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },

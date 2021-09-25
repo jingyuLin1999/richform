@@ -1,4 +1,4 @@
-import { isUrl, loadDict } from "../utils";
+import { isUrl, loadDict, strToObj } from "../utils";
 import CommonMixin from "../utils/commonMixin"
 export default {
     props: {
@@ -61,7 +61,7 @@ export default {
             let value = this.values[this.field.name];
             try {
                 switch (this.schema.type) {
-                    case "array": friendValue = Array.isArray(value) ? value : JSON.parse(value); break;
+                    case "array": friendValue = Array.isArray(value) ? value : strToObj(value); break;
                     case "number": friendValue = typeof value == "number" ? value : parseInt(value); break;
                     case "datetime": friendValue = new Date(value); break;
                 }

@@ -143,9 +143,10 @@ export default {
       }
     },
     onInput(event, index) {
-      var value = event.target.value;
+      console.log(123)
+      let value = event.target.value;
       event.target.value = this.segments[index];
-      var segment = Number(value);
+      let segment = Number(value);
       if (isNaN(segment)) {
         return;
       } else if (value === "") {
