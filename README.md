@@ -94,8 +94,9 @@ export default {
   }
 }
 ```
+
 ## 特殊功能  
-1、字段依赖  
+1、字段选项依赖  
 ```js
 {
   title: "下拉选框B",
@@ -133,7 +134,7 @@ export default {
   ],
 }
 ```
-2、隐藏配置  
+2、字段隐藏依赖 
 ```js
 {
     title: "名称对方",
@@ -143,8 +144,37 @@ export default {
     hideRely: "radioA==单选框B",
 }
 ```
-## 更多widgets配置详情  
+3、更多widgets配置详情  
 请见src/pages/richform.vue
+
+## 深度编辑  
+values可能是深度嵌套如下  
+```js
+{
+  title: {
+    text: "ECharts 入门示例",
+    subtext: "Living Expenses in Shenzhen",
+  },
+  legend: {
+    orient: "horizontal", // vertical/horizontal
+    left: 0,
+    // top: 0,
+    bottom: 0,
+  },
+}
+```
+要编辑这种valuse可开启deepValues: true  
+```html
+  <rich-form :form="form" :schema="schema" :values="values" deepValues/>
+```
+此时在定义form的name字段和shema结构，需要与values的结构对应    
+```js
+layout: [{
+  title: "标题",
+  widget: "input",
+  name: "title.text",
+}]
+```
 
 ## 项目运行
 ```
@@ -161,10 +191,3 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

@@ -129,6 +129,7 @@ export default {
         map: "阳新花园城",
         selectMultiple: '["选项1","选项2"]',
         enddate: "2020-12-09 18:38:54",
+        rate: 4,
       },
       form: {
         border: true, // 显示边框
@@ -403,7 +404,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.19:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.20:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },

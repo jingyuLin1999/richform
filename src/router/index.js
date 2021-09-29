@@ -12,6 +12,11 @@ const routes = [
         path: '/',
         name: 'form-design',
         component: () => import('@/pages/form-design')
+    },
+    {
+        path: '/deep-values',
+        name: 'deep-values',
+        component: () => import('@/pages/deep-values')
     }
 ]
 

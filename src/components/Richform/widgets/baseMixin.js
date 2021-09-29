@@ -43,7 +43,7 @@ export default {
             this.$setFieldAttr();
             this.pickHideFields();
             this.pickDependencies();
-            this.onDispatch()
+            this.onDispatch();
         },
         $setFieldAttr() {
             const defaultFieldAttr = this.defaultFieldAttr();

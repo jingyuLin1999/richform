@@ -112,7 +112,7 @@ export default {
 @import "./vars.scss";
 .layout {
   .active-design {
-    border: 3px solid #409eff;
+    border: 3px solid $active-border-color;
   }
   padding-right: 0;
   > .field-border-top:first-child {

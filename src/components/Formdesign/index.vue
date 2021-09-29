@@ -104,7 +104,7 @@ export default {
         form: {
           border: true, // 显示边框
           grid: true, // 表单内部栅栏
-          labelSuffix: true, // 字段标题后缀内容，默认' : '
+          labelSuffix: ":", // 字段标题后缀内容，默认' : '
           labelWidth: "100px", // 标签宽度,默认50px
           validator: "input", // submit
           labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
@@ -250,6 +250,7 @@ export default {
     height: 100%;
     position: relative;
     .base-widgets {
+      padding-right: 2px;
       .widget-title {
         height: 25px;
         line-height: 25px;

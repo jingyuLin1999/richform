@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import { path } from "ramda";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
 import CommonMixin from "./utils/commonMixin";
@@ -110,7 +111,7 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
-  inject: ["dependencies", "requireds"],
+  inject: ["dependencies", "requireds", "isDeepValues", "realyValues"],
   mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -191,20 +192,22 @@ export default {
         this.requireds.push(this.field.name);
     },
     createValue() {
+      // 引用地址不能改变，直接返回
       if (!this.isFriendValue) return;
       // TODO 提供两种模式，树型结构或普通结构
       // 有值则不需要创建，即values的优先级大于default的值
       if (this.values[this.field.name] != undefined) return;
       // 是否立即触发验证
-      const defaultValue =
-        this.values[this.field.name] ||
-        this.fieldSchema.default ||
-        this.field.default;
+      const defaultValue = this.isDeepValues
+        ? path(this.field.name.split("."), this.realyValues)
+        : this.values[this.field.name] ||
+          this.fieldSchema.default ||
+          this.field.default;
+      // 若有默认值，则需要直接进行校验
       if (defaultValue)
-        // 若有默认值，则需要直接进行校验
         this.validateField(this.field.name, this.fieldSchema, defaultValue);
+      // 生成默认值
       this.$set(
-        // 生产默认值
         this.values,
         this.field.name,
         defaultValue

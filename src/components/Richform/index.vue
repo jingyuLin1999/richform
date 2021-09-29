@@ -38,10 +38,20 @@ hideRely：<字段名称name> == 'A'
 
 二期目标
 表单设计器
+
+
 -->
 <template>
-  <form :class="['richform', form.border ? 'form-border' : '']" :id="formId">
-    <!-- {{values}} -->
+  <form
+    :class="[
+      'richform',
+      form.border ? 'richform-border' : '',
+      form.activeDesign && isDesign ? 'active-form-design' : '',
+    ]"
+    :id="formId"
+  >
+    <!-- 画布遮罩，用于全局点击事件 -->
+    <div class="canvas-mask" @click="onClickCanvas"></div>
     <perfect-scrollbar :style="{ 'min-height': '120px' }">
       <!-- 顶部按钮 -->
       <actions
@@ -53,7 +63,7 @@ hideRely：<字段名称name> == 'A'
       <form-layout
         :schema="schema"
         :layout="friendForm.layout"
-        :values="values"
+        :values="richValues"
         :isDesign="isDesign"
         :form="form"
         :fieldErrors="fieldErrors"
@@ -75,6 +85,7 @@ hideRely：<字段名称name> == 'A'
 </template>
 
 <script>
+import { hasPath } from "ramda";
 import Actions from "./actions";
 import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
@@ -95,15 +106,18 @@ export default {
     form: { type: Object, default: () => ({}) }, // 表单布局
     isDesign: { type: Boolean, default: false }, // 是否是设计模式
     hooks: { type: Object, default: () => ({}) }, // 钩子，挂载一些函数或数据供外部使用
-    showBtns: { type: Boolean, default: true },
+    showBtns: { type: Boolean, default: true }, // 是否显示按钮
+    deepValues: { type: Boolean, default: false }, // 值是否开启深度编辑模式
     isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址，若需要转换类型，需要在shema中指明要转换的数据类型
   },
   provide() {
     return {
-      formId: this.formId,
+      formId: this.formId, // 表单id
       dependencies: this.dependencies,
       requireds: this.requireds,
       isFriendValue: this.isFriendValue,
+      isDeepValues: this.deepValues,
+      realyValues: this.values, // 开启deepValues时richValues返回的实际是rubbishyValues值,在field无法根据values赋初值，故需传入
     };
   },
   data() {
@@ -115,6 +129,8 @@ export default {
       defaultForm,
       requireds: [], // 收集必须字段
       hideFields: {}, // 收集隐藏的字段
+      dirtyValues: {}, // 脏值即values中有变化的键值对
+      rubbishyValues: {}, // 垃圾值
     };
   },
   mounted() {
@@ -132,6 +148,9 @@ export default {
       if (!this.form.actions) return [];
       return this.form.actions.filter((actionItem) => !actionItem.top);
     },
+    richValues() {
+      return this.deepValues ? this.rubbishyValues : this.values;
+    },
   },
   methods: {
     load() {
@@ -146,10 +165,22 @@ export default {
       return Object.keys(this.form).length == 0;
     },
     onFieldValueChange(fieldName, value) {
-      // handle bug 实际值已经更新，但dom没有变化
-      this.$delete(this.values, fieldName);
-      this.$set(this.values, fieldName, value);
+      try {
+        // 若是deepValues需要values进行赋值
+        if (this.deepValues) {
+          let valueKeys = fieldName.split(".");
+          let checkPath = hasPath(valueKeys, this.values);
+          if (checkPath)
+            eval("this.values" + "['" + valueKeys.join("']['") + "'] = value"); // TODO 防止注入
+        }
+        // handle bug 实际值已经更新，但dom没有变化
+        this.$delete(this.richValues, fieldName);
+        this.$set(this.richValues, fieldName, value);
+      } catch (e) {
+        console.warn("全局设置值出错：" + e);
+      }
     },
+    // 设计模式点击事件
     onDesignClicked(clicked) {
       if (!this.isDesign) return;
       if (clicked == this.lastClicked) {
@@ -164,7 +195,7 @@ export default {
         this.$set(clicked, "activeDesign", true);
       }
       this.lastClicked = clicked;
-      // 表单设计器
+      // to表单设计器
       this.$emit("designItem", clicked);
     },
     _registerEvents() {
@@ -181,16 +212,16 @@ export default {
       this.$emit("action", action); // 外部可获取当前点击了哪个事件
     },
     onReset() {
-      for (let key in this.values) {
-        let type = Array.isArray(this.values[key])
+      for (let key in this.richValues) {
+        let type = Array.isArray(this.richValues[key])
           ? "array"
-          : this.values[key] == null
+          : this.richValues[key] == null
           ? "null"
-          : typeof this.values[key];
+          : typeof this.richValues[key];
         // 子组件用v-model监听的是computed的值
         // 为了触发computed的set属性，需删除再赋值
-        this.$delete(this.values, key);
-        this.$set(this.values, key, this.friendDefaultValue(type));
+        this.$delete(this.richValues, key);
+        this.$set(this.richValues, key, this.friendDefaultValue(type));
       }
     },
     // 全局校验
@@ -201,7 +232,7 @@ export default {
       const _this = this;
       this.fieldErrors = {};
       this.schema.required = this.requireds;
-      let valid = AJV.validate(this.schema, this.values);
+      let valid = AJV.validate(this.schema, this.richValues);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
         console.error("全局校验失败：" + AJV.errors);
@@ -221,8 +252,14 @@ export default {
       eventbus.$off(`${this.formId}:design:clicked`);
       eventbus.$off(`${this.formId}:action`);
     },
+    // 画布全局设置
+    onClickCanvas() {
+      this.form.widget = "canvas";
+      this.onDesignClicked(this.form);
+    },
   },
   beforeDestroy() {
+    this.rubbishyValues = {};
     this._unregisterEvents();
   },
 };
@@ -234,8 +271,16 @@ export default {
 .richform {
   height: 100%;
   font-size: $form-font-size;
+  position: relative;
   .ps {
     // height: 800px;
+  }
+  > .canvas-mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
   .no-ready {
     width: 100%;
@@ -247,8 +292,11 @@ export default {
     align-items: center;
   }
 }
-.form-border {
+.richform-border {
   padding: 10px;
   border: 1px solid $form-border-color;
+}
+.active-form-design{
+  border: 1px solid $active-border-color;
 }
 </style>
