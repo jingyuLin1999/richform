@@ -22,6 +22,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 <template>
   <div class="richform-deep-value">
     {{ values }}
+    <el-button @click="onAddValues">新增values</el-button>
     <RichForm
       :schema="schema"
       :form="form"
@@ -46,6 +47,7 @@ export default {
         properties: {},
       },
       values: {
+        // hello: "hello",
         title: {
           text: "ECharts 入门示例",
           subtext: "Living Expenses in Shenzhen",
@@ -62,6 +64,12 @@ export default {
         actions: [],
         layout: [
           {
+            title: "你好",
+            widget: "select",
+            name: "hello",
+            options: [{ label: "nihao", value: "hello" }],
+          },
+          {
             title: "主标题",
             widget: "input",
             name: "title.text",
@@ -74,6 +82,11 @@ export default {
         ],
       },
     };
+  },
+  methods: {
+    onAddValues() {
+      this.$set(this.values, "hello", "hello");
+    },
   },
 };
 </script>

@@ -28,6 +28,7 @@
           :schema="schema"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
+          :realyValues="realyValues"
         ></layout>
       </div>
     </div>

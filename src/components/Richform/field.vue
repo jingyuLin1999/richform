@@ -111,7 +111,7 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
   name: "field",
-  inject: ["dependencies", "requireds", "isDeepValues", "realyValues"],
+  inject: ["dependencies", "requireds", "isDeepValues"],
   mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -121,6 +121,7 @@ export default {
     values: { type: Object, default: () => ({}) },
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
+    realyValues: { type: Object, default: () => ({}) },
   },
   data() {
     return {
@@ -129,6 +130,15 @@ export default {
   },
   mounted() {
     this.load();
+  },
+  watch: {
+    realyValues: {
+      deep: true,
+      handler() {
+        if (!this.isDeepValues) return;
+        this.createValue();
+      },
+    },
   },
   computed: {
     asyncComponent() {

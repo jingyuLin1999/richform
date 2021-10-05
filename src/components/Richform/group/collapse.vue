@@ -29,8 +29,13 @@
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"
+            :realyValues="realyValues"
           ></layout>
-          <actions v-if="Array.isArray(collapse.actions)" :actions="collapse.actions" :isDesign="isDesign"></actions>
+          <actions
+            v-if="Array.isArray(collapse.actions)"
+            :actions="collapse.actions"
+            :isDesign="isDesign"
+          ></actions>
         </div>
       </el-collapse-item>
     </el-collapse>

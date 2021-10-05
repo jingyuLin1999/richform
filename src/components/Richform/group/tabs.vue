@@ -23,6 +23,7 @@
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"
+            :realyValues="realyValues"
           ></layout>
         </div>
       </el-tab-pane>

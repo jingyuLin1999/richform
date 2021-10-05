@@ -68,6 +68,7 @@ hideRely：<字段名称name> == 'A'
         :form="form"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
+        :realyValues="realyValues"
       >
       </form-layout>
       <!-- 底部按钮 -->
@@ -117,7 +118,6 @@ export default {
       requireds: this.requireds,
       isFriendValue: this.isFriendValue,
       isDeepValues: this.deepValues,
-      realyValues: this.values, // 开启deepValues时richValues返回的实际是rubbishyValues值,在field无法根据values赋初值，故需传入
     };
   },
   data() {
@@ -131,6 +131,7 @@ export default {
       hideFields: {}, // 收集隐藏的字段
       dirtyValues: {}, // 脏值即values中有变化的键值对
       rubbishyValues: {}, // 垃圾值
+      realyValues: this.values, // 开启deepValues时richValues返回的实际是rubbishyValues值,在field无法根据values赋初值，故需传入
     };
   },
   mounted() {
@@ -235,7 +236,7 @@ export default {
       let valid = AJV.validate(this.schema, this.richValues);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
-        console.error("全局校验失败：" + AJV.errors);
+        console.error("全局校验失败字段集：", AJV.errors);
         AJV.errors.map((errorItem) => {
           let fieldName = errorItem.dataPath
             .split(".")
@@ -296,7 +297,7 @@ export default {
   padding: 10px;
   border: 1px solid $form-border-color;
 }
-.active-form-design{
+.active-form-design {
   border: 1px solid $active-border-color;
 }
 </style>
