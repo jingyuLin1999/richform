@@ -133,11 +133,11 @@ export default {
   },
   watch: {
     realyValues: {
-      deep: true,
       handler() {
         if (!this.isDeepValues) return;
         this.createValue();
       },
+      deep: true,
     },
   },
   computed: {
@@ -224,6 +224,7 @@ export default {
           ? defaultValue
           : this.friendDefaultValue(this.fieldSchema.type)
       );
+      console.log(this.values, 123);
     },
     validateField(fieldName, schema, value) {
       try {

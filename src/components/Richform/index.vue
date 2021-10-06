@@ -131,7 +131,6 @@ export default {
       hideFields: {}, // 收集隐藏的字段
       dirtyValues: {}, // 脏值即values中有变化的键值对
       rubbishyValues: {}, // 垃圾值
-      realyValues: this.values, // 开启deepValues时richValues返回的实际是rubbishyValues值,在field无法根据values赋初值，故需传入
     };
   },
   mounted() {
@@ -151,6 +150,10 @@ export default {
     },
     richValues() {
       return this.deepValues ? this.rubbishyValues : this.values;
+    },
+    realyValues() {
+      // 开启deepValues时richValues返回的实际是rubbishyValues值,在field无法根据values赋初值，故需传入
+      return this.values;
     },
   },
   methods: {

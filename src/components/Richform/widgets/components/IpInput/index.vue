@@ -143,7 +143,6 @@ export default {
       }
     },
     onInput(event, index) {
-      console.log(123)
       let value = event.target.value;
       event.target.value = this.segments[index];
       let segment = Number(value);

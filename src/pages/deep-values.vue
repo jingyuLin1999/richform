@@ -47,7 +47,6 @@ export default {
         properties: {},
       },
       values: {
-        // hello: "hello",
         title: {
           text: "ECharts 入门示例",
           subtext: "Living Expenses in Shenzhen",
@@ -85,7 +84,13 @@ export default {
   },
   methods: {
     onAddValues() {
-      this.$set(this.values, "hello", "hello");
+      this.$set(this.$data, "values", {
+        hello: "hello",
+        title: {
+          text: "ECharts 入门示例",
+          subtext: "Living Expenses in Shenzhen",
+        },
+      });
     },
   },
 };
