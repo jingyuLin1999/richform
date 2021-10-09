@@ -219,6 +219,10 @@ export const widgets = [
         name: "slot",
         html: "你好，我是自定义文本",
     },
+    {
+        title: "IP输入框",
+        widget: "ipinput",
+    },
 ]
 
 

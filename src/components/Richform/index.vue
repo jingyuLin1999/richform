@@ -29,7 +29,8 @@ dict: "http://localhost:8080/#/form-design",
 dict: {
   [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
   [<字段名name> == 'B']: [{},{}], // options
-  [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
+  [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any且值是url，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
+  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段必须
 }
 隐藏说明
 hideRely：<字段名称name> == 'A'
@@ -52,7 +53,7 @@ hideRely：<字段名称name> == 'A'
   >
     <!-- 画布遮罩，用于全局点击事件 -->
     <div class="canvas-mask" @click="onClickCanvas"></div>
-    <perfect-scrollbar :style="{ 'min-height': '120px' }">
+    <perfect-scrollbar :style="{ 'min-height': '20px' }">
       <!-- 顶部按钮 -->
       <actions
         v-if="showBtns"
@@ -273,7 +274,6 @@ export default {
 @import "./vars.scss";
 @import "./utils/design.scss";
 .richform {
-  height: 100%;
   font-size: $form-font-size;
   position: relative;
   .ps {

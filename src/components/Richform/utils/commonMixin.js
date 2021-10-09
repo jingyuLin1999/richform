@@ -51,7 +51,11 @@ export default {
                     } else if (Array.isArray(dictItem.dictValue)) {
                         // 若是数组，则直接赋值给options
                         this.$set(dictItem.field, "options", dictItem.dictValue);
-                    } else {
+                    } else if (typeof dictItem.dictValue == "object") {
+                        let filterKey = dictItem.dictValue.filterKey;
+                        if (!filterKey || !dictItem.options.length) return;
+                        let filterOptions = dictItem.options.filter(item => (item[filterKey] == this.values[fieldName]));
+                        this.$set(dictItem.field, "options", filterOptions);
                     }
                 }
             }

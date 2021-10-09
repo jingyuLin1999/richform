@@ -1,7 +1,12 @@
 <template>
   <div class="form-design">
     <div class="design-header">
-      <h1 class="title">表单设计器</h1>
+      <div class="header-left">
+        <a target="_blank" href="https://github.com/jingyuLin1999/richform"
+          ><img class="header-github-image" src="@/assets/github.png"
+        /></a>
+        <h1 class="title">表单设计器</h1>
+      </div>
       <div class="tools">
         <i class="el-icon-document-add tool" @click="onSubmit">生成JSON</i>
         <div class="tool" @click="onPreview">
@@ -33,7 +38,8 @@
                 v-for="(widgetItem, index) in widgetsMeta"
                 :key="index"
                 class="base-component-item"
-              >{{ widgetItem.title }}</span>
+                >{{ widgetItem.title }}</span
+              >
             </draggable>
           </div>
           <!-- 布局组件 -->
@@ -50,7 +56,8 @@
                 v-for="(layoutItem, index) in layoutMeta"
                 :key="index"
                 class="base-component-item"
-              >{{ layoutItem.title }}</span>
+                >{{ layoutItem.title }}</span
+              >
             </draggable>
           </div>
         </template>
@@ -65,7 +72,11 @@
           ></RichForm>
         </template>
         <template slot="last">
-          <el-tabs class="tab-attribute" v-model="activeTabName" @tab-click="onTabClick">
+          <el-tabs
+            class="tab-attribute"
+            v-model="activeTabName"
+            @tab-click="onTabClick"
+          >
             <el-tab-pane label="属性配置" name="attribute" class="design-tab">
               <RichForm
                 :schema="attribute.schema"
@@ -75,7 +86,11 @@
               ></RichForm>
             </el-tab-pane>
             <el-tab-pane label="校验规则" name="rules" class="design-tab">
-              <RichForm :schema="rules.schema" :form="rules.form" :values="rules.values"></RichForm>
+              <RichForm
+                :schema="rules.schema"
+                :form="rules.form"
+                :values="rules.values"
+              ></RichForm>
             </el-tab-pane>
           </el-tabs>
         </template>
@@ -93,7 +108,7 @@ export default {
   name: "FormDesign",
   components: { Draggable, SplitLayout, RichForm },
   props: {
-    fields: { type: Array, default: () => [] } // 表的字段
+    fields: { type: Array, default: () => [] }, // 表的字段
   },
   data() {
     return {
@@ -109,7 +124,7 @@ export default {
           validator: "input", // submit
           labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
           labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
-          layout: []
+          layout: [],
         },
         values: {},
         schema: {
@@ -117,23 +132,23 @@ export default {
           title: "表单设计器",
           description: "form design",
           type: "object",
-          properties: {}
-        }
+          properties: {},
+        },
       },
       rules: {
         form: {},
         values: {},
-        schema: {}
+        schema: {},
       },
       attribute: {
         // 属性配置
         form: {},
         values: {},
-        schema: {}
+        schema: {},
       },
       activeTabName: "attribute",
       layoutMeta: layout,
-      widgetsMeta: widgets
+      widgetsMeta: widgets,
     };
   },
   methods: {
@@ -147,9 +162,9 @@ export default {
           pull: "clone", // 克隆方式拖拽出去
           put: false, // 禁止拖拽回来
           ghostClass: "design-field-ghost",
-          dragClass: "design-sortable-drag" // 排序背景显示
+          dragClass: "design-sortable-drag", // 排序背景显示
         },
-        sort: false // 禁止排序
+        sort: false, // 禁止排序
       };
     },
     onTabClick(tab, event) {
@@ -191,9 +206,7 @@ export default {
     // 布局克隆前预设处理
     cloneDragField(dragItem) {
       let newdragItem = JSON.parse(JSON.stringify(dragItem));
-      newdragItem.designId = Math.random()
-        .toString(16)
-        .slice(2, 14);
+      newdragItem.designId = Math.random().toString(16).slice(2, 14);
       newdragItem.name = newdragItem.name + newdragItem.designId;
       return newdragItem;
     },
@@ -201,8 +214,8 @@ export default {
       this.$set(this.designItem, "activeField", false);
       this.$set(this.$data, "isDesign", !this.isDesign);
     },
-    onSubmit() {}
-  }
+    onSubmit() {},
+  },
 };
 </script>
 
@@ -230,16 +243,27 @@ export default {
     justify-content: space-between;
     align-items: center;
     background: linear-gradient(90deg, #1179f4 45%, #079dc8, #01b3ac);
-    .title {
-      margin: 0;
-      padding: 0;
-      font-size: 19px;
-      height: 55px;
-      line-height: 55px;
+    .header-left {
+      display: flex;
+      align-items: center;
+      .title {
+        margin: 0;
+        padding: 0;
+        font-size: 19px;
+        height: 55px;
+        line-height: 55px;
+      }
+      .header-github-image {
+        width: 25px;
+        height: 25px;
+        margin-right: 12px;
+      }
     }
+
     .tools {
       display: flex;
       font-size: 14px;
+      align-items: center;
       > .tool {
         cursor: pointer;
         margin-left: 10px;

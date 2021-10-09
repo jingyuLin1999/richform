@@ -128,6 +128,7 @@ export default {
                             keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
                             dictValue: dictItem,
                             field: this.field,
+                            options: this.field.options ? JSON.parse(JSON.stringify(this.field.options)) : [],
                         });
                     }
                 }

@@ -13,12 +13,12 @@
     "ajv-i18n": "^4.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "element-ui": "^2.15.2",
+    "element-ui": "^2.15.6",
     "jquery": "^3.6.0",
     "ramda": "^0.27.1",
     "vue": "^2.6.11",
     "vue-baidu-map": "^0.21.22",
-    "vue-router": "^3.5.1",
+    "vue-router": "^3.5.2",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3",
     "vxe-table": "^3.3.9",
@@ -58,7 +58,6 @@
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions",
-    "not dead"
+    "last 2 versions"
   ]
 }

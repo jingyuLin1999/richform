@@ -206,7 +206,8 @@ export default {
       if (!this.isFriendValue) return;
       // TODO 提供两种模式，树型结构或普通结构
       // 有值则不需要创建，即values的优先级大于default的值
-      if (this.values[this.field.name] != undefined) return;
+      if (this.values[this.field.name] != undefined && !this.isDeepValues)
+        return;
       // 是否立即触发验证
       const defaultValue = this.isDeepValues
         ? path(this.field.name.split("."), this.realyValues)
@@ -224,7 +225,6 @@ export default {
           ? defaultValue
           : this.friendDefaultValue(this.fieldSchema.type)
       );
-      console.log(this.values, 123);
     },
     validateField(fieldName, schema, value) {
       try {

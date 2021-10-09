@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.0.8",
+  "version": "0.1.1",
   "description": "基于element的表单、表单设计器",
   "main": "lib/richform.common",
   "directories": {
@@ -17,9 +17,7 @@
     "element-ui": "^2.15.2",
     "jquery": "^3.6.0",
     "ramda": "^0.27.1",
-    "vue": "^2.6.11",
     "vue-baidu-map": "^0.21.22",
-    "vue-router": "^3.5.1",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3",
     "vxe-table": "^3.3.9",

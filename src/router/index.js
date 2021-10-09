@@ -1,8 +1,9 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+import Router from 'vue-router'
 
-const routes = [
+Vue.use(Router)
+
+const constRouter = [
     {
         path: '/form-design',
         name: 'richform',
@@ -20,9 +21,9 @@ const routes = [
     }
 ]
 
-const router = new VueRouter({
+const router = new Router({
     // mode: 'history',
-    routes
+    routes: constRouter
 })
 
 export default router

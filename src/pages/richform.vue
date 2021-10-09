@@ -77,6 +77,12 @@ export default {
             type: "string",
             minLength: 1,
           },
+          selectC: {
+            title: "下拉C依赖A",
+            widget: "select",
+            type: "string",
+            minLength: 1,
+          },
           radioA: {
             title: "单选框A",
             widget: "radio",
@@ -356,6 +362,10 @@ export default {
                 value: "选项2",
                 label: "双皮奶",
               },
+              {
+                value: "选项3",
+                label: "选项3",
+              },
             ],
           },
           {
@@ -394,6 +404,32 @@ export default {
             ],
           },
           {
+            title: "下拉选框C",
+            widget: "select",
+            name: "selectC",
+            description: "我的选项依赖于【下拉选框A】",
+            dict: {
+              "selectA==any": { filterKey: "id" },
+            },
+            options: [
+              {
+                id: "选项1",
+                value: "选项1",
+                label: "黄金糕",
+              },
+              {
+                id: "选项1",
+                value: "选项2",
+                label: "双皮奶",
+              },
+              {
+                id: "这个不会被过滤",
+                value: "选项3",
+                label: "这个不会被过滤",
+              },
+            ],
+          },
+          {
             title: "触发字典过滤",
             widget: "input",
             name: "factoryid",
@@ -404,7 +440,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.16:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.15:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },
