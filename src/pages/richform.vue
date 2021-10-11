@@ -139,11 +139,11 @@ export default {
       },
       form: {
         border: true, // 显示边框
-        grid: false, // 表单内部栅栏
+        grid: true, // 表单内部栅栏
         labelSuffix: ":", // 字段标题后缀内容，默认' : '
         labelWidth: "110px", // 标签宽度,默认50px
         validator: "input", // submit
-        labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
+        labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left/center
         labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
         actions: [
           //声明显示在下方和动作按钮
@@ -440,7 +440,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.15:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.16:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },

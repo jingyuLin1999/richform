@@ -44,7 +44,8 @@ module.exports = {
             // "vue2-perfect-scrollbar": "vue2-perfect-scrollbar",
             // "vuedraggable": "vuedraggable",
             // "vxe-table": "vxe-table",
-            // "xe-utils": "xe-utils"
+            // "xe-utils": "xe-utils",
+            // "element-resize-detector": "element-resize-detector"
         }
     },
     // to handle element icon error in build. 

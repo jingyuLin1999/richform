@@ -8,6 +8,7 @@
     :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
   >
     <div
+      :ref="fieldId + 'field'"
       :class="[
         'field',
         form.labelInline ? 'label-inline' : '',
@@ -19,11 +20,10 @@
       <div
         :class="[
           'title-wrapper',
-          form.labelAlign == 'right' ? 'label-right' : '',
+          'label-' + (form.labelAlign || 'right'),
           form.labelInline ? 'label-hori' : 'label-vert',
         ]"
         :style="{
-          'min-height': form.grid && form.labelInline ? '50px' : '26px',
           width: form.labelInline ? form.labelWidth : '100%',
         }"
       >
@@ -53,11 +53,15 @@
         </el-tooltip>
       </div>
       <div
+        v-if="form.grid && form.labelInline"
+        class="label-right-border"
+        :style="{ height: lableRightBorder }"
+      ></div>
+      <div
         :class="[
           'field-value',
           isDesign ? 'field-mask' : '',
           !form.labelInline ? 'field-value-vert' : 'field-value-hori',
-          form.grid && form.labelInline ? 'label-border' : '',
         ]"
       >
         <component
@@ -107,6 +111,7 @@ import { path } from "ramda";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
 import CommonMixin from "./utils/commonMixin";
+import elementResizeDetectorMaker from "element-resize-detector";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 
 export default {
@@ -126,10 +131,15 @@ export default {
   data() {
     return {
       fieldSchema: {}, // 字段的schema
+      erd: elementResizeDetectorMaker(), // dom节点监听器
+      lableRightBorder: "0px", // 标签右侧的边
+      fieldId: Math.random().toString(15).slice(2, 15),
     };
   },
   mounted() {
     this.load();
+
+    this.calcuFieldHeight();
   },
   watch: {
     realyValues: {
@@ -174,6 +184,21 @@ export default {
         arguments[0] = `${this.formId}:${arguments[0]}`;
         eventbus.$emit(...arguments);
       }
+    },
+    calcuFieldHeight() {
+      let fieldValueDom = this.$refs[this.fieldId + "field"];
+      let isLock = false,
+        debounce = null;
+      this.erd.listenTo(fieldValueDom, (element) => {
+        if (isLock) return;
+        let height = element.offsetHeight;
+        this.$set(this.$data, "lableRightBorder", height + "px");
+        if (debounce) clearTimeout(debounce);
+        debounce = setTimeout(() => {
+          isLock = false;
+        }, 500);
+        isLock = true;
+      });
     },
     pickSchema() {
       // schema不是必须的或无field就无法查找
@@ -255,6 +280,9 @@ export default {
       this.onDispatch();
     },
   },
+  beforeDestroy() {
+    this.erd.removeAllListeners(this.$refs[this.fieldId + "field"]);
+  },
 };
 </script>
 
@@ -281,6 +309,7 @@ export default {
   > .field {
     align-items: center;
     position: relative;
+    min-height: 48px;
     > .title-wrapper {
       display: flex;
       align-items: center;
@@ -303,11 +332,10 @@ export default {
       padding-right: 4px;
       box-sizing: border-box;
     }
-    // 标签右边
-    > .label-border {
-      position: relative;
-      border-left: 1px solid $form-border-color;
-      padding: 8px 3px; // 错误占位符
+    .label-center {
+      justify-content: center;
+      padding-right: 4px;
+      box-sizing: border-box;
     }
     // 控制标签和字段垂直显示
     > .label-vert {
@@ -332,12 +360,15 @@ export default {
       left: 0;
       top: 0;
     }
+    > .label-right-border {
+      width: 1px;
+      background: $form-border-color;
+    }
     > .field-value {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      min-height: 50px; // 这个值需要和style中的值同步
-      padding: 0 3px; // 边框,不能改成margin否则会溢出
+      padding: 1px 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
       position: relative;
       > .error-message {
