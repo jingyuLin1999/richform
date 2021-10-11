@@ -14,6 +14,7 @@
         form.labelInline ? 'label-inline' : '',
         form.grid ? 'field-border' : '',
         field.activeDesign && isDesign ? 'active-design' : '',
+        form.labelInline && !form.grid ? 'inline-no-grid' : '',
       ]"
       @click="onClickedItem(field)"
     >
@@ -302,6 +303,9 @@ export default {
   > .label-inline {
     display: flex;
   }
+  > .inline-no-grid {
+    margin-bottom: 4px;
+  }
   > .field-border {
     border: 1px solid $form-border-color;
     border-top: 0;
@@ -368,7 +372,7 @@ export default {
       display: flex;
       align-items: center;
       box-sizing: border-box;
-      padding: 1px 3px; // 边框,不能改成margin否则会溢出
+      padding: 0 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
       position: relative;
       > .error-message {
@@ -378,7 +382,7 @@ export default {
         color: #e83030;
         position: absolute;
         left: 0;
-        bottom: -8px;
+        bottom: -13px;
         z-index: 999;
       }
     }
@@ -388,9 +392,9 @@ export default {
       padding-left: 4px;
       display: flex;
       align-items: flex-start;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       > .error-message {
-        bottom: -1px;
+        bottom: -13px;
       }
     }
     // 去除element自带的margin-bottom

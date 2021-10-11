@@ -55,6 +55,7 @@ export default {
                         let filterKey = dictItem.dictValue.filterKey;
                         if (!filterKey || !dictItem.options.length) return;
                         let filterOptions = dictItem.options.filter(item => (item[filterKey] == this.values[fieldName]));
+                        if(!filterOptions.length) this.values[dictItem.field.name] = null; 
                         this.$set(dictItem.field, "options", filterOptions);
                     }
                 }

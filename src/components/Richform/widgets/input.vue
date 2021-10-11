@@ -52,7 +52,7 @@ export default {
 .input-widget {
   width: 100%;
   textarea {
-    margin: 5px 0 6px 0 !important;
+    margin: 2px 0 !important;
   }
 }
 </style>
