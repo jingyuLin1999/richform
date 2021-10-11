@@ -217,6 +217,18 @@ export default {
     onSubmit() {},
   },
 };
+// 加载表单元数据，供外部调用
+function loadMetas() {
+  const metaFiles = require.context("./meta", true, /\.js$/);
+  const modules = metaFiles.keys().reduce((modules, modulePath) => {
+    const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, "$1");
+    const value = metaFiles(modulePath);
+    modules[moduleName] = value;
+    return modules;
+  }, {});
+  return modules;
+}
+export const FormMetas = loadMetas();
 </script>
 
 <style lang="scss">
