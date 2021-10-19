@@ -1,8 +1,8 @@
 {
   "name": "richform",
-  "version": "0.1.6",
+  "version": "0.1.9",
   "description": "基于element的表单、表单设计器",
-  "main": "lib/richform.common",
+  "main": "lib/richform.umd.min.js",
   "directories": {
     "lib": "lib"
   },
@@ -21,8 +21,7 @@
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3",
     "vxe-table": "^3.3.9",
-    "xe-utils": "^3.3.0",
-    "element-resize-detector": "^1.2.3"
+    "xe-utils": "^3.3.0"
   },
   "author": "ljy",
   "license": "ISC",

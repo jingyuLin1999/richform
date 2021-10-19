@@ -22,12 +22,12 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 <template>
   <div class="rich-form-app">
     {{ values }}
-    <el-button
+    <Button
       size="small"
       type="success"
       @click="hooks.validate()"
       :style="{ 'margin-bottom': '3px' }"
-      >外部校验</el-button
+      >外部校验</Button
     >
     <RichForm
       :schema="schema"
@@ -41,9 +41,10 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 </template>
 
 <script>
+import { Button } from "element-ui";
 import RichForm from "../components/Richform";
 export default {
-  components: { RichForm },
+  components: { RichForm, Button },
   data() {
     return {
       hooks: {},
@@ -440,7 +441,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.16:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.14:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },

@@ -1,5 +1,5 @@
 <template>
-  <div class="ipinput-widget">
+  <div class="ipinput-widget" :id="widgetId">
     <ipInput
       :disabled="field.readOnly"
       :ip="value"

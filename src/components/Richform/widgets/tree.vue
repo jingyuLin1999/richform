@@ -1,21 +1,25 @@
 <template>
-  <div class="perfect-tree-wrapper" :style="{ '--theme': field.theme }">
-    <el-input
+  <div
+    class="perfect-tree-wrapper"
+    :id="widgetId"
+    :style="{ '--theme': field.theme }"
+  >
+    <Input
       v-if="field.isShowSearch"
       placeholder="输入关键字进行过滤"
       v-model="filterText"
     >
-    </el-input>
-    <el-input
+    </Input>
+    <Input
       v-if="field.showAddTemplate"
       size="small"
       placeholder="新增模板"
       type="textarea"
       v-model="field.template"
-    ></el-input>
-    <el-tree
+    ></Input>
+    <Tree
       ref="pefectTree"
-      :data="field.options"
+      :data="value"
       :node-key="field.nodeKey"
       :default-expand-all="field.isExpandAll"
       :expand-on-click-node="false"
@@ -50,7 +54,7 @@
         </div>
         <!-- 工具 -->
         <span class="tools">
-          <el-tooltip
+          <Tooltip
             class="tool-item"
             popper-class="perfect-tree-tool-tip"
             :open-delay="200"
@@ -61,8 +65,8 @@
             effect="light"
           >
             <i class="el-icon-circle-plus-outline" @click="addSibling()"></i>
-          </el-tooltip>
-          <el-tooltip
+          </Tooltip>
+          <Tooltip
             class="tool-item"
             popper-class="perfect-tree-tool-tip"
             :open-delay="200"
@@ -73,8 +77,8 @@
             effect="light"
           >
             <i class="el-icon-plus" @click="addNodeModal(data, node)"></i>
-          </el-tooltip>
-          <el-tooltip
+          </Tooltip>
+          <Tooltip
             class="tool-item"
             popper-class="perfect-tree-tool-tip"
             :open-delay="200"
@@ -88,8 +92,8 @@
               class="el-icon-edit-outline"
               @click="editNodeModal(data, node, $event)"
             ></i>
-          </el-tooltip>
-          <el-tooltip
+          </Tooltip>
+          <Tooltip
             class="tool-item"
             popper-class="perfect-tree-tool-tip"
             :open-delay="200"
@@ -100,10 +104,10 @@
             effect="light"
           >
             <i class="el-icon-delete" @click="onRemoveNode(data, node)"></i>
-          </el-tooltip>
+          </Tooltip>
         </span>
       </span>
-    </el-tree>
+    </Tree>
     <!-- 弹窗 -->
     <Modal
       v-model="isModal"
@@ -118,18 +122,16 @@
         class="field-row"
       >
         <label v-if="key != 'children'" class="field-label">{{ key }}:</label>
-        <el-input
+        <Input
           v-if="key != 'children'"
           size="small"
           v-model="template[key]"
           required
-        ></el-input>
+        ></Input>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="isModal = false" size="mini">取 消</el-button>
-        <el-button type="primary" size="mini" @click="onSureBtn"
-          >确 定</el-button
-        >
+        <Button @click="isModal = false" size="mini">取 消</Button>
+        <Button type="primary" size="mini" @click="onSureBtn">确 定</Button>
       </span>
     </Modal>
   </div>
@@ -140,9 +142,10 @@ import "xe-utils";
 import { Modal } from "vxe-table";
 import "vxe-table/lib/style.css";
 import baseMixin from "./baseMixin";
+import { Input, Button, Tree, Tooltip } from "element-ui";
 export default {
   mixins: [baseMixin],
-  components: { Modal },
+  components: { Modal, Input, Button, Tree, Tooltip },
   data() {
     return {
       isModal: false, // 弹出
@@ -186,7 +189,7 @@ export default {
         showAddTemplate: false, // 显示新增模板
       };
     },
-    editNodeTitle(){},
+    editNodeTitle() {},
     onCheckedNode() {
       // 当是多选框时，返回id
       if (this.field.isShowCheckbox) {
@@ -246,6 +249,7 @@ export default {
       }
       data.children.push(this.template);
       this.isModal = false;
+      this.getWidgetHeight();
     },
     editNodeModal(data, node) {
       this.isModal = true;
@@ -264,6 +268,7 @@ export default {
       this.isModal = true;
       this.dialogEditModel = false;
       this.values.pid = 0;
+      this.getWidgetHeight();
     },
   },
 };

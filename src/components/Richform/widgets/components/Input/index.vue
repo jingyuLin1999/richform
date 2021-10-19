@@ -1,23 +1,25 @@
 
 <!--
-用于处理 el-input change事件不触发bug
+用于处理 Input change事件不触发bug
 -->
 <template>
-  <el-input v-model="inputVal" :placeholder="placeholder"></el-input>
+  <Input v-model="inputVal" :placeholder="placeholder"></Input>
 </template>
 
 <script>
+import { Input } from "element-ui";
 export default {
   props: {
     value: {
       type: String,
-      default: ""
+      default: "",
     },
-    placeholder: { type: String, default: "" }
+    placeholder: { type: String, default: "" },
   },
+  components: { Input },
   data() {
     return {
-      inputVal: this.value
+      inputVal: this.value,
     };
   },
   watch: {
@@ -28,9 +30,9 @@ export default {
       if (newVal !== this.inputVal) {
         this.inputVal = newVal;
       }
-    }
+    },
   },
-  methods: {}
+  methods: {},
 };
 </script>
 

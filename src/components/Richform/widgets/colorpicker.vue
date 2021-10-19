@@ -1,5 +1,6 @@
 <template>
-  <el-color-picker
+  <ColorPicker
+    :id="widgetId"
     class="widget-colorpicker"
     v-model="value"
     :disabled="field.disabled"
@@ -7,13 +8,15 @@
     :color-format="field.colorFormat"
     :size="field.size"
     :predefine="field.predefineColors"
-  ></el-color-picker>
+  ></ColorPicker>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { ColorPicker } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { ColorPicker },
   data() {
     return {
       checkAll: false,

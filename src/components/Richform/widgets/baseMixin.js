@@ -11,12 +11,16 @@ export default {
     data() {
         return {
             updateValue: 0,
+            widgetId: Math.random().toString(15).slice(2, 15),
         }
     },
     inject: ["dependencies", "isFriendValue"],
     mixins: [CommonMixin],
     created() {
         this.load();
+    },
+    mounted() {
+        this.getWidgetHeight();
     },
     computed: {
         value: {
@@ -133,6 +137,16 @@ export default {
                     }
                 }
             }
-        }
-    }
+        },
+        // 获取widget的dom高度，widgetDom高度会变化的需要调用该方法
+        getWidgetHeight() {
+            this.$nextTick(() => {
+                // 不放在field的原因是设计器拖拽换位置不会重新计算高度
+                const widgetDom = document.getElementById(this.widgetId);
+                if (!widgetDom || widgetDom.offsetHeight == 0) return;
+                let height = (widgetDom.offsetHeight < 40 ? 40 : widgetDom.offsetHeight) + 8;
+                this.$emit("widgetHeight", height);
+            })
+        },
+    },
 }

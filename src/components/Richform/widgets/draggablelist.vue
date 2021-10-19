@@ -1,5 +1,5 @@
 <template>
-  <dl class="draggable-list-widget">
+  <dl class="draggable-list-widget" :id="widgetId">
     <draggable v-bind="dragOptions()" :list="value">
       <dd
         class="draggable-list-item"
@@ -14,7 +14,7 @@
           ]"
         ></i>
         <!-- 字符串 -->
-        <el-input
+        <Input
           v-if="typeof item == 'string'"
           :size="field.size"
           v-model="value[index]"
@@ -27,7 +27,7 @@
           v-for="(key, index) in Object.keys(item)"
           :key="index"
         >
-          <el-input
+          <Input
             v-if="field.editKeys && field.editKeys.includes(key)"
             v-model="item[key]"
             :size="field.size"
@@ -46,18 +46,19 @@
         class="draggable-list-add"
         @click="addItem"
       >
-        添加标签
+        添加
       </div>
     </draggable>
   </dl>
 </template>
 <script>
+import { Input } from "element-ui";
 import baseMixin from "./baseMixin";
 import Draggable from "vuedraggable";
 export default {
   name: "DraggableListWidget",
   mixins: [baseMixin],
-  components: { Draggable },
+  components: { Draggable, Input },
   data() {
     return {
       id: 1,
@@ -99,11 +100,13 @@ export default {
       else if (Array.isArray(this.field.template))
         template = JSON.parse(JSON.stringify(this.field.template));
       this.value.push(template);
+      this.getWidgetHeight();
     },
     // 删除项目
     deleteItem(index) {
       if (this.value.length === 1 && this.field.atLeastOne) return;
       this.value.splice(index, 1);
+      this.getWidgetHeight();
     },
     // 拖拽配置
     dragOptions() {
@@ -128,6 +131,8 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin: 0;
+  padding: 0;
   .draggable-list-icon,
   .delete-list-icon {
     width: 30px;

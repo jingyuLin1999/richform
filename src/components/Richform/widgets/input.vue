@@ -1,5 +1,6 @@
 <template>
-  <el-input
+  <Input
+    :id="widgetId"
     :class="[
       'input-widget',
       'el-form-item',
@@ -18,13 +19,15 @@
     :size="field.size"
     :maxlength="field.maxLength"
     :minlength="field.minLength"
-  ></el-input>
+  ></Input>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Input } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { Input },
   methods: {
     defaultFieldAttr() {
       return {

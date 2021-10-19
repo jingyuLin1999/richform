@@ -13,8 +13,8 @@
       class="design-no-collapse"
       @click="onClickedItem(collapse)"
     ></div>
-    <el-collapse v-model="openCollapseName">
-      <el-collapse-item :name="collapse.name" class="collapse-item">
+    <Collapse v-model="openCollapseName">
+      <CollapseItem :name="collapse.name" class="collapse-item">
         <template slot="title">
           <span :style="collapse.style" class="collapse-title">{{
             collapse.title
@@ -37,8 +37,8 @@
             :isDesign="isDesign"
           ></actions>
         </div>
-      </el-collapse-item>
-    </el-collapse>
+      </CollapseItem>
+    </Collapse>
     <!--拖拽-->
     <span
       class="design-draggable design-handle-move"
@@ -67,9 +67,11 @@
 
 <script>
 import DesignMixin from "../utils/designMixin";
+import { Collapse, CollapseItem } from "element-ui";
 export default {
   name: "collapse",
   mixins: [DesignMixin],
+  components: { Collapse, CollapseItem },
   props: {
     collapse: { type: Object, default: () => ({}) },
   },

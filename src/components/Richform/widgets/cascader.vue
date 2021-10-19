@@ -1,5 +1,6 @@
 <template>
-  <el-cascader
+  <Cascader
+    :id="widgetId"
     class="cascader-widget"
     v-model="value"
     :options="field.options"
@@ -10,13 +11,15 @@
     :filterable="field.filterable"
     :props="field.defaultProp"
     :show-all-levels="field.showAllLevels"
-  ></el-cascader>
+  ></Cascader>
 </template>
 
 <script>
+import { Cascader } from "element-ui";
 import baseMixin from "./baseMixin";
 export default {
   mixins: [baseMixin],
+  components: { Cascader },
   methods: {
     defaultFieldAttr() {
       return {

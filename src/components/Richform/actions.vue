@@ -2,7 +2,7 @@
 <template>
   <div class="actions">
     <template v-for="(action, index) of leftActions">
-      <el-button
+      <Button
         :key="index"
         :type="action.type"
         v-if="action.visible != false"
@@ -12,11 +12,11 @@
         :disabled="isDesign"
       >
         <i :class="action.icon" v-if="action.icon"></i> {{ action.title }}
-      </el-button>
+      </Button>
     </template>
     <div class="right">
       <template v-for="(action, index) of rightActions">
-        <el-button
+        <Button
           :key="index"
           :type="action.type"
           :size="action.size"
@@ -26,7 +26,7 @@
           :disabled="isDesign"
         >
           <i :class="action.icon" v-if="action.icon"></i> {{ action.title }}
-        </el-button>
+        </Button>
       </template>
     </div>
   </div>
@@ -34,10 +34,11 @@
 
 <script>
 import eventbus from "./utils/eventbus";
-
+import { Button } from "element-ui";
 export default {
   name: "RichFormActions",
   inject: ["formId"],
+  components: { Button },
   props: {
     actions: Array,
     isDesign: { type: Boolean, default: false }, // 是否是设计模式
@@ -66,11 +67,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.actions{
-    margin: 2px 0;
-    .right{
-        display: flex;
-        justify-content: flex-end;
-    }
+.actions {
+  margin: 2px 0;
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>

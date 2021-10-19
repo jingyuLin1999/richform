@@ -1,20 +1,22 @@
 <template>
-  <div>
-    <el-transfer
+  <div :id="widgetId">
+    <Transfer
       style="display: flex; justify-content: flex-start; align-items: center"
       v-model="value"
       :data="field.options"
       :filterable="field.filterable"
       :titles="field.titles"
       :button-texts="field.buttonTexts"
-    ></el-transfer>
+    ></Transfer>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Transfer } from "element-ui";
 export default {
   name: "TransferWidget",
+  components: { Transfer },
   mixins: [baseMixin],
   methods: {
     defaultFieldAttr() {

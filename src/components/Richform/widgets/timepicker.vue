@@ -1,7 +1,7 @@
 
 <template>
-  <div class="timepicker-widget">
-    <el-time-picker
+  <div class="timepicker-widget" :id="widgetId">
+    <TimePicker
       class="el-time"
       v-if="field.isPicker"
       v-model="value"
@@ -17,8 +17,8 @@
       :range-separator="field.rangeSeparator"
       :start-placeholder="field.startPlaceholder"
       :end-placeholder="field.endPlaceholder"
-    ></el-time-picker>
-    <el-time-select
+    ></TimePicker>
+    <TimeSelect
       class="el-time"
       v-else
       v-model="value"
@@ -29,15 +29,17 @@
       :clearable="field.clearable"
       :value-format="field.valueFormat"
       :size="field.size"
-    ></el-time-select>
+    ></TimeSelect>
   </div>
 </template>
 
 
 <script>
 import baseMixin from "./baseMixin";
+import { TimeSelect, TimePicker } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { TimeSelect, TimePicker },
   methods: {
     defaultFieldAttr() {
       return {

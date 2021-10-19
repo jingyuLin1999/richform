@@ -1,29 +1,33 @@
 <template>
-  <el-date-picker
-    v-model="value"
-    :type="field.type"
-    :readonly="field.readOnly"
-    :placeholder="field.placeholder"
-    :disabled="field.disabled"
-    :clearable="field.clearable"
-    :size="field.size"
-    :editable="field.editable"
-    :format="field.format"
-    :value-format="field.valueFormat"
-    :arrow-control="field.arrowControl"
-    :range-separator="field.rangeSeparator"
-    :start-placeholder="field.startPlaceholder"
-    :end-placeholder="field.endPlaceholder"
-    :picker-options="field.pickerOptions"
-    :style="{ width: '100%' }"
-  ></el-date-picker>
+  <div :id="widgetId" class="date-picker-widget">
+    <DatePicker
+      v-model="value"
+      :type="field.type"
+      :readonly="field.readOnly"
+      :placeholder="field.placeholder"
+      :disabled="field.disabled"
+      :clearable="field.clearable"
+      :size="field.size"
+      :editable="field.editable"
+      :format="field.format"
+      :value-format="field.valueFormat"
+      :arrow-control="field.arrowControl"
+      :range-separator="field.rangeSeparator"
+      :start-placeholder="field.startPlaceholder"
+      :end-placeholder="field.endPlaceholder"
+      :picker-options="field.pickerOptions"
+      :style="{ width: '100%' }"
+    ></DatePicker>
+  </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { DatePicker } from "element-ui";
 export default {
   name: "dataPickerWidget",
   mixins: [baseMixin],
+  components: { DatePicker },
   methods: {
     defaultFieldAttr() {
       return {
@@ -78,4 +82,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.date-picker-widget {
+  width: 100%;
+}
 </style>

@@ -7,8 +7,8 @@
       class="design-no-tabs"
       @click="onClickedItem(tabsItem)"
     ></div>
-    <el-tabs v-model="activeTabName" @tab-click="clickTab(tabsItem)">
-      <el-tab-pane
+    <Tabs v-model="activeTabName" @tab-click="clickTab(tabsItem)">
+      <TabPane
         v-for="(tab, index) in tabsItem.tabs"
         :key="index"
         :label="tab.label"
@@ -26,8 +26,8 @@
             :realyValues="realyValues"
           ></layout>
         </div>
-      </el-tab-pane>
-    </el-tabs>
+      </TabPane>
+    </Tabs>
     <!--拖拽-->
     <span
       class="design-draggable design-handle-move"
@@ -56,9 +56,11 @@
 
 <script>
 import DesignMixin from "../utils/designMixin";
+import { Tabs, TabPane } from "element-ui";
 export default {
   name: "tabs-layout",
   mixins: [DesignMixin],
+  components: { Tabs, TabPane },
   props: {
     tabsItem: { type: Object, default: () => ({}) },
   },

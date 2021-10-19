@@ -1,6 +1,6 @@
 <template>
-  <div class="bdmap-component">
-    <el-input
+  <div class="bdmap-component" :id="widgetId">
+    <Input
       v-model="value"
       size="small"
       @focus="isHideSearchList = false"
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { Input } from "element-ui";
 import {
   BaiduMap,
   BmMarker,
@@ -75,6 +76,7 @@ export default {
     BmCircle,
     BmLocalSearch,
     BmCopyright,
+    Input,
   },
   mixins: [baseMixin],
   data() {

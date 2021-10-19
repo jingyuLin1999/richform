@@ -204,11 +204,11 @@ export const widgets = [
         multiple: false, // 可通过 props.multiple = true 来开启多选模
         options: [
             {
-                value: "zhinan",
+                id: "zhinan",
                 label: "指南",
                 children: [
-                    { value: "shejiyuanze", label: "设计原则" },
-                    { value: 'collapse', label: '折叠面板' }
+                    { id: "shejiyuanze", label: "设计原则" },
+                    { id: 'collapse', label: '折叠面板' }
                 ],
             },
         ],

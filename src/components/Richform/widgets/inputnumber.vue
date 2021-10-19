@@ -1,6 +1,6 @@
 <template>
-  <div class="inputnumber-widget">
-    <el-input-number
+  <div class="inputnumber-widget" :id="widgetId">
+    <InputNumber
       v-model="value"
       :disabled="field.disabled"
       :step="field.step"
@@ -10,14 +10,16 @@
       :step-strictly="field.stepStrictly"
       :precision="field.precision"
       :controls-position="field.controlsPosition"
-    ></el-input-number>
+    ></InputNumber>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { InputNumber } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { InputNumber },
   methods: {
     defaultFieldAttr() {
       return {

@@ -72,27 +72,23 @@
           ></RichForm>
         </template>
         <template slot="last">
-          <el-tabs
-            class="tab-attribute"
-            v-model="activeTabName"
-            @tab-click="onTabClick"
-          >
-            <el-tab-pane label="属性配置" name="attribute" class="design-tab">
+          <Tabs class="tab-attribute" v-model="activeTabName">
+            <TabPane label="属性配置" name="attribute" class="design-tab">
               <RichForm
                 :schema="attribute.schema"
                 :form="attribute.form"
                 :values="attribute.values"
                 :isDesign="false"
               ></RichForm>
-            </el-tab-pane>
-            <el-tab-pane label="校验规则" name="rules" class="design-tab">
+            </TabPane>
+            <TabPane label="校验规则" name="rules" class="design-tab">
               <RichForm
                 :schema="rules.schema"
                 :form="rules.form"
                 :values="rules.values"
               ></RichForm>
-            </el-tab-pane>
-          </el-tabs>
+            </TabPane>
+          </Tabs>
         </template>
       </split-layout>
     </div>
@@ -104,9 +100,10 @@ import RichForm from "../Richform";
 import Draggable from "vuedraggable";
 import SplitLayout from "../SplitLayout";
 import { layout, widgets } from "./meta/layout";
+import { Tabs, TabPane } from "element-ui";
 export default {
   name: "FormDesign",
-  components: { Draggable, SplitLayout, RichForm },
+  components: { Draggable, SplitLayout, RichForm, Tabs, TabPane },
   props: {
     fields: { type: Array, default: () => [] }, // 表的字段
   },
@@ -166,9 +163,6 @@ export default {
         },
         sort: false, // 禁止排序
       };
-    },
-    onTabClick(tab, event) {
-      // console.log(tab, event);
     },
     clickedField(item) {
       try {
@@ -242,7 +236,7 @@ export const FormMetas = loadMetas();
   // 修改属性配置elementUi tab的样式
   .tab-attribute {
     .el-tabs__item {
-      width: 135px;
+      width: 140px;
       text-align: center;
     }
   }
@@ -314,6 +308,7 @@ export const FormMetas = loadMetas();
       }
     }
     .design-canvas {
+      height: 100%;
     }
   }
 }

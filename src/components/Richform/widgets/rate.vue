@@ -1,6 +1,7 @@
 
 <template>
-  <el-rate
+  <Rate
+    :id="widgetId"
     v-model="value"
     :colors="field.colors"
     :show-text="field.showText"
@@ -13,14 +14,16 @@
     :low-threshold="field.lowThreshold"
     :high-threshold="field.highThreshold"
     :score-template="field.scoreTemplate"
-  ></el-rate>
+  ></Rate>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Rate } from "element-ui";
 
 export default {
   mixins: [baseMixin],
+  components: { Rate },
   methods: {
     defaultFieldAttr() {
       return {

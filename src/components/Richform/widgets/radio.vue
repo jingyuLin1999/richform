@@ -1,21 +1,21 @@
 <template>
-  <div class="radio-widget">
-    <el-radio
+  <div class="radio-widget" :id="widgetId">
+    <Radio
       v-if="!field.isGroup"
       :disabled="field.disabled"
       :border="field.border"
       :size="field.size"
       v-model="value"
       :label="field.title"
-    ></el-radio>
-    <el-radio-group
+    ></Radio>
+    <RadioGroup
       v-else
       :text-color="field.textColor"
       :fill="field.fill"
       v-model="value"
     >
       <div v-if="field.isButton">
-        <el-radio-button
+        <RadioButton
           v-for="radio in field.options"
           :name="radio.name"
           :key="radio.name"
@@ -23,10 +23,10 @@
           :border="radio.border"
           :size="radio.size"
           :label="radio.title"
-        ></el-radio-button>
+        ></RadioButton>
       </div>
       <div v-else>
-        <el-radio
+        <Radio
           v-for="radio in field.options"
           :name="radio.name"
           :key="radio.name"
@@ -34,16 +34,18 @@
           :border="radio.border"
           :size="radio.size"
           :label="radio.title"
-        ></el-radio>
+        ></Radio>
       </div>
-    </el-radio-group>
+    </RadioGroup>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Radio, RadioGroup, RadioButton } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { Radio, RadioGroup, RadioButton },
   methods: {
     defaultFieldAttr() {
       return {

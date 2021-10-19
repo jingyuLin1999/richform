@@ -22,8 +22,8 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 <template>
   <div class="richform-deep-value">
     {{ values }}
-    <el-button @click="onAddValues">新增values</el-button>
-    <el-button @click="changeValue">改变values</el-button>
+    <Button @click="onAddValues">新增values</Button>
+    <Button @click="changeValue">改变values</Button>
     <RichForm
       :schema="schema"
       :form="form"
@@ -35,9 +35,11 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 </template>
 
 <script>
+import { Button } from "element-ui";
 import RichForm from "../components/Richform";
+
 export default {
-  components: { RichForm },
+  components: { RichForm, Button },
   data() {
     return {
       schema: {

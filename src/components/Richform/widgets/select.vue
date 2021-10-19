@@ -1,11 +1,12 @@
 <template>
-  <div class="select-widget-wrapper">
-    <el-select
+  <div class="select-widget-wrapper" :id="widgetId">
+    <Select
       v-model="value"
       :class="[
         'select-widget',
         'el-form-item',
         fieldErrors[field.name] ? 'is-error' : '',
+        widgetId,
       ]"
       :placeholder="field.placeholder"
       :disabled="field.disabled"
@@ -15,40 +16,46 @@
       :allow-create="field.allowCreate"
       :filterable="field.filterable"
       :size="field.size"
+      @change="calcuHeight"
     >
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
-        <el-option
+        <Option
           v-for="(option, index) in field.options"
           :key="index"
           :label="option[field.defaultProp.label]"
           :value="option[field.defaultProp.value]"
           :disabled="option.disabled"
-        ></el-option>
+        ></Option>
       </div>
       <!-- 分组 -->
       <div v-else>
-        <el-option-group
+        <OptionGroup
           v-for="(group, index) in field.options"
           :key="index"
           :label="group.label"
         >
-          <el-option
+          <Option
             v-for="option in group.options"
             :key="option[field.defaultProp.value]"
             :label="option[field.defaultProp.label]"
             :value="option[field.defaultProp.value]"
-          ></el-option>
-        </el-option-group>
+          ></Option>
+        </OptionGroup>
       </div>
-    </el-select>
+    </Select>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Select, Option, OptionGroup } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { Select, Option, OptionGroup },
+  mounted() {
+    this.calcuHeight();
+  },
   methods: {
     defaultFieldAttr() {
       return {
@@ -67,6 +74,12 @@ export default {
         },
       };
     },
+    // 有延迟，重复计算高度
+    calcuHeight() {
+      setTimeout(() => {
+        this.getWidgetHeight();
+      }, 80);
+    },
   },
 };
 </script>
@@ -74,7 +87,9 @@ export default {
 <style lang="scss">
 .select-widget-wrapper {
   width: 100%;
+  height: 100%;
   > .select-widget {
+    height: 100%;
     width: 100%;
   }
 }

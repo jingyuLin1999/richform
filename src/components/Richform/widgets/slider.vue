@@ -1,7 +1,6 @@
 <template>
-  <!--     :format-tooltip="formatTooltip" -->
-  <div class="widget-slider">
-    <el-slider
+  <div class="widget-slider" :id="widgetId">
+    <Slider
       v-model="value"
       :disabled="field.disabled"
       :show-tooltip="field.showTooltip"
@@ -16,14 +15,16 @@
       :show-input-controls="field.showInputControls"
       :range="field.showRange"
       :marks="field.marks"
-    ></el-slider>
+    ></Slider>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Slider } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { Slider },
   methods: {
     defaultFieldAttr() {
       return {

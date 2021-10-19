@@ -1,5 +1,6 @@
 <template>
   <el-switch
+    :id="widgetId"
     class="switch-widget"
     v-model="value"
     :width="field.width"
@@ -17,8 +18,10 @@
 
 <script>
 import baseMixin from "./baseMixin";
+import { Switch as elSwitch } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { elSwitch },
   methods: {
     defaultFieldAttr() {
       return {

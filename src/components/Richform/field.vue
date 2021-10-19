@@ -8,7 +8,6 @@
     :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
   >
     <div
-      :ref="fieldId + 'field'"
       :class="[
         'field',
         form.labelInline ? 'label-inline' : '',
@@ -29,6 +28,7 @@
         }"
       >
         <div
+          ref="fieldLabel"
           v-if="isShyTitle"
           :class="['label-title', fieldSchema.require ? 'required-field' : '']"
         >
@@ -43,7 +43,7 @@
           "
           >{{ form.labelSuffix }}</span
         >
-        <el-tooltip
+        <Tooltip
           v-if="fieldSchema.description || field.description"
           :content="fieldSchema.description || field.description"
           class="field-question"
@@ -51,12 +51,12 @@
           effect="light"
         >
           <i class="el-icon-question"></i>
-        </el-tooltip>
+        </Tooltip>
       </div>
       <div
         v-if="form.grid && form.labelInline"
         class="label-right-border"
-        :style="{ height: lableRightBorder }"
+        :style="{ height: lableRightBorder + 'px' }"
       ></div>
       <div
         :class="[
@@ -73,6 +73,7 @@
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
           @change="onChange"
+          @widgetHeight="getWidgetHeight"
         />
         <!-- 错误信息 -->
         <div class="error-message" v-if="fieldErrors[field.name]">
@@ -109,14 +110,14 @@
 
 <script>
 import { path } from "ramda";
+import { Tooltip } from "element-ui";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
 import CommonMixin from "./utils/commonMixin";
-import elementResizeDetectorMaker from "element-resize-detector";
 import AJV, { localize as localizeErrors } from "./utils/validator";
-
 export default {
   name: "field",
+  components: { Tooltip },
   inject: ["dependencies", "requireds", "isDeepValues"],
   mixins: [DesignMixin, CommonMixin],
   props: {
@@ -132,15 +133,11 @@ export default {
   data() {
     return {
       fieldSchema: {}, // 字段的schema
-      erd: elementResizeDetectorMaker(), // dom节点监听器
-      lableRightBorder: "0px", // 标签右侧的边
-      fieldId: Math.random().toString(15).slice(2, 15),
+      lableRightBorder: 0, // 标签右侧的边
     };
   },
   mounted() {
     this.load();
-
-    this.calcuFieldHeight();
   },
   watch: {
     realyValues: {
@@ -179,27 +176,17 @@ export default {
       this.pickRequireds();
       this.createValue();
     },
+    getWidgetHeight(valueHeight) {
+      const labelHeight = this.$refs.fieldLabel.offsetHeight;
+      const height = labelHeight > valueHeight ? labelHeight : valueHeight;
+      this.$set(this.$data, "lableRightBorder", height);
+    },
     emit() {
       // 全局总线
       if (arguments.length > 0) {
         arguments[0] = `${this.formId}:${arguments[0]}`;
         eventbus.$emit(...arguments);
       }
-    },
-    calcuFieldHeight() {
-      let fieldValueDom = this.$refs[this.fieldId + "field"];
-      let isLock = false,
-        debounce = null;
-      this.erd.listenTo(fieldValueDom, (element) => {
-        if (isLock) return;
-        let height = element.offsetHeight;
-        this.$set(this.$data, "lableRightBorder", height + "px");
-        if (debounce) clearTimeout(debounce);
-        debounce = setTimeout(() => {
-          isLock = false;
-        }, 500);
-        isLock = true;
-      });
     },
     pickSchema() {
       // schema不是必须的或无field就无法查找
@@ -281,9 +268,6 @@ export default {
       this.onDispatch();
     },
   },
-  beforeDestroy() {
-    this.erd.removeAllListeners(this.$refs[this.fieldId + "field"]);
-  },
 };
 </script>
 
@@ -292,6 +276,7 @@ export default {
 .field-wrapper {
   position: relative;
   color: $field-font-color;
+  box-sizing: border-box;
   .required-field::before {
     content: "*";
     color: #f56c6c;

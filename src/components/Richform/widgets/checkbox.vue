@@ -1,25 +1,25 @@
 <template>
-  <div class="checkbox-widget">
+  <div class="checkbox-widget" :id="widgetId">
     <!-- 单个复选框 -->
-    <el-checkbox
+    <Checkbox
       v-if="!field.isGroup"
       v-model="value"
       :border="field.border"
       :disabled="field.disabled"
       :label="field.title || field.label"
       :size="field.size"
-    ></el-checkbox>
+    ></Checkbox>
     <!-- 普通全选复选框-->
-    <el-checkbox
+    <Checkbox
       v-if="field.isGroup && !field.isButton"
       class="widget-checkAll"
       :indeterminate="isIndeterminate"
       v-model="checkAll"
       @change="onCheckAll"
       label="全选"
-    ></el-checkbox>
+    ></Checkbox>
     <!-- 多个复选框，必须设置options -->
-    <el-checkbox-group
+    <CheckboxGroup
       v-if="field.isGroup"
       v-model="value"
       :max="field.max"
@@ -31,20 +31,20 @@
       @change="onCheckboxGroup"
     >
       <!-- 普通复选组 -->
-      <div v-if="!field.isButton">
-        <el-checkbox
+      <template v-if="!field.isButton">
+        <Checkbox
           v-for="box in field.options"
           :key="box.name"
           :label="box.title || box.label"
           :border="box.border"
           :disabled="box.disabled"
           :size="box.size"
-        ></el-checkbox>
-      </div>
+        ></Checkbox>
+      </template>
       <!-- 按钮样式 -->
-      <div v-else-if="field.isButton">
-        <el-checkbox-button
-          v-for="box in field.options"
+      <template v-else-if="field.isButton">
+        <CheckboxButton
+          v-for="box in field.options || []"
           :key="box.name"
           :label="box.title || box.label"
           :border="box.border"
@@ -52,16 +52,18 @@
           :size="box.size"
           :text-color="box.textColor"
           :fill="box.fill"
-        ></el-checkbox-button>
-      </div>
-    </el-checkbox-group>
+        ></CheckboxButton>
+      </template>
+    </CheckboxGroup>
   </div>
 </template>
 
 <script>
 import baseMixin from "./baseMixin";
+import { Checkbox, CheckboxButton, CheckboxGroup } from "element-ui";
 export default {
   mixins: [baseMixin],
+  components: { Checkbox, CheckboxButton, CheckboxGroup },
   data() {
     return {
       checkAll: false,
@@ -96,6 +98,12 @@ export default {
     onCheckboxGroup(value) {
       this.checkAll = this.field.options.length == value.length;
       this.isIndeterminate = this.checkAll ? false : true;
+    },
+    friendValue() {
+      const { name, isGroup } = this.field;
+      let value = this.values[name];
+      if (isGroup && !Array.isArray(value)) return [];
+      return value;
     },
   },
 };

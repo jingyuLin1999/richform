@@ -24,9 +24,9 @@ module.exports = {
         performance: {
             hints: 'warning',
             //入口起点的最大体积
-            maxEntrypointSize: 50000000,
+            maxEntrypointSize: 5000,
             //生成文件的最大体积
-            maxAssetSize: 300000000,
+            maxAssetSize: 3000,
         },
         plugins: [],
         externals: {
@@ -44,8 +44,7 @@ module.exports = {
             // "vue2-perfect-scrollbar": "vue2-perfect-scrollbar",
             // "vuedraggable": "vuedraggable",
             // "vxe-table": "vxe-table",
-            // "xe-utils": "xe-utils",
-            // "element-resize-detector": "element-resize-detector"
+            // "xe-utils": "xe-utils"
         }
     },
     // to handle element icon error in build. 
