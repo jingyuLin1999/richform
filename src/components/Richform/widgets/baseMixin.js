@@ -11,10 +11,10 @@ export default {
     data() {
         return {
             updateValue: 0,
-            widgetId: Math.random().toString(15).slice(2, 15),
+            widgetId: Math.random().toString(15).slice(2, 15)
         }
     },
-    inject: ["dependencies", "isFriendValue"],
+    inject: ["dependencies", "isFriendValue", "globalVars"],
     mixins: [CommonMixin],
     created() {
         this.load();
@@ -47,7 +47,14 @@ export default {
             this.$setFieldAttr();
             this.pickHideFields();
             this.pickDependencies();
-            this.onDispatch();
+            this.loadCompleteDispatch();
+        },
+        loadCompleteDispatch() {
+            for (let key in this.values) this.dispatchHide(key); // 隐藏字段需要立马派发，不然视觉体验不友好
+            if (this.globalVars.loadCompleted) clearTimeout(this.globalVars.loadCompleted);
+            this.globalVars.loadCompleted = setTimeout(() => {
+                for (let key in this.values) this.dispatchOptions(key);
+            }, 500)
         },
         $setFieldAttr() {
             const defaultFieldAttr = this.defaultFieldAttr();
@@ -104,9 +111,6 @@ export default {
         },
         // 收集依赖关系
         async pickDependencies() {
-            // 赋值初始值
-            if (!this.dependencies[this.field.name])
-                this.dependencies[this.field.name] = [];
             if (!this.field.hasOwnProperty("dict") || this.field.length == 0) return;
             if (typeof this.field.dict == "string" && isUrl(this.field.dict)) {
                 // dict字段是url则直接获取数据，并赋值给options
@@ -117,22 +121,24 @@ export default {
                 for (let key in this.field.dict) {
                     let dictItem = this.field.dict[key];
                     let dictKeyVal = key.split("==");
-                    if (this.dependencies[dictKeyVal[0].trim()]) {
-                        for (let key in this.dependencies) {
-                            let hasExit = this.dependencies[key].find((item) => {
-                                if (item.keyValue == this.field.name) {
-                                    // 必须重新赋值，因为form的地址已经变了
-                                    this.$set(item, 'field', this.field)
-                                    return true;
-                                }
-                            });
-                            if (hasExit) return;
+                    let relyKey = dictKeyVal[0].trim();
+                    let relyValue = dictKeyVal[1].trim();
+                    // 赋值初始值
+                    if (!this.dependencies[relyKey]) this.dependencies[relyKey] = [];
+                    // 已存在就无需重复添加
+                    let hasExit = this.dependencies[relyKey].find((item) => {
+                        if (item.keyValue == relyValue) {
+                            // 必须重新赋值，因为form的地址已经变了
+                            this.$set(item, 'field', this.field)
+                            return true;
                         }
-                        this.dependencies[dictKeyVal[0].trim()].push({
+                    });
+                    if (!hasExit) {
+                        this.dependencies[relyKey].push({
                             keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
                             dictValue: dictItem,
                             field: this.field,
-                            options: this.field.options ? JSON.parse(JSON.stringify(this.field.options)) : [],
+                            options: JSON.parse(JSON.stringify(this.field.options))
                         });
                     }
                 }

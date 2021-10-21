@@ -419,9 +419,9 @@ export default {
                 label: "黄金糕",
               },
               {
-                id: "选项1",
-                value: "选项2",
-                label: "双皮奶",
+                id: "选项3",
+                value: "选项3",
+                label: "选项3",
               },
               {
                 id: "这个不会被过滤",

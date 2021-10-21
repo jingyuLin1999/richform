@@ -24,9 +24,9 @@ module.exports = {
         performance: {
             hints: 'warning',
             //入口起点的最大体积
-            maxEntrypointSize: 5000,
+            maxEntrypointSize: 100000,
             //生成文件的最大体积
-            maxAssetSize: 3000,
+            maxAssetSize: 600000,
         },
         plugins: [],
         externals: {

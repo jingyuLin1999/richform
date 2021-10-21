@@ -19,7 +19,7 @@
     ></Input>
     <Tree
       ref="pefectTree"
-      :data="value"
+      :data="value || field.options"
       :node-key="field.nodeKey"
       :default-expand-all="field.isExpandAll"
       :expand-on-click-node="false"

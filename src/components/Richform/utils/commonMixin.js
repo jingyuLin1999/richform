@@ -32,6 +32,7 @@ export default {
             for (let index = 0; index < dicts.length; index++) {
                 let dictItem = dicts[index];
                 if (dictItem.keyValue == this.values[fieldName] || dictItem.keyValue == "any") {
+                    let oldOptions = JSON.stringify(dictItem.field.options);
                     if (
                         typeof dictItem.dictValue == "string" &&
                         isUrl(dictItem.dictValue)
@@ -40,10 +41,7 @@ export default {
                         try {
                             // 若是url则发起http请求获取字典
                             const { payload } = await loadDict(dictItem.dictValue, { [fieldName]: this.values[fieldName] });
-                            if (Array.isArray(payload)) {
-                                options = payload;
-                                if (!payload.length) this.values[dictItem.field.name] = null; // 
-                            }
+                            if (Array.isArray(payload)) options = payload;
                         } catch (e) {
                             console.error(e);
                         }
@@ -51,22 +49,22 @@ export default {
                     } else if (Array.isArray(dictItem.dictValue)) {
                         // 若是数组，则直接赋值给options
                         this.$set(dictItem.field, "options", dictItem.dictValue);
-                    } else if (typeof dictItem.dictValue == "object") {
+                    } else if (Object.prototype.toString.call(dictItem.dictValue) === '[object Object]') {
                         let filterKey = dictItem.dictValue.filterKey;
                         if (!filterKey || !dictItem.options.length) return;
                         let filterOptions = dictItem.options.filter(item => (item[filterKey] == this.values[fieldName]));
-                        if(!filterOptions.length) this.values[dictItem.field.name] = null; 
                         this.$set(dictItem.field, "options", filterOptions);
                     }
+                    // 只有选项改变了，对应值才应清零
+                    let newOptions = JSON.stringify(dictItem.field.options);
+                    if (oldOptions != newOptions) this.values[dictItem.field.name] = null;
                 }
             }
         },
         // 根据values的字段进行派发动作
-        onDispatch() {
-            for (let key in this.values) {
-                this.dispatchHide(key);
-                this.dispatchOptions(key);
-            }
+        onDispatch(fieldName) {
+            this.dispatchHide(fieldName);
+            this.dispatchOptions(fieldName);
         },
         // 检查隐藏依赖
         dispatchHide(key) {

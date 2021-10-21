@@ -265,7 +265,7 @@ export default {
     onChange(fieldName, value, schema) {
       this.emit("field:change", fieldName, value);
       this.validateField(fieldName, schema, value);
-      this.onDispatch();
+      this.onDispatch(fieldName);
     },
   },
 };

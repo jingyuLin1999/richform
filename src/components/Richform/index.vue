@@ -120,6 +120,7 @@ export default {
       requireds: this.requireds,
       isFriendValue: this.isFriendValue,
       isDeepValues: this.deepValues,
+      globalVars: this.globalVars,
     };
   },
   data() {
@@ -133,6 +134,10 @@ export default {
       hideFields: {}, // 收集隐藏的字段
       dirtyValues: {}, // 脏值即values中有变化的键值对
       rubbishyValues: {}, // 垃圾值
+      globalVars: {
+        // 全局变量
+        loadCompleted: null, // 是否加载完成
+      },
     };
   },
   mounted() {
