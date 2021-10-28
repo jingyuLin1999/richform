@@ -30,6 +30,7 @@ module.exports = {
         },
         plugins: [],
         externals: {
+            // "ajv": "ajv",
             // "ajv-errors": "ajv-errors",
             // "ajv-i18n": "ajv-i18n",
             // "axios": "axios",

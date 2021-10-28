@@ -205,10 +205,11 @@ export const widgets = [
         options: [
             {
                 id: "zhinan",
+                value: "zhinan",
                 label: "指南",
                 children: [
-                    { id: "shejiyuanze", label: "设计原则" },
-                    { id: 'collapse', label: '折叠面板' }
+                    { id: "shejiyuanze", value: "shejiyuanze", label: "设计原则" },
+                    { id: 'collapse', value: "collapse", label: '折叠面板' }
                 ],
             },
         ],
@@ -222,6 +223,21 @@ export const widgets = [
     {
         title: "IP输入框",
         widget: "ipinput",
+    },
+    {
+        title: "上传",
+        widget: "upload",
+        name: "imageFile",
+        tips: "", // 提示
+        listType: "picture-card", // 可选 text/picture/picture-card
+        actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
+        deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
+        draggable: true, // 是否可拖拽
+        multiple: true, // 多选
+        autoUpload: true, // 是否在选取文件后立即进行上传
+        limit: 3, // 上传限制
+        disabled: false,
+        showFileList: true, // 是否显示已上传文件列表
     },
 ]
 

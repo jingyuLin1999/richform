@@ -35,6 +35,9 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :values="values"
       :isDesign="false"
       :hooks="hooks"
+      :authorization="{
+        value: 'Kvf16dcf9872Yi00d32HM448fzyJ8abb151kYlu01S179fd16edd17xiQq9b',
+      }"
       @action="formAction"
     ></RichForm>
   </div>
@@ -54,6 +57,9 @@ export default {
         description: "A product from Acme's catalog",
         type: "object",
         properties: {
+          upload: {
+            type: "array",
+          },
           input: {
             title: "名称对方",
             description: "设备名称",
@@ -137,6 +143,9 @@ export default {
         selectMultiple: '["选项1","选项2"]',
         enddate: "2020-12-09 18:38:54",
         rate: 4,
+        imageFile: [
+          "http://127.0.0.1:9000/images/0d4d19123dd04970b7d2943277200cca.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211028%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211028T070611Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ee6740c7d7d1e10f3af407068ad7d42896d0baf634db83ab409c3b48c66cecb9",
+        ],
       },
       form: {
         border: true, // 显示边框
@@ -200,6 +209,21 @@ export default {
                 bbb: "你好",
               },
             ],
+          },
+          {
+            title: "上传",
+            widget: "upload",
+            name: "imageFile",
+            tips: "提示语句", // 提示
+            listType: "text", // 可选 text/picture/picture-card
+            actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
+            deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
+            draggable: true, // 是否可拖拽
+            multiple: true, // 多选
+            autoUpload: true, // 是否在选取文件后立即进行上传
+            limit: 1, // 上传限制
+            disabled: false,
+            showFileList: true, // 是否显示已上传文件列表
           },
           {
             title: "结束日期",
@@ -297,19 +321,24 @@ export default {
             widget: "tree",
             name: "tree",
             isShowCheckbox: true,
+            onlyCheckedKeys: true,
+            nodeKey: "value",
             options: [
               {
                 id: 1,
+                value: "11",
                 label: "一级 1",
                 children: [
                   {
                     id: 2,
+                    value: "22",
                     label: "二级 1-1",
                   },
                 ],
               },
               {
                 id: 3,
+                value: "33",
                 label: "三级 1-1-1",
               },
             ],

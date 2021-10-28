@@ -135,6 +135,7 @@ export const attribute = {
                 title: "数据配置",
                 widget: "tree",
                 name: "options",
+                addSibling: true,
                 editable: true,
                 deletable: true,
                 addable: true,

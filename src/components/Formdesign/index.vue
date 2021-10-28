@@ -64,10 +64,11 @@
         <template slot="center">
           <RichForm
             class="design-canvas"
+            :isDesign="isDesign"
             :schema="design.schema"
             :form="design.form"
             :values="design.values"
-            :isDesign="isDesign"
+            :authorization="authorization"
             @designItem="clickedField"
           ></RichForm>
         </template>
@@ -106,6 +107,7 @@ export default {
   components: { Draggable, SplitLayout, RichForm, Tabs, TabPane },
   props: {
     fields: { type: Array, default: () => [] }, // 表的字段
+    authorization: { type: Object, default: () => ({}) }, // 权限
   },
   data() {
     return {

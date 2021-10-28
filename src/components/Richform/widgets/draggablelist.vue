@@ -15,6 +15,7 @@
         ></i>
         <!-- 字符串 -->
         <Input
+          class="input-draggable"
           v-if="typeof item == 'string'"
           :size="field.size"
           v-model="value[index]"
@@ -28,6 +29,7 @@
           :key="index"
         >
           <Input
+            class="input-draggable"
             v-if="field.editKeys && field.editKeys.includes(key)"
             v-model="item[key]"
             :size="field.size"
@@ -157,6 +159,9 @@ export default {
     margin: 5px 0;
     .list-handel-move {
       color: #556567;
+    }
+    .input-draggable {
+      min-width: 60px;
     }
     .input-wrapper {
       margin-right: 3px;

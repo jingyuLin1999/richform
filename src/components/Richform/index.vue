@@ -112,6 +112,7 @@ export default {
     showBtns: { type: Boolean, default: true }, // 是否显示按钮
     deepValues: { type: Boolean, default: false }, // 值是否开启深度编辑模式
     isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址，若需要转换类型，需要在shema中指明要转换的数据类型
+    authorization: { type: Object, default: () => ({}) }, // 权限
   },
   provide() {
     return {
@@ -165,12 +166,21 @@ export default {
   },
   methods: {
     load() {
+      this.onAuthorize();
       this._registerEvents();
       this.initHooks();
     },
     initHooks() {
       this.hooks.validate = this.globalValidate;
       this.hooks.reset = this.onReset;
+    },
+    onAuthorize() {
+      const { key, value } = Object.assign(
+        { key: "Authorization", value: "Authorization" },
+        this.authorization
+      );
+      sessionStorage.setItem("auth-key", key);
+      sessionStorage.setItem("auth-value", value);
     },
     noReady() {
       return Object.keys(this.form).length == 0;

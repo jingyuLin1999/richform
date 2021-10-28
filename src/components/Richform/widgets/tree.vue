@@ -19,7 +19,7 @@
     ></Input>
     <Tree
       ref="pefectTree"
-      :data="value || field.options"
+      :data="treeValue"
       :node-key="field.nodeKey"
       :default-expand-all="field.isExpandAll"
       :expand-on-click-node="false"
@@ -27,10 +27,14 @@
       :draggable="field.draggable"
       :show-checkbox="field.isShowCheckbox"
       @check-change="onCheckedNode"
+      @node-click="onNodeClick"
     >
       <span
-        :class="['perfect-tree-node', `perfect-tree-node_${data.id}`]"
-        :data="data.id"
+        :class="[
+          'perfect-tree-node',
+          `perfect-tree-node_${data[field.nodeKey]}`,
+        ]"
+        :data="data[field.nodeKey]"
         slot-scope="{ node, data }"
         @dblclick="editNodeTitle(data, node, $event)"
       >
@@ -46,8 +50,8 @@
           </span>
           <span
             class="title"
-            :ref="'perfect-tree-node-input_' + data.id"
-            :id="'perfect-tree-node-input_' + data.id"
+            :ref="'perfect-tree-node-input_' + data[field.nodeKey]"
+            :id="'perfect-tree-node-input_' + data[field.nodeKey]"
           >
             {{ data.label || data[field.defaultProps.label] }}
           </span>
@@ -142,10 +146,10 @@ import "xe-utils";
 import { Modal } from "vxe-table";
 import "vxe-table/lib/style.css";
 import baseMixin from "./baseMixin";
-import { Input, Button, Tree, Tooltip } from "element-ui";
+import { Input, Button, Tree, Tooltip, MessageBox } from "element-ui";
 export default {
   mixins: [baseMixin],
-  components: { Modal, Input, Button, Tree, Tooltip },
+  components: { Modal, Input, Button, Tree, Tooltip, MessageBox },
   data() {
     return {
       isModal: false, // 弹出
@@ -164,55 +168,68 @@ export default {
       this.$refs.pefectTree.filter(val);
     },
   },
+  computed: {
+    treeValue() {
+      return this.field.options.length > 0 ? this.field.options : this.value;
+    },
+  },
   methods: {
     defaultFieldAttr() {
       return {
         options: [], // 树数据
         nodeKey: "id", // 节点id
-        defaultProps: {}, // 字段对应关系
+        defaultProps: {
+          // 字段对应关系
+          label: "label",
+          value: "value",
+        },
         isExpandAll: true, // 展开全部
         isShowCheckbox: false, // 显示复选框
         checkedKeys: [], // 已经选择的key值
+        onlyCheckedKeys: false, // 值仅仅只要全部选中的，排除半选
         isShowSearch: false, // 开启搜索功能
         isShowIcon: true, // 是否显示图标
         onlyClickLeaf: true, // 仅仅枝叶可以单击
         editable: false,
         deletable: false,
-        addable: true,
+        addable: false,
         draggable: false, // 开启拖拽
         addSibling: false,
         theme: "#409eff",
         expandIcon: "el-icon-folder-opened",
         narrowIcon: "el-icon-folder",
         leafIcon: "el-icon-document",
-        template: `{ "id": null, "label": "" }`, // 节点模板
+        template: `{ "id": null, "label": "", "value": ""}`, // 节点模板
         showAddTemplate: false, // 显示新增模板
       };
     },
     editNodeTitle() {},
+    // 点击节点，即单选时使用
+    onNodeClick(data) {
+      if (this.field.isShowCheckbox || this.field.options.length == 0) return;
+      this.changeValue(data[this.field.nodeKey]);
+    },
     onCheckedNode() {
       // 当是多选框时，返回id
-      if (this.field.isShowCheckbox) {
-        // 方法一： https://www.cnblogs.com/qing619/p/8144584.html
-        // 方法二： https://www.bilibili.com/read/cv5259145/
-        const treeRef = this.$refs["pefectTree"];
-        let getCheckedKeys = treeRef.getCheckedKeys();
+      // 方法一： https://www.cnblogs.com/qing619/p/8144584.html
+      // 方法二： https://www.bilibili.com/read/cv5259145/
+      const treeRef = this.$refs["pefectTree"];
+      let getCheckedKeys = treeRef.getCheckedKeys();
+      if (!this.field.onlyCheckedKeys) {
         let getHalfCheckedKeys = treeRef.getHalfCheckedKeys();
         getHalfCheckedKeys.map((item) => {
           if (!getCheckedKeys.includes(item)) getCheckedKeys.push(item);
         });
-        this.changeValue(getCheckedKeys);
-        return;
       }
-      const checkedNode = treeRef.getCheckedNodes();
-      this.changeValue(checkedNode);
+      this.changeValue(getCheckedKeys);
     },
     filterNode(value, data) {
       if (!value) return true;
       return data[this.field.defaultProps.label].indexOf(value) !== -1;
     },
-    async onRemoveNode(data, node) {
-      this.$confirm("此操作将永久删除节点, 是否继续?", "提示", {
+    onRemoveNode(data, node) {
+      if (this.treeValue.length == 1) return;
+      MessageBox.confirm("此操作将永久删除节点, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
@@ -220,17 +237,12 @@ export default {
         .then(() => {
           const parent = node.parent;
           const children = parent.data.children || parent.data;
-          const index = children.findIndex((item) => item.id === data.id);
+          const index = children.findIndex(
+            (item) => item[this.field.nodeKey] === data[this.field.nodeKey]
+          );
           children.splice(index, 1);
         })
         .catch(() => {});
-    },
-    addNodeModal(data, node) {
-      this.isModal = true;
-      this.modalTitle = "新增";
-      this.modalType = "add";
-      this.clickNode = { data, node };
-      this.template = JSON.parse(this.field.template);
     },
     onSureBtn() {
       switch (this.modalType) {
@@ -240,7 +252,20 @@ export default {
         case "edit":
           this.editNode();
           break;
+        case "addSibling":
+          this.addSiblingNode();
+          break;
       }
+    },
+    addNodeModal(data, node) {
+      this.isModal = true;
+      this.modalTitle = "新增";
+      this.modalType = "add";
+      this.clickNode = { data, node };
+      this.template = JSON.parse(this.field.template);
+      this.template[this.field.nodeKey] = Math.random()
+        .toString(16)
+        .slice(2, 12);
     },
     addNode() {
       let { data, node } = this.clickNode;
@@ -267,8 +292,18 @@ export default {
     addSibling() {
       this.isModal = true;
       this.dialogEditModel = false;
+      this.modalTitle = "新增兄弟节点";
+      this.modalType = "addSibling";
       this.values.pid = 0;
+      this.template = JSON.parse(this.field.template);
+      this.template[this.field.nodeKey] = Math.random()
+        .toString(16)
+        .slice(2, 12);
       this.getWidgetHeight();
+    },
+    addSiblingNode() {
+      this.treeValue.push(this.template);
+      this.isModal = false;
     },
   },
 };
