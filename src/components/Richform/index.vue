@@ -175,6 +175,7 @@ export default {
       this.hooks.reset = this.onReset;
     },
     onAuthorize() {
+      if (Object.keys(this.authorization).length == 0) return;
       const { key, value } = Object.assign(
         { key: "Authorization", value: "Authorization" },
         this.authorization
