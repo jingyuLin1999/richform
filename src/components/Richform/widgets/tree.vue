@@ -26,6 +26,7 @@
       :filter-node-method="filterNode"
       :draggable="field.draggable"
       :show-checkbox="field.isShowCheckbox"
+      :default-checked-keys="defaultCheckedKeys"
       @check-change="onCheckedNode"
       @node-click="onNodeClick"
     >
@@ -39,7 +40,9 @@
         @dblclick="editNodeTitle(data, node, $event)"
       >
         <!-- 标题 -->
-        <div class="title-wrapper">
+        <div
+          :class="['title-wrapper', onActiveNode(data) ? 'active-node' : '']"
+        >
           <span v-if="field.isShowIcon">
             <!-- 张开和收缩图标-->
             <i
@@ -158,6 +161,7 @@ export default {
       clickNode: {}, // 节点的数据
       template: {},
       filterText: "",
+      activeNode: "", //
     };
   },
   watch: {
@@ -171,6 +175,16 @@ export default {
   computed: {
     treeValue() {
       return this.field.options.length > 0 ? this.field.options : this.value;
+    },
+    defaultCheckedKeys() {
+      let defaultCheckedKeys = [];
+      if (Array.isArray(this.value)) {
+        defaultCheckedKeys = defaultCheckedKeys.concat(this.value);
+      }
+      defaultCheckedKeys = defaultCheckedKeys.concat(
+        this.field.defaultCheckedKeys
+      );
+      return defaultCheckedKeys;
     },
   },
   methods: {
@@ -201,12 +215,20 @@ export default {
         leafIcon: "el-icon-document",
         template: `{ "id": null, "label": "", "value": ""}`, // 节点模板
         showAddTemplate: false, // 显示新增模板
+        defaultCheckedKeys: [], // 默认勾选的值
       };
+    },
+    onActiveNode(data) {
+      if (this.field.isShowCheckbox || this.field.options.length == 0)
+        return false;
+      else if (data[this.field.nodeKey] == this.value) return true;
+      return false;
     },
     editNodeTitle() {},
     // 点击节点，即单选时使用
     onNodeClick(data) {
       if (this.field.isShowCheckbox || this.field.options.length == 0) return;
+
       this.changeValue(data[this.field.nodeKey]);
     },
     onCheckedNode() {
@@ -354,6 +376,9 @@ export default {
     }
     .title {
       padding: 3px 0;
+    }
+    .active-node {
+      color: #4f9ffe;
     }
   }
   .perfect-tree-node:hover .tool-item {

@@ -36,7 +36,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :isDesign="false"
       :hooks="hooks"
       :authorization="{
-        value: 'Kvf16dcf9872Yi00d32HM448fzyJ8abb151kYlu01S179fd16edd17xiQq9b',
+        value: 'gxf16dcf98fqy3P0d324n448f3VV8abbIU9r2oY541179fd16edd17qnnw38',
       }"
       @action="formAction"
     ></RichForm>
@@ -146,6 +146,7 @@ export default {
         imageFile: [
           "http://127.0.0.1:9000/images/0d4d19123dd04970b7d2943277200cca.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211028%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211028T070611Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ee6740c7d7d1e10f3af407068ad7d42896d0baf634db83ab409c3b48c66cecb9",
         ],
+        tree: "22",
       },
       form: {
         border: true, // 显示边框
@@ -211,20 +212,41 @@ export default {
             ],
           },
           {
-            title: "上传",
-            widget: "upload",
-            name: "imageFile",
-            tips: "提示语句", // 提示
-            listType: "text", // 可选 text/picture/picture-card
-            actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
-            deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
-            draggable: true, // 是否可拖拽
-            multiple: true, // 多选
-            autoUpload: true, // 是否在选取文件后立即进行上传
-            limit: 1, // 上传限制
-            disabled: false,
-            showFileList: true, // 是否显示已上传文件列表
+            widget: "grid",
+            title: "文件上传",
+            showTitle: true,
+            isClicked: false,
+            fields: [
+              [
+                {
+                  title: "上传",
+                  widget: "upload",
+                  name: "imageFile",
+                  tips: "提示语句", // 提示
+                  listType: "text", // 可选 text/picture/picture-card
+                  actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
+                  deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
+                  draggable: true, // 是否可拖拽
+                  multiple: true, // 多选
+                  autoUpload: true, // 是否在选取文件后立即进行上传
+                  limit: 1, // 上传限制
+                  disabled: false,
+                  showFileList: true, // 是否显示已上传文件列表
+                },
+                {
+                  title: "文件名",
+                  name: "filename",
+                  widget: "input",
+                },
+                {
+                  title: "文件大小",
+                  name: "filesize",
+                  widget: "input",
+                },
+              ],
+            ],
           },
+
           {
             title: "结束日期",
             name: "enddate",
@@ -320,7 +342,7 @@ export default {
             title: "树结构", // 树
             widget: "tree",
             name: "tree",
-            isShowCheckbox: true,
+            isShowCheckbox: false,
             onlyCheckedKeys: true,
             nodeKey: "value",
             options: [
@@ -470,7 +492,7 @@ export default {
             name: "dictTest",
             dict: {
               "factoryid == any":
-                "http://192.168.100.14:8080/manage/dict/getWorkshopByFactoryId.do",
+                "http://192.168.100.11:8080/manage/dict/getWorkshopByFactoryId.do",
             },
             options: [],
           },

@@ -28,7 +28,9 @@
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </div>
-      <div v-if="field.tips.length>0" class="el-upload__tip" slot="tip">{{ field.tips }}</div>
+      <div v-if="field.tips.length > 0" class="el-upload__tip" slot="tip">
+        {{ field.tips }}
+      </div>
     </Upload>
   </div>
 </template>
@@ -67,6 +69,11 @@ export default {
         limit: 1, // 上传限制
         disabled: false,
         showFileList: true, // 是否显示已上传文件列表
+        mapValues: {
+          // 将服务器返回值映射到values对应字段
+          originalFilename: "filename", // 返回字段 value字段
+          fileSize: "filesize",
+        },
       };
     },
     onFileList() {
@@ -79,6 +86,12 @@ export default {
     },
     onSuccess(response, file, fileList) {
       const { payload } = response;
+      // 映射值
+      for (let key in payload) {
+        let mapValues = this.field.mapValues;
+        let valuesKey = mapValues[key];
+        if (valuesKey) this.values[valuesKey] = payload[key];
+      }
       Object.assign(file, payload);
       this.pickValues(fileList);
     },
