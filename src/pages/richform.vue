@@ -232,6 +232,11 @@ export default {
                   limit: 1, // 上传限制
                   disabled: false,
                   showFileList: true, // 是否显示已上传文件列表
+                  mapValues: {
+                    // 将服务器返回值映射到values对应字段
+                    originalFilename: "filename", // 返回字段 value字段
+                    fileSize: "filesize",
+                  },
                 },
                 {
                   title: "文件名",

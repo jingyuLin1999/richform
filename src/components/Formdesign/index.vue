@@ -2,9 +2,9 @@
   <div class="form-design">
     <div class="design-header">
       <div class="header-left">
-        <a target="_blank" href="https://github.com/jingyuLin1999/richform"
-          ><img class="header-github-image" src="@/assets/github.png"
-        /></a>
+        <a target="_blank" href="https://github.com/jingyuLin1999/richform">
+          <span class="iconfont header-github-image">&#xe628;</span>
+        </a>
         <h1 class="title">表单设计器</h1>
       </div>
       <div class="tools">
@@ -228,6 +228,21 @@ export const FormMetas = loadMetas();
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: "iconfont";
+  src: url("./iconfont/iconfont.woff2?t=1635472525124") format("woff2"),
+    url("./iconfont/iconfont.woff?t=1635472525124") format("woff"),
+    url("./iconfont/iconfont.ttf?t=1635472525124") format("truetype");
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .form-design {
   height: 100%;
   display: flex;
@@ -254,6 +269,11 @@ export const FormMetas = loadMetas();
     .header-left {
       display: flex;
       align-items: center;
+      .header-github-image {
+        color: #000;
+        font-size: 28px;
+        margin-right: 12px;
+      }
       .title {
         margin: 0;
         padding: 0;
