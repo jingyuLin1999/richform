@@ -33,9 +33,10 @@ export default {
                 else return this.values[this.field.name];
             },
             set(value) {
-                if (this.isFriendValue)
-                    this.changeValue(value)
-                else this.values[this.field.name] = value
+                if (this.isFriendValue) {
+                    let emitValue = this.beforeChange(value);
+                    this.changeValue(emitValue)
+                } else this.values[this.field.name] = value
             }
         },
         dict() {
@@ -61,6 +62,9 @@ export default {
             let fieldAttr = Object.assign(defaultFieldAttr, this.field)
             for (const [key, value] of Object.entries(fieldAttr))
                 this.$set(this.field, key, value)
+        },
+        beforeChange(value) {
+            return value;
         },
         changeValue(value) {
             this.updateValue++;

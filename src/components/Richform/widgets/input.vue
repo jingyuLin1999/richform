@@ -19,7 +19,14 @@
     :size="field.size"
     :maxlength="field.maxLength"
     :minlength="field.minLength"
-  ></Input>
+  >
+    <template v-if="field.append.length > 0" slot="append">{{
+      field.append
+    }}</template>
+    <template v-if="field.prepend.length > 0" slot="prepend">{{
+      field.prepend
+    }}</template>
+  </Input>
 </template>
 
 <script>

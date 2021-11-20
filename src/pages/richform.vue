@@ -137,6 +137,7 @@ export default {
         },
       },
       values: {
+        cascader: "strict",
         a: "",
         select: "",
         map: "阳新花园城",
@@ -188,6 +189,7 @@ export default {
             name: "cascader",
             disabled: false,
             placeholder: "",
+            isLeaf: true, // 只获取最后一级
             filterable: true, // 搜索功能
             clearable: true,
             separator: "/", // 分隔符
@@ -195,6 +197,7 @@ export default {
             defaultProp: {
               value: "value",
               label: "bbb",
+              parentId: "parentId",
               expandTrigger: "click", // 	click / hover
               checkStrictly: true, // 父子节点不互相关联,可单选
               multiple: false, // 可通过 props.multiple = true 来开启多选模
@@ -203,11 +206,28 @@ export default {
               {
                 value: "zhinan",
                 bbb: "指南",
-                children: [{ value: "shejiyuanze", bbb: "设计原则" }],
+                parentId: "0",
+                children: [
+                  {
+                    value: "shejiyuanze",
+                    bbb: "设计原则",
+                    parentId: "zhinan",
+                    children: [
+                      {
+                        value: "strict",
+                        bbb: "严格要求",
+                        parentId: "shejiyuanze",
+                      },
+                    ],
+                  },
+                  { value: "cart", bbb: "卡车", parentId: "zhinan" },
+                ],
               },
               {
                 value: "nihao",
                 bbb: "你好",
+                parentId: "0",
+                children: [{ value: "test", bbb: "测试", parentId: "nihao" }],
               },
             ],
           },
@@ -490,6 +510,9 @@ export default {
             title: "触发字典过滤",
             widget: "input",
             name: "factoryid",
+            prefixIcon: "el-icon-search",
+            prepend: "D", // 当type等于text有效。
+            append: "KB",
           },
           {
             title: "字典过滤",
