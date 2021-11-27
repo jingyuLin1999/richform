@@ -63,6 +63,11 @@ export default {
           upload: {
             type: "array",
           },
+          enddate: {
+            type: "string",
+            minLength: 1,
+            require: true,
+          },
           input: {
             title: "名称对方",
             description: "设备名称",
@@ -230,7 +235,7 @@ export default {
                 value: 5,
                 bbb: "你好",
                 parentId: "0",
-                children: [{ value: 6, bbb: "测试", parentId:"5" }],
+                children: [{ value: 6, bbb: "测试", parentId: "5" }],
               },
             ],
           },
@@ -274,14 +279,14 @@ export default {
               ],
             ],
           },
-
           {
             title: "结束日期",
             name: "enddate",
             widget: "datetimepicker",
             pickerOptions: {},
-            valueFormat: "yyyy-MM-dd HH:mm:ss",
-            type: "datetime",
+            format: "yyyy 年 MM 月 dd 日",
+            valueFormat: "yyyy-MM-dd",
+            type: "date",
           },
           {
             title: "日期选择器",

@@ -65,7 +65,14 @@ export default {
       let curItem = this.cascaderDict[id];
       if (!curItem) return parentId;
       if (curItem) {
-        if (this.schema.type == "number") id = parseInt(id);
+        switch (this.schema.type) {
+          case "number":
+            id = parseInt(id);
+            break;
+          case "string":
+            id = id.toString();
+            break;
+        }
         parentId.unshift(id);
       }
       let parentIdKey = this.field.defaultProp.parentId;
@@ -75,7 +82,6 @@ export default {
       let value = this.values[this.field.name];
       if (this.field.isLeaf && !Array.isArray(value)) {
         value = this.pickGenerationId(value);
-        console.log(value);
       }
       return value;
     },
