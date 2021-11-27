@@ -57,6 +57,9 @@ export default {
         description: "A product from Acme's catalog",
         type: "object",
         properties: {
+          cascader: {
+            type: "number",
+          },
           upload: {
             type: "array",
           },
@@ -137,7 +140,7 @@ export default {
         },
       },
       values: {
-        cascader: "strict",
+        cascader: 4,
         a: "",
         select: "",
         map: "阳新花园城",
@@ -204,30 +207,30 @@ export default {
             },
             options: [
               {
-                value: "zhinan",
+                value: 1,
                 bbb: "指南",
                 parentId: "0",
                 children: [
                   {
-                    value: "shejiyuanze",
+                    value: 2,
                     bbb: "设计原则",
-                    parentId: "zhinan",
+                    parentId: "1",
                     children: [
                       {
-                        value: "strict",
+                        value: 3,
                         bbb: "严格要求",
-                        parentId: "shejiyuanze",
+                        parentId: "2",
                       },
                     ],
                   },
-                  { value: "cart", bbb: "卡车", parentId: "zhinan" },
+                  { value: 4, bbb: "卡车", parentId: "1" },
                 ],
               },
               {
-                value: "nihao",
+                value: 5,
                 bbb: "你好",
                 parentId: "0",
-                children: [{ value: "test", bbb: "测试", parentId: "nihao" }],
+                children: [{ value: 6, bbb: "测试", parentId:"5" }],
               },
             ],
           },

@@ -25,7 +25,6 @@
 ## 用法
 ```
 npm i richform -S
-
 ```
 
 ```html
