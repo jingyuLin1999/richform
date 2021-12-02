@@ -84,7 +84,7 @@ export default {
             title: "下拉选框A",
             widget: "select",
             type: "string",
-            default: "选项1",
+            // default: "选项1",
           },
           selectB: {
             title: "下拉B依赖A",
@@ -454,6 +454,58 @@ export default {
             ],
           },
           {
+            title: "下拉选框C",
+            widget: "select",
+            name: "selectC",
+            description: "我的选项依赖于【下拉选框A】",
+            dict: {
+              "selectA==any": { filterKey: "macCtrlTypeId" },
+            },
+            options: [
+              {
+                macCtrlTypeId: "选项1",
+                value: "选项1",
+                label: "黄金糕",
+              },
+              {
+                macCtrlTypeId: "选项3",
+                value: "选项3",
+                label: "选项3",
+              },
+              {
+                macCtrlTypeId: "这个不会被过滤",
+                value: "选项3",
+                label: "这个不会被过滤",
+              },
+            ],
+          },
+          {
+            title: "下拉选框D",
+            widget: "select",
+            name: "selectD",
+            description: "我的选项依赖于【下拉选框A】",
+            dict: {
+              "selectA==any": { filterKey: "macCtrlTypeId" },
+            },
+            options: [
+              {
+                macCtrlTypeId: "选项1",
+                value: "选项1",
+                label: "黄金糕",
+              },
+              {
+                macCtrlTypeId: "选项3",
+                value: "选项3",
+                label: "选项3",
+              },
+              {
+                macCtrlTypeId: "这个不会被过滤",
+                value: "选项3",
+                label: "这个不会被过滤",
+              },
+            ],
+          },
+          {
             title: "下拉选框B",
             widget: "select",
             name: "selectB",
@@ -485,32 +537,6 @@ export default {
               {
                 value: "选项2",
                 label: "双皮奶",
-              },
-            ],
-          },
-          {
-            title: "下拉选框C",
-            widget: "select",
-            name: "selectC",
-            description: "我的选项依赖于【下拉选框A】",
-            dict: {
-              "selectA==any": { filterKey: "id" },
-            },
-            options: [
-              {
-                id: "选项1",
-                value: "选项1",
-                label: "黄金糕",
-              },
-              {
-                id: "选项3",
-                value: "选项3",
-                label: "选项3",
-              },
-              {
-                id: "这个不会被过滤",
-                value: "选项3",
-                label: "这个不会被过滤",
               },
             ],
           },

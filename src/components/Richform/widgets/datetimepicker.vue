@@ -79,7 +79,6 @@ export default {
     },
     friendValue() {
       let value = this.values[this.field.name];
-      if (typeof value == "string") value = new Date(value);
       return value;
     },
   },

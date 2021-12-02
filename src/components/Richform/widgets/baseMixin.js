@@ -131,7 +131,7 @@ export default {
                     if (!this.dependencies[relyKey]) this.dependencies[relyKey] = [];
                     // 已存在就无需重复添加
                     let hasExit = this.dependencies[relyKey].find((item) => {
-                        if (item.keyValue == relyValue) {
+                        if (item.keyValue == relyValue && item.name == this.field.name) {
                             // 必须重新赋值，因为form的地址已经变了
                             this.$set(item, 'field', this.field)
                             return true;
@@ -139,6 +139,7 @@ export default {
                     });
                     if (!hasExit) {
                         this.dependencies[relyKey].push({
+                            name: this.field.name,
                             keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
                             dictValue: dictItem,
                             field: this.field,
