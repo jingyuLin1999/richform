@@ -128,6 +128,17 @@ export default {
   ],
 }
 ```
+补充说明  
+当两个select的选项互相依赖时，箭值为条件，值可以有三种形式，若是url则获取数据，若是数组则直接赋值给options  
+```js
+dict: "http://localhost:8080/#/form-design", // 获取到的值会直接覆盖options
+dict: {  
+  [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
+  [<字段名name> == 'B']: [{},{}], // options
+  [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any且值是url，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
+  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤
+}
+```
 2、字段隐藏依赖 
 ```js
 {

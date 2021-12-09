@@ -75,6 +75,6 @@ export default {
                     this.$set(item.field, "hide", item.value == this.values[key]);
                 }
             }
-        },
+        }
     }
 }

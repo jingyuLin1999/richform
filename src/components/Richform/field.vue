@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { path } from "ramda";
+import { path, pick } from "ramda";
 import { Tooltip } from "element-ui";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
@@ -118,7 +118,7 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 export default {
   name: "field",
   components: { Tooltip },
-  inject: ["dependencies", "requireds", "isDeepValues"],
+  inject: ["dependencies", "requireds", "isDeepValues", "regExpFields"],
   mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -241,17 +241,32 @@ export default {
     },
     validateField(fieldName, schema, value) {
       try {
+        schema = path(fieldName.split("."), this.schema.properties) || schema;
         if (!Object.keys(schema).length) return;
         let require = [];
+        const pickSchema = pick(
+          [
+            "if",
+            "then",
+            "else",
+            "errorMessage",
+            "allOf",
+            "anyOf",
+            "oneOf",
+            "not",
+          ],
+          this.schema
+        );
         if (schema.require) require.push(fieldName);
-        const schemaTemplate = {
+        const unitSchema = {
           type: "object",
           properties: {
             [fieldName]: schema,
           },
           required: require,
+          // ...pickSchema,
         };
-        let valid = AJV.validate(schemaTemplate, this.values);
+        let valid = AJV.validate(unitSchema, this.values);
         if (valid || !value) {
           this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
         } else {
@@ -262,8 +277,27 @@ export default {
         console.error("单个字段验证错误了：" + e);
       }
     },
+    // 派发表达式，并修改schema
+    dispatchRegExp(fieldName) {
+      const regExps = this.regExpFields[fieldName];
+      if (!regExps) return;
+      regExps.forEach((element) => {
+        const { dispatchName, exp } = element;
+        const fieldSchema = path(
+          dispatchName.split("."),
+          this.schema.properties
+        ); // 有可能找不到
+        if (fieldSchema) fieldSchema[exp] = this.values[fieldName];
+        else {
+          this.$set(this.schema.properties, dispatchName, {
+            [exp]: this.values[fieldName],
+          });
+        }
+      });
+    },
     onChange(fieldName, value, schema) {
       this.emit("field:change", fieldName, value);
+      this.dispatchRegExp(fieldName);
       this.validateField(fieldName, schema, value);
       this.onDispatch(fieldName);
     },

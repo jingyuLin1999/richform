@@ -21,19 +21,24 @@
         dict: "", // 字典url路径，优先级大于options,获取到的数据最终赋值给options
         options: [{},{}], // 下拉选框的选项
         default: "", // 提供默认值，优先级小于values的值
-  },
-
-字典说明
-1、当两个select的选项互相依赖时，箭值为条件，值可以有两种形式，若是url则获取数据，若是数组则直接赋值给options
-dict: "http://localhost:8080/#/form-design",
-dict: {
-  [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
-  [<字段名name> == 'B']: [{},{}], // options
-  [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any且值是url，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
-  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤
-}
-隐藏说明
-hideRely：<字段名称name> == 'A'
+        regExp: [], // 等式关系,支持多字段验证
+  }
+  <1>字典说明
+  当两个select的选项互相依赖时，箭值为条件，值可以有两种形式，若是url则获取数据，若是数组则直接赋值给options
+  dict: "http://localhost:8080/#/form-design",
+  dict: {
+    [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
+    [<字段名name> == 'B']: [{},{}], // options
+    [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any且值是url，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
+    [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤
+  }
+  <2>隐藏说明
+  hideRely：<字段名称name> == 'A'
+  <3>等式说明
+  regExp: [
+    {exp: "minimum", relyName: <字段intA>}, // exp 请查阅json schema
+    {exp: "minimum", relyName: <字段intB>},
+  ]
 
 二期目标
 表单设计器
@@ -116,25 +121,27 @@ export default {
   },
   provide() {
     return {
-      formId: this.formId, // 表单id
+      formId: this.formId,
       dependencies: this.dependencies,
       requireds: this.requireds,
       isFriendValue: this.isFriendValue,
       isDeepValues: this.deepValues,
       globalVars: this.globalVars,
+      regExpFields: this.regExpFields,
     };
   },
   data() {
     return {
-      formId: Math.random().toString(15).slice(2, 15),
+      defaultForm,
+      formId: Math.random().toString(15).slice(2, 15), // 表单id
       fieldErrors: {}, // 字段错误信息收集
       dependencies: {}, // 字段相互依赖信息
       lastClicked: {}, // 记录最后的点击事件，用于取消事件
-      defaultForm,
       requireds: [], // 收集必须字段
       hideFields: {}, // 收集隐藏的字段
       dirtyValues: {}, // 脏值即values中有变化的键值对
       rubbishyValues: {}, // 垃圾值
+      regExpFields: {}, // 表达式
       globalVars: {
         // 全局变量
         loadCompleted: null, // 是否加载完成
@@ -241,9 +248,6 @@ export default {
           : this.richValues[key] == null
           ? "null"
           : typeof this.richValues[key];
-        // 子组件用v-model监听的是computed的值
-        // 为了触发computed的set属性，需删除再赋值
-        this.$delete(this.richValues, key);
         this.$set(this.richValues, key, this.friendDefaultValue(type));
       }
     },
@@ -252,19 +256,22 @@ export default {
       // 未传入schema，无法校验，直接返回
       if (!Object.keys(this.schema).length) return true;
       // 开始校验
-      const _this = this;
       this.fieldErrors = {};
       this.schema.required = this.requireds;
+      // 处理验证一次后，schem规则改变，再次验证错误信息还是保留第一次的
+      // https://ajv.js.org/api.html#api-validateschema
+      AJV.removeSchema();
+      AJV.addSchema(this.schema);
       let valid = AJV.validate(this.schema, this.richValues);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);
         AJV.errors.map((errorItem) => {
-          let fieldName = errorItem.dataPath
-            .split(".")
-            .slice(1, errorItem.dataPath.length)
-            .join(".");
-          _this.$set(_this.fieldErrors, fieldName, errorItem.message);
+          let fieldName = errorItem.instancePath
+            .split("/")
+            .slice(1, errorItem.instancePath.length)
+            .join("/");
+          this.$set(this.fieldErrors, fieldName, errorItem.message);
         });
       }
       return valid;

@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.2.5",
+  "version": "0.2.9",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,9 +9,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "ajv": "^6.12.6",
-    "ajv-errors": "^1.0.1",
-    "ajv-i18n": "^4.0.0",
+    "ajv": "^8.6.3",
+    "ajv-errors": "^3.0.0",
+    "ajv-i18n": "^3.6.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.6",

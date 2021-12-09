@@ -69,10 +69,10 @@ export default {
             require: true,
           },
           input: {
-            title: "名称对方",
+            title: "对方名称",
             description: "设备名称",
             type: "string",
-            minLength: 5,
+            minLength: 1,
             widget: "input",
             default: "当我的值等于：123456时，会改变下拉选项B的选项",
             require: true,
@@ -85,6 +85,10 @@ export default {
             widget: "select",
             type: "string",
             // default: "选项1",
+          },
+          factoryid: {
+            type: "string",
+            require: true,
           },
           selectB: {
             title: "下拉B依赖A",
@@ -143,6 +147,23 @@ export default {
             },
           },
         },
+        errorMessage: {
+          // 自定义信息
+          properties: {
+            selectB: "不能少于一个字符，这是自定义信息",
+          },
+        },
+        if: {
+          properties: { selectA: { const: "选项1" } },
+        },
+        then: {
+          properties: {
+            factoryid: {
+              type: "string",
+              minLength: 1,
+            },
+          },
+        },
       },
       values: {
         cascader: 4,
@@ -191,6 +212,30 @@ export default {
           },
         ],
         layout: [
+          {
+            widget: "grid",
+            title: "regExp属性例子",
+            showTitle: true,
+            isClicked: false,
+            fields: [
+              [
+                {
+                  title: "数字A",
+                  name: "intA",
+                  widget: "inputnumber",
+                },
+              ],
+              [
+                {
+                  title: "数字B",
+                  name: "intB",
+                  widget: "inputnumber",
+                  description: "我的校验规则是值大于【数字A】",
+                  regExp: [{ exp: "minimum", relyName: "intA" }],
+                },
+              ],
+            ],
+          },
           {
             title: "级联选择器",
             widget: "cascader",
@@ -405,7 +450,7 @@ export default {
             html: "<a href='#'>richform你好</a><br>123",
           },
           {
-            title: "名称对方",
+            title: "对方名称",
             widget: "input",
             name: "input",
             type: "textarea",

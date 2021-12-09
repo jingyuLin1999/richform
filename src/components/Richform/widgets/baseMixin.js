@@ -14,7 +14,7 @@ export default {
             widgetId: Math.random().toString(15).slice(2, 15)
         }
     },
-    inject: ["dependencies", "isFriendValue", "globalVars"],
+    inject: ["dependencies", "isFriendValue", "globalVars", "regExpFields"],
     mixins: [CommonMixin],
     created() {
         this.load();
@@ -48,6 +48,7 @@ export default {
             this.$setFieldAttr();
             this.pickHideFields();
             this.pickDependencies();
+            this.pickRegExp();
             this.loadCompleteDispatch();
         },
         loadCompleteDispatch() {
@@ -159,5 +160,21 @@ export default {
                 this.$emit("widgetHeight", height);
             })
         },
+        // 收集表达式依赖
+        pickRegExp() {
+            const regExp = this.field.regExp;
+            if (!regExp) return;
+            regExp.map(regItem => {
+                const { relyName } = regItem;
+                if (!this.regExpFields[relyName]) this.regExpFields[relyName] = [];
+                if (this.regExpFields[relyName].find(item => item.dispatchName == this.field.name
+                    && item.relyName == regItem.relyName)) return; // 确保只收取一个表达式，
+                // 正式收集
+                this.regExpFields[relyName].push({
+                    ...regItem,
+                    dispatchName: this.field.name,
+                })
+            })
+        }
     },
 }

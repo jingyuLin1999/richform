@@ -6,7 +6,12 @@
       gridItem.activeDesign ? 'active-design' : '',
     ]"
   >
-    <div class="grid-title" v-if="gridItem.showTitle">
+    <div
+      class="grid-title"
+      v-if="gridItem.showTitle"
+      :class="[form.grid ? 'grid-title-border' : '']"
+      @click="onClickedItem(gridItem)"
+    >
       {{ gridItem.title }}
     </div>
     <div class="gird-content">
@@ -75,8 +80,18 @@ export default {
 <style lang="scss">
 @import "../vars.scss";
 .grid-layout {
-  margin-top: 5px;
+  margin-top: 2px;
   position: relative;
+  &.grid-layout-border {
+    box-sizing: border-box;
+    border: 1px solid $form-border-color;
+    border-top: 0;
+    border-right: 0;
+  }
+  .grid-title-border {
+    border-top: 1px solid $form-border-color;
+    border-right: 1px solid $form-border-color;
+  }
   .drag-wrapper {
     top: 0;
     left: 0;
@@ -110,11 +125,5 @@ export default {
       border-right: 1px solid $form-border-color;
     }
   }
-}
-.grid-layout-border {
-  box-sizing: border-box;
-  border: 1px solid $form-border-color;
-  border-top: 0;
-  border-right: 0;
 }
 </style>
