@@ -1,19 +1,20 @@
 <template>
-  <el-switch
-    :id="widgetId"
-    class="switch-widget"
-    v-model="value"
-    :width="field.width"
-    :disabled="field.disabled"
-    :active-color="field.activeColor"
-    :inactive-color="field.inactiveColor"
-    :active-text="field.activeText"
-    :inactive-text="field.inactiveText"
-    :active-value="field.activeValue"
-    :inactive-value="field.inactiveValue"
-    :active-icon-class="field.activeIconClass"
-    :inactive-icon-class="field.inactiveIconClass"
-  ></el-switch>
+  <div :id="widgetId">
+    <el-switch
+      class="switch-widget"
+      v-model="value"
+      :width="field.width"
+      :disabled="field.disabled"
+      :active-color="field.activeColor"
+      :inactive-color="field.inactiveColor"
+      :active-text="field.activeText"
+      :inactive-text="field.inactiveText"
+      :active-value="field.activeValue"
+      :inactive-value="field.inactiveValue"
+      :active-icon-class="field.activeIconClass"
+      :inactive-icon-class="field.inactiveIconClass"
+    ></el-switch>
+  </div>
 </template>
 
 <script>

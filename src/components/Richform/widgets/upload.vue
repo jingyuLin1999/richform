@@ -52,6 +52,12 @@ export default {
       fileList: [],
     };
   },
+  watch: {
+    "field.listType"() {
+      // 类型改变了，可能导致高度发生变化，需重新计算高度
+      this.getWidgetHeight();
+    },
+  },
   mounted() {
     this.onFileList();
   },
@@ -143,5 +149,6 @@ export default {
 <style lang="scss">
 .upload-widget {
   width: 100%;
+  overflow: hidden;
 }
 </style>

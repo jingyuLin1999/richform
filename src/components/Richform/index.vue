@@ -30,16 +30,16 @@ dict: {
   [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
   [<字段名name> == 'B']: [{},{}], // options
   [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any且值是url，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
-  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段必须
+  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤
 }
 隐藏说明
 hideRely：<字段名称name> == 'A'
 
-
-
 二期目标
 表单设计器
 
+三期目标
+流程设计器
 
 -->
 <template>
@@ -196,7 +196,8 @@ export default {
             eval("this.values" + "['" + valueKeys.join("']['") + "'] = value"); // TODO 防止注入
         }
         // handle bug 实际值已经更新，但dom没有变化
-        this.$delete(this.richValues, fieldName);
+        // this.$delete(this.richValues, fieldName);
+        this.$set(this.richValues, fieldName, null);
         this.$set(this.richValues, fieldName, value);
       } catch (e) {
         console.warn("全局设置值出错：" + e);

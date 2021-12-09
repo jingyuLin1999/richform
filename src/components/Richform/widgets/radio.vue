@@ -6,8 +6,10 @@
       :border="field.border"
       :size="field.size"
       v-model="value"
-      :label="field.title"
-    ></Radio>
+      :label="field.options[0].name || field.title"
+    >
+      {{ field.options[0].title || field.title }}</Radio
+    >
     <RadioGroup
       v-else
       :text-color="field.textColor"
@@ -22,8 +24,10 @@
           :disabled="radio.disabled"
           :border="radio.border"
           :size="radio.size"
-          :label="radio.title"
-        ></RadioButton>
+          :label="radio.name"
+        >
+          {{ radio.title }}
+        </RadioButton>
       </div>
       <div v-else>
         <Radio
@@ -33,8 +37,10 @@
           :disabled="radio.disabled"
           :border="radio.border"
           :size="radio.size"
-          :label="radio.title"
-        ></Radio>
+          :label="radio.name"
+        >
+          {{ radio.title }}
+        </Radio>
       </div>
     </RadioGroup>
   </div>
