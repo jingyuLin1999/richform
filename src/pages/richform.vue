@@ -150,7 +150,7 @@ export default {
         errorMessage: {
           // 自定义信息
           properties: {
-            selectB: "不能少于一个字符，这是自定义信息",
+            intB: "必须大于等于数字A，这是自定义错误信息",
           },
         },
         if: {

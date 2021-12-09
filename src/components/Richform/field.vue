@@ -264,7 +264,7 @@ export default {
             [fieldName]: schema,
           },
           required: require,
-          // ...pickSchema,
+          ...pickSchema,
         };
         let valid = AJV.validate(unitSchema, this.values);
         if (valid || !value) {
