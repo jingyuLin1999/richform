@@ -122,7 +122,9 @@ export default {
                 for (let key in this.hideFields) {
                     // 已存在则不需要重新收集
                     let hasExit = this.hideFields[key].find((item) => {
-                        if (item.key == this.field.name && item.value == relyValue) {
+                        if (item.key == relyKey &&
+                            item.value == relyValue &&
+                            item.name == this.field.name) {
                             // 必须重新赋值，因为form的地址已经变了
                             this.$set(item, 'field', this.field)
                             return true;
@@ -132,8 +134,9 @@ export default {
                 }
                 let convertKey = ["true", "false"];
                 this.hideFields[relyKey].push({
-                    key: this.field.name,
-                    value: relyValue, // convertKey.includes(relyValue) ? JSON.parse(relyValue) : relyValue,
+                    name: this.field.name,
+                    key: relyKey,
+                    value: relyValue,
                     field: this.field,
                 });
             })

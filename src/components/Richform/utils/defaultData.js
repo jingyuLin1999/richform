@@ -21,5 +21,4 @@ export const defaultSchema = {
     allOf: [],
     anyOf: [],
     oneOf: [],
-    not: {},
 }

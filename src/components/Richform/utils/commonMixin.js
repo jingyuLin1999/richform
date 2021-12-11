@@ -70,11 +70,17 @@ export default {
         dispatchHide(key) {
             let hideFields = this.hideFields[key];
             if (hideFields && this.values[key]) {
+                let hideHistory = [];
                 for (let index = 0; index < hideFields.length; index++) {
                     let item = hideFields[index];
+                    let nameKey = item.name + "@" + item.key;
                     let isEquality = item.value == this.values[key];
-                    this.$set(item.field, "hide", isEquality);
-                    if (isEquality) break; // 只要满足一个条件，后面的就无需验证
+                    if (!hideHistory.includes(nameKey) && isEquality) {
+                        hideHistory.push(nameKey)
+                        this.$set(item.field, "hide", isEquality);
+                    } else if (hideHistory.includes(nameKey)) {
+                        // 这种情况，表示重复的name和key已有一个验证通过
+                    } else this.$set(item.field, "hide", isEquality);
                 }
             }
         }

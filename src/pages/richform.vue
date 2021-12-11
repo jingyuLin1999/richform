@@ -435,10 +435,17 @@ export default {
                     name: "input",
                     type: "text",
                     hideRely: [
+                      "radioA == radioC",
                       "radioA==radioB",
                       "beHide == hello",
-                      "radioA == radioC",
                     ],
+                  },
+                  {
+                    title: "I LOVE YOU",
+                    widget: "input",
+                    name: "iloveyou",
+                    type: "text",
+                    hideRely: ["radioA==radioB"],
                   },
                 ],
               },

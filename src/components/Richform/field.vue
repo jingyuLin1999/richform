@@ -276,7 +276,6 @@ export default {
             "if",
             "else",
             "then",
-            "not",
             "allOf",
             "anyOf",
             "oneOf",
