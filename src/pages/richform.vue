@@ -36,7 +36,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :isDesign="false"
       :hooks="hooks"
       :authorization="{
-        value: 'gxf16dcf98fqy3P0d324n448f3VV8abbIU9r2oY541179fd16edd17qnnw38',
+        value: '4Ff16dcf98Pv01q0d3241448f0P08abb4W767OPqr6179fd16edd174DJc15',
       }"
       @action="formAction"
     ></RichForm>
@@ -57,6 +57,9 @@ export default {
         description: "A product from Acme's catalog",
         type: "object",
         properties: {
+          inputTypeSwitch: {
+            type: "number",
+          },
           cascader: {
             type: "number",
           },
@@ -81,30 +84,21 @@ export default {
             type: "array",
           },
           selectA: {
-            title: "下拉选框A",
-            widget: "select",
             type: "string",
+            minLength: 1,
+            require: true,
             // default: "选项1",
           },
           factoryid: {
             type: "string",
             require: true,
           },
-          selectB: {
-            title: "下拉B依赖A",
-            widget: "select",
-            type: "string",
-            minLength: 1,
-          },
           selectC: {
-            title: "下拉C依赖A",
-            widget: "select",
             type: "string",
             minLength: 1,
           },
           radioA: {
             title: "单选框A",
-            widget: "radio",
             type: "string",
             default: "单选框A",
             description: "当我的值等于：单选框B,会隐藏第一项",
@@ -161,6 +155,12 @@ export default {
             factoryid: {
               type: "string",
               minLength: 1,
+              require: true,
+            },
+            selectB: {
+              type: "string",
+              minLength: 1,
+              require: true,
             },
           },
         },
@@ -174,7 +174,7 @@ export default {
         enddate: "2020-12-09 18:38:54",
         rate: 4,
         imageFile: [
-          "http://127.0.0.1:9000/images/0d4d19123dd04970b7d2943277200cca.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211028%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211028T070611Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=ee6740c7d7d1e10f3af407068ad7d42896d0baf634db83ab409c3b48c66cecb9",
+          "http://192.168.100.12:9000/images/178a383967db4bc48bcf790282d5f19f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211210T013328Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7592596bef4cdb51eab88ea7713e7e423c23d21f8d822b8d9639f5917bbdb75a",
         ],
         tree: "22",
       },
@@ -213,6 +213,12 @@ export default {
         ],
         layout: [
           {
+            title: "input类型转换",
+            name: "inputTypeSwitch",
+            widget: "input",
+            description: "在schema中type定义的是number",
+          },
+          {
             widget: "grid",
             title: "regExp属性例子",
             showTitle: true,
@@ -234,6 +240,187 @@ export default {
                   regExp: [{ exp: "minimum", relyName: "intA" }],
                 },
               ],
+            ],
+          },
+          {
+            widget: "tabs",
+            title: "依赖关系例子",
+            enabled: true,
+            tabs: [
+              {
+                label: "选项依赖",
+                name: "optonRelyon",
+                icon: "",
+                fields: [
+                  {
+                    title: "下拉选框A", // 优先级小于shema中定义的title
+                    widget: "select",
+                    name: "selectA",
+                    options: [
+                      {
+                        value: "选项1",
+                        label: "黄金糕",
+                      },
+                      {
+                        value: "选项2",
+                        label: "双皮奶",
+                      },
+                      {
+                        value: "选项3",
+                        label: "选项3",
+                      },
+                    ],
+                  },
+                  {
+                    title: "下拉选框C",
+                    widget: "select",
+                    name: "selectC",
+                    description: "我的选项依赖于【下拉选框A】等于黄金糕",
+                    dict: {
+                      "selectA==any": { filterKey: "macCtrlTypeId" },
+                    },
+                    options: [
+                      {
+                        macCtrlTypeId: "选项1",
+                        value: "选项1",
+                        label: "黄金糕",
+                      },
+                      {
+                        macCtrlTypeId: "选项3",
+                        value: "选项3",
+                        label: "选项3",
+                      },
+                      {
+                        macCtrlTypeId: "这个不会被过滤",
+                        value: "选项3",
+                        label: "这个不会被过滤",
+                      },
+                    ],
+                  },
+                  {
+                    title: "下拉选框D",
+                    widget: "select",
+                    name: "selectD",
+                    description: "我的选项依赖于【下拉选框A】等于黄金糕",
+                    dict: {
+                      "selectA==any": { filterKey: "macCtrlTypeId" },
+                    },
+                    options: [
+                      {
+                        macCtrlTypeId: "选项1",
+                        value: "选项1",
+                        label: "黄金糕",
+                      },
+                      {
+                        macCtrlTypeId: "选项3",
+                        value: "选项3",
+                        label: "选项3",
+                      },
+                      {
+                        macCtrlTypeId: "这个不会被过滤",
+                        value: "选项3",
+                        label: "这个不会被过滤",
+                      },
+                    ],
+                  },
+                  {
+                    title: "下拉选框B",
+                    widget: "select",
+                    name: "selectB",
+                    description:
+                      "我的选项依赖于【下拉选框A】等于黄金糕。且在等于该值时会触发验证规则",
+                    dict: {
+                      "selectA==选项1": [
+                        {
+                          value: "选项1",
+                          label: "根据[下拉选框A]的值变化A",
+                        },
+                        {
+                          value: "选项2",
+                          label: "根据[下拉选框A]的值变化B",
+                        },
+                      ],
+                      "selectA == 选项2": "http://localhost:8080/form-design",
+                      "input == 123456": [
+                        {
+                          value: "input等于123456",
+                          label: "input等于123456",
+                        },
+                      ],
+                    },
+                    options: [
+                      {
+                        value: "选项1",
+                        label: "黄金糕",
+                      },
+                      {
+                        value: "选项2",
+                        label: "双皮奶",
+                      },
+                    ],
+                  },
+                  {
+                    title: "触发字典过滤",
+                    widget: "input",
+                    name: "factoryid",
+                    prefixIcon: "el-icon-search",
+                    prepend: "D", // 当type等于text有效。
+                    append: "KB",
+                  },
+                  {
+                    title: "字典过滤",
+                    widget: "select",
+                    name: "dictTest",
+                    dict: {
+                      "factoryid == any":
+                        "http://192.168.100.11:8080/manage/dict/getWorkshopByFactoryId.do",
+                    },
+                    options: [],
+                  },
+                ],
+              },
+              {
+                label: "隐藏依赖",
+                name: "hideRelyon",
+                icon: "",
+                fields: [
+                  {
+                    widget: "radio",
+                    title: "单选",
+                    name: "radioA",
+                    isGroup: true,
+                    isButton: true,
+                    disabled: false,
+                    border: true,
+                    size: "small",
+                    textColor: "#fff",
+                    fill: "#409EFF",
+                    options: [
+                      {
+                        name: "radioA",
+                        title: "单选框A",
+                        disabled: false,
+                        border: false,
+                        size: "default",
+                      },
+                      {
+                        name: "radioB",
+                        title: "单选框B",
+                        disabled: false,
+                        border: false,
+                        size: "default",
+                      },
+                    ],
+                  },
+                  {
+                    title: "对方名称",
+                    widget: "input",
+                    name: "input",
+                    type: "text",
+                    hideRely: "radioA==radioB",
+                  },
+                ],
+              },
             ],
           },
           {
@@ -302,7 +489,7 @@ export default {
                   draggable: true, // 是否可拖拽
                   multiple: true, // 多选
                   autoUpload: true, // 是否在选取文件后立即进行上传
-                  limit: 1, // 上传限制
+                  limit: 2, // 上传限制
                   disabled: false,
                   showFileList: true, // 是否显示已上传文件列表
                   mapValues: {
@@ -449,13 +636,6 @@ export default {
             name: "slot",
             html: "<a href='#'>richform你好</a><br>123",
           },
-          {
-            title: "对方名称",
-            widget: "input",
-            name: "input",
-            type: "textarea",
-            hideRely: "radioA==单选框B",
-          },
           // {
           //   title: "百度地图",
           //   widget: "map",
@@ -476,158 +656,6 @@ export default {
               {
                 value: "选项2",
                 label: "双皮奶",
-              },
-            ],
-          },
-          {
-            title: "下拉选框A", // 优先级小于shema中定义的title
-            widget: "select",
-            name: "selectA",
-            options: [
-              {
-                value: "选项1",
-                label: "黄金糕",
-              },
-              {
-                value: "选项2",
-                label: "双皮奶",
-              },
-              {
-                value: "选项3",
-                label: "选项3",
-              },
-            ],
-          },
-          {
-            title: "下拉选框C",
-            widget: "select",
-            name: "selectC",
-            description: "我的选项依赖于【下拉选框A】",
-            dict: {
-              "selectA==any": { filterKey: "macCtrlTypeId" },
-            },
-            options: [
-              {
-                macCtrlTypeId: "选项1",
-                value: "选项1",
-                label: "黄金糕",
-              },
-              {
-                macCtrlTypeId: "选项3",
-                value: "选项3",
-                label: "选项3",
-              },
-              {
-                macCtrlTypeId: "这个不会被过滤",
-                value: "选项3",
-                label: "这个不会被过滤",
-              },
-            ],
-          },
-          {
-            title: "下拉选框D",
-            widget: "select",
-            name: "selectD",
-            description: "我的选项依赖于【下拉选框A】",
-            dict: {
-              "selectA==any": { filterKey: "macCtrlTypeId" },
-            },
-            options: [
-              {
-                macCtrlTypeId: "选项1",
-                value: "选项1",
-                label: "黄金糕",
-              },
-              {
-                macCtrlTypeId: "选项3",
-                value: "选项3",
-                label: "选项3",
-              },
-              {
-                macCtrlTypeId: "这个不会被过滤",
-                value: "选项3",
-                label: "这个不会被过滤",
-              },
-            ],
-          },
-          {
-            title: "下拉选框B",
-            widget: "select",
-            name: "selectB",
-            description: "我的选项依赖于【下拉选框A】",
-            dict: {
-              "selectA==选项1": [
-                {
-                  value: "选项1",
-                  label: "根据[下拉选框A]的值变化A",
-                },
-                {
-                  value: "选项2",
-                  label: "根据[下拉选框A]的值变化B",
-                },
-              ],
-              "selectA == 选项2": "http://localhost:8080/form-design",
-              "input == 123456": [
-                {
-                  value: "input等于123456",
-                  label: "input等于123456",
-                },
-              ],
-            },
-            options: [
-              {
-                value: "选项1",
-                label: "黄金糕",
-              },
-              {
-                value: "选项2",
-                label: "双皮奶",
-              },
-            ],
-          },
-          {
-            title: "触发字典过滤",
-            widget: "input",
-            name: "factoryid",
-            prefixIcon: "el-icon-search",
-            prepend: "D", // 当type等于text有效。
-            append: "KB",
-          },
-          {
-            title: "字典过滤",
-            widget: "select",
-            name: "dictTest",
-            dict: {
-              "factoryid == any":
-                "http://192.168.100.11:8080/manage/dict/getWorkshopByFactoryId.do",
-            },
-            options: [],
-          },
-          {
-            widget: "radio",
-            title: "单选",
-            name: "radioA",
-            isGroup: true,
-            isButton: true,
-            disabled: false,
-            border: true,
-            size: "small",
-            textColor: "#fff",
-            fill: "#409EFF",
-            options: [
-              {
-                name: "radioA",
-                title: "单选框A",
-                disabled: false,
-                border: false,
-                size: "default",
-              },
-              {
-                name: "radioB",
-                title: "单选框B",
-                disabled: false,
-                border: false,
-                size: "default",
               },
             ],
           },
@@ -707,15 +735,8 @@ export default {
                   activeIconClass: "",
                   inactiveIconClass: "",
                 },
-                {
-                  title: "滑块",
-                  widget: "slider",
-                  name: "slider",
-                  clearable: true,
-                  minimum: 0,
-                  maximum: 1000,
-                  step: 100,
-                },
+              ],
+              [
                 {
                   title: "滑块",
                   widget: "slider",
@@ -737,7 +758,6 @@ export default {
                   step: 100,
                 },
               ],
-              [],
             ],
           },
           {
@@ -822,24 +842,6 @@ export default {
                     title: "输入框13",
                   },
                 ],
-              },
-            ],
-          },
-          {
-            name: "network",
-            widget: "collapse",
-            title: "信令服务器",
-            expand: true,
-            fields: [
-              {
-                title: "输入框",
-                widget: "input",
-                name: "input",
-              },
-              {
-                title: "输入框",
-                widget: "input",
-                name: "input",
               },
             ],
           },

@@ -67,7 +67,7 @@
       ></actions>
       <!-- 核心布局 -->
       <form-layout
-        :schema="schema"
+        :schema="friendSchema"
         :layout="friendForm.layout"
         :values="richValues"
         :isDesign="isDesign"
@@ -92,14 +92,14 @@
 </template>
 
 <script>
-import { hasPath } from "ramda";
+import { hasPath, clone, pick } from "ramda";
 import Actions from "./actions";
 import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
 import eventbus from "./utils/eventbus";
 import CommonMixin from "./utils/commonMixin";
 import "element-ui/lib/theme-chalk/index.css";
-import { defaultForm } from "./utils/defaultData";
+import { defaultForm, defaultSchema } from "./utils/defaultData";
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
@@ -152,6 +152,14 @@ export default {
     this.load();
   },
   computed: {
+    friendSchema() {
+      const friendSchema = Object.assign(clone(defaultSchema), this.schema);
+      const pickSpecSchema = pick(["allOf", "anyOf", "oneOf"], friendSchema);
+      for (let key in pickSpecSchema) {
+        if (pickSpecSchema[key].length == 0) this.$delete(friendSchema, key);
+      }
+      return friendSchema;
+    },
     friendForm() {
       return Object.assign({}, this.defaultForm, this.form);
     },
@@ -254,15 +262,15 @@ export default {
     // 全局校验
     globalValidate() {
       // 未传入schema，无法校验，直接返回
-      if (!Object.keys(this.schema).length) return true;
+      if (!Object.keys(this.friendSchema).length) return true;
       // 开始校验
       this.fieldErrors = {};
-      this.schema.required = this.requireds;
+      this.friendSchema.required = this.requireds;
       // 处理验证一次后，schem规则改变，再次验证错误信息还是保留第一次的
       // https://ajv.js.org/api.html#api-validateschema
       AJV.removeSchema();
-      AJV.addSchema(this.schema);
-      let valid = AJV.validate(this.schema, this.richValues);
+      AJV.addSchema(this.friendSchema);
+      let valid = AJV.validate(this.friendSchema, this.richValues);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);

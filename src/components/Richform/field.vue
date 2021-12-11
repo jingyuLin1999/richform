@@ -30,7 +30,12 @@
         <div
           ref="fieldLabel"
           v-if="isShyTitle"
-          :class="['label-title', fieldSchema.require ? 'required-field' : '']"
+          :class="[
+            'label-title',
+            fieldSchema.require || requireds.includes(field.name)
+              ? 'required-field'
+              : '',
+          ]"
         >
           {{ fieldTitle }}
         </div>
@@ -134,6 +139,7 @@ export default {
     return {
       fieldSchema: {}, // 字段的schema
       lableRightBorder: 0, // 标签右侧的边
+      errorFieldsHistory: [], // 记录上一次历史错误字段，用于消除本次必填和错误信息
     };
   },
   mounted() {
@@ -230,6 +236,7 @@ export default {
       // 若有默认值，则需要直接进行校验
       if (defaultValue)
         this.validateField(this.field.name, this.fieldSchema, defaultValue);
+
       // 生成默认值
       this.$set(
         this.values,
@@ -239,39 +246,83 @@ export default {
           : this.friendDefaultValue(this.fieldSchema.type)
       );
     },
+    pickFieldSchema(fieldName) {
+      const fieldSchema =
+        path(fieldName.split("."), this.schema.then.properties) ||
+        path(fieldName.split("."), this.schema.properties) ||
+        {};
+      return fieldSchema;
+    },
+    removeErrorAndRequire() {
+      // 先根据错误信息
+      this.errorFieldsHistory.map((nameKey) => {
+        // 必填
+        let requireIndex = this.requireds.findIndex(
+          (require) => require == nameKey
+        );
+        if (requireIndex != -1) this.$delete(this.requireds, requireIndex);
+        // 错误
+        if (this.fieldErrors[nameKey]) this.$delete(this.fieldErrors, nameKey);
+      });
+      this.errorFieldsHistory = [];
+    },
     validateField(fieldName, schema, value) {
       try {
-        schema = path(fieldName.split("."), this.schema.properties) || schema;
+        schema = this.pickFieldSchema(fieldName) || schema;
         if (!Object.keys(schema).length) return;
-        let require = [];
         const pickSchema = pick(
           [
-            "if",
-            "then",
-            "else",
             "errorMessage",
+            "if",
+            "else",
+            "then",
+            "not",
             "allOf",
             "anyOf",
             "oneOf",
-            "not",
           ],
           this.schema
         );
+        let require = [];
         if (schema.require) require.push(fieldName);
         const unitSchema = {
           type: "object",
           properties: {
             [fieldName]: schema,
           },
-          required: require,
+          // required: require,
           ...pickSchema,
         };
         let valid = AJV.validate(unitSchema, this.values);
-        if (valid || !value) {
-          this.$delete(this.fieldErrors, fieldName); // 验证正常需要从错误池中移除
-        } else {
-          localizeErrors(AJV.errors); // 将错误信息转化成中文
-          this.$set(this.fieldErrors, fieldName, AJV.errors[0].message); // 将错误信息添加到错误池中
+        localizeErrors(AJV.errors); // 将错误信息转化成中文
+
+        if (valid) this.$delete(this.fieldErrors, fieldName);
+        // 验证正常需要从错误池中移除
+        else {
+          AJV.errors.map((errorItem) => {
+            let fieldName = errorItem.instancePath
+              .split("/")
+              .slice(1, errorItem.instancePath.length)
+              .join("/");
+
+            // 收集错误字段
+            this.errorFieldsHistory.push(fieldName);
+            // 收集是否有必填信息
+            let fieldSchema = this.pickFieldSchema(fieldName);
+            if (
+              Object.keys(fieldSchema).length > 0 &&
+              fieldSchema.require &&
+              !this.requireds.includes(fieldName)
+            )
+              this.requireds.push(fieldName);
+            // 错误信息收集
+            if (
+              fieldName != this.field.name &&
+              this.fieldErrors[this.field.name]
+            )
+              this.$delete(this.fieldErrors, this.field.name); // 验证正常需要从错误池中移除
+            this.$set(this.fieldErrors, fieldName, errorItem.message);
+          });
         }
       } catch (e) {
         console.error("单个字段验证错误了：" + e);
@@ -298,6 +349,7 @@ export default {
     onChange(fieldName, value, schema) {
       this.emit("field:change", fieldName, value);
       this.dispatchRegExp(fieldName);
+      this.removeErrorAndRequire();
       this.validateField(fieldName, schema, value);
       this.onDispatch(fieldName);
     },

@@ -1,5 +1,7 @@
+import { type } from "ramda";
 import { isUrl, loadDict, strToObj } from "../utils";
-import CommonMixin from "../utils/commonMixin"
+import CommonMixin from "../utils/commonMixin";
+
 export default {
     props: {
         field: { type: Object, default: () => ({}) },
@@ -78,8 +80,22 @@ export default {
             try {
                 switch (this.schema.type) {
                     case "array": friendValue = Array.isArray(value) ? value : strToObj(value); break;
-                    case "number": friendValue = typeof value == "number" ? value : parseInt(value); break;
+                    case "number": friendValue = type(value) == "Number" ? value : parseFloat(value); break;
                     case "datetime": friendValue = new Date(value); break;
+                    case "boolean":
+                        friendValue = type(value) == "Boolean"
+                            ? value
+                            : value
+                                ? Boolean(value)
+                                : false;
+                        break;
+                    case "integer":
+                        friendValue = type(value) == "Number"
+                            ? value
+                            : value
+                                ? parseInt(value)
+                                : value;
+                        break;
                 }
                 if (friendValue) this.values[this.field.name] = friendValue; // 有友好值，需要更新
             } catch (e) {

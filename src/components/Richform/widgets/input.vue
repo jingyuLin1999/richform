@@ -52,7 +52,24 @@ export default {
         size: "", // large、small 和 mini
         maxLength: null,
         minLength: null,
+        options: [], // {label: "",value: ""}
       };
+    },
+    friendValue() {
+      let value = this.values[this.field.name];
+      if (!value) value = null;
+      else if (typeof value != "string" && value) value = value.toString();
+      return value;
+    },
+    beforeChange(val) {
+      if (this.schema.type == "number")
+        return val.indexOf(".") == val.length - 1
+          ? val
+          : val.indexOf("-") == 0 && val.length == 1
+          ? val
+          : parseFloat(val);
+
+      return val;
     },
   },
 };
