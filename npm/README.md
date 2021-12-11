@@ -1,6 +1,6 @@
-# Richform  
+# richform
 
-## 主要功能  
+## 主要功能
 * richform表单组件
     * 数据驱动
     * 校验规则采用标准的JsonSchema,[JsonSchema文档](https://github.com/jingyuLin1999/richform/blob/main/JSON-Schema.md)
@@ -17,13 +17,16 @@
     * 已签核状态显示
     * 错误处理
 
-## 预览  
-
+## 预览
 [表单设计器](https://www.shandawang.com/richform/#/)  
 
 [完整功能](https://www.shandawang.com/richform/#/form-design)  
 
 ## 用法
+```
+npm i richform -S
+```
+
 ```html
 <div class="demo-wrapper">
     <div class="form-design">
@@ -34,12 +37,14 @@
     </div>
 </div>
 ```
+
 ```js
 import { RichForm, FormDesign } from "richform";
 export default {
+  components: { RichForm,FormDesign},
   data() {
     return {
-        schema: {}, // 验证规则，见JsonSchema文档
+        schema: {}, // 验证规则
         values: {}, // 表单的值
         form: {
             border: true, // 显示边框
@@ -149,6 +154,14 @@ dict: {
     hideRely: "radioA==单选框B",
 }
 ```
+补充说明
+```js
+hideRely：<字段名称nameA> == 'C', // 可以是单值  
+hideRely：[ // 也可以是多值，只要满足一个条件，就隐藏,且后面条件不会再校验   
+  <字段名称nameA> == 'C',  
+  <字段名称nameB> == 'D',
+]
+```
 3、更多widgets配置详情  
 请见src/pages/richform.vue
 
@@ -181,13 +194,18 @@ layout: [{
 }]
 ```
 
-## 更多widgets配置详情  
-请见源码，目录src/pages/richform.vue的完整配置。 
+## 项目运行
+```
+npm install
+```
 
-<br/>
+### 开发模式下编译和热重载
+```
+npm run serve
+```
 
-
-
-
-
+### 生产模式下打包
+```
+npm run build
+```
 

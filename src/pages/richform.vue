@@ -412,6 +412,13 @@ export default {
                         border: false,
                         size: "default",
                       },
+                      {
+                        name: "radioC",
+                        title: "单选框C",
+                        disabled: false,
+                        border: false,
+                        size: "default",
+                      },
                     ],
                   },
                   {
@@ -427,7 +434,11 @@ export default {
                     widget: "input",
                     name: "input",
                     type: "text",
-                    hideRely: ["radioA==radioB", "beHide == hello"],
+                    hideRely: [
+                      "radioA==radioB",
+                      "beHide == hello",
+                      "radioA == radioC",
+                    ],
                   },
                 ],
               },

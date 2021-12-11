@@ -70,9 +70,12 @@ export default {
         dispatchHide(key) {
             let hideFields = this.hideFields[key];
             if (hideFields && this.values[key]) {
-                hideFields.map((item) => {
-                    this.$set(item.field, "hide", item.value == this.values[key]);
-                })
+                for (let index = 0; index < hideFields.length; index++) {
+                    let item = hideFields[index];
+                    let isEquality = item.value == this.values[key];
+                    this.$set(item.field, "hide", isEquality);
+                    if (isEquality) break; // 只要满足一个条件，后面的就无需验证
+                }
             }
         }
     }

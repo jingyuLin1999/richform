@@ -154,6 +154,14 @@ dict: {
     hideRely: "radioA==单选框B",
 }
 ```
+补充说明
+```js
+hideRely：<字段名称nameA> == 'C', // 可以是单值  
+hideRely：[ // 也可以是多值，只要满足一个条件，就隐藏,且后面条件不会再校验   
+  <字段名称nameA> == 'C',  
+  <字段名称nameB> == 'D',
+]
+```
 3、更多widgets配置详情  
 请见src/pages/richform.vue
 
