@@ -54,8 +54,10 @@ export default {
             this.loadCompleteDispatch();
         },
         loadCompleteDispatch() {
-            for (let key in this.values) this.dispatchHide(key); // 隐藏字段需要立马派发，不然视觉体验不友好
-            if (this.globalVars.loadCompleted) clearTimeout(this.globalVars.loadCompleted);
+            for (let key in this.values)// 隐藏字段需要立马派发，不然视觉体验不友好
+                this.dispatchHide(key);
+            if (this.globalVars.loadCompleted)
+                clearTimeout(this.globalVars.loadCompleted);
             this.globalVars.loadCompleted = setTimeout(() => {
                 for (let key in this.values) this.dispatchOptions(key);
             }, 500)
@@ -105,30 +107,36 @@ export default {
         },
         // 字段依赖隐藏
         pickHideFields() {
-            if (!this.field.hideRely) return; // 若不存在依赖，则无需收集
-            let hideItem = this.field.hideRely.split("==");
-            if (hideItem.length != 2) return;
-            if (!this.hideFields[hideItem[0].trim()])
-                this.hideFields[hideItem[0].trim()] = [];
-            // 已存在则不需要重新收集
-            for (let key in this.hideFields) {
-                let hasExit = this.hideFields[key].find((item) => {
-                    if (item.key == this.field.name) {
-                        // 必须重新赋值，因为form的地址已经变了
-                        this.$set(item, 'field', this.field)
-                        return true;
-                    }
-                });
-                if (hasExit) return;
-            }
-            let convertKey = ["true", "false"];
-            let value = hideItem[1].trim();
+            const hideRely = this.field.hideRely;
+            if (!hideRely) return; // 若不存在依赖，则无需收集
+            const hideFields = Array.isArray(hideRely) ? hideRely :
+                type(hideRely) == "String" ? [hideRely] : [];
 
-            this.hideFields[hideItem[0].trim()].push({
-                key: this.field.name,
-                value: convertKey.includes(value) ? JSON.parse(value) : value,
-                field: this.field,
-            });
+            hideFields.map(hideItem => {
+                let splitHideExp = hideItem.split("==");
+                if (splitHideExp.length != 2) return;
+                let relyKey = splitHideExp[0].trim();
+                let relyValue = splitHideExp[1].trim();
+                if (!this.hideFields[relyKey]) this.hideFields[relyKey] = [];
+                // 必须全部遍历，以应对依赖先后关系
+                for (let key in this.hideFields) {
+                    // 已存在则不需要重新收集
+                    let hasExit = this.hideFields[key].find((item) => {
+                        if (item.key == this.field.name && item.value == relyValue) {
+                            // 必须重新赋值，因为form的地址已经变了
+                            this.$set(item, 'field', this.field)
+                            return true;
+                        }
+                    });
+                    if (hasExit) return;
+                }
+                let convertKey = ["true", "false"];
+                this.hideFields[relyKey].push({
+                    key: this.field.name,
+                    value: relyValue, // convertKey.includes(relyValue) ? JSON.parse(relyValue) : relyValue,
+                    field: this.field,
+                });
+            })
         },
         // 收集依赖关系
         async pickDependencies() {
@@ -171,7 +179,10 @@ export default {
             this.$nextTick(() => {
                 // 不放在field的原因是设计器拖拽换位置不会重新计算高度
                 const widgetDom = document.getElementById(this.widgetId);
-                if (!widgetDom || widgetDom.offsetHeight == 0) return;
+                if (!widgetDom || widgetDom.offsetHeight == 0) {
+                    this.$emit("widgetHeight", 48);
+                    return;
+                }
                 let height = (widgetDom.offsetHeight < 40 ? 40 : widgetDom.offsetHeight) + 8;
                 this.$emit("widgetHeight", height);
             })

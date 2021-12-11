@@ -69,11 +69,10 @@ export default {
         // 检查隐藏依赖
         dispatchHide(key) {
             let hideFields = this.hideFields[key];
-            if (hideFields) {
-                for (let index = 0; index < hideFields.length; index++) {
-                    let item = hideFields[index];
+            if (hideFields && this.values[key]) {
+                hideFields.map((item) => {
                     this.$set(item.field, "hide", item.value == this.values[key]);
-                }
+                })
             }
         }
     }

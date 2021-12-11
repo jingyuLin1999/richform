@@ -33,7 +33,11 @@
     [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤
   }
   <2>隐藏说明
-  hideRely：<字段名称name> == 'A'
+  hideRely：<字段名称nameA> == 'C', // 可以是单值
+  hideRely：[ // 也可以是多值，只要满足一个条件，就隐藏
+    <字段名称nameA> == 'C',
+    <字段名称nameB> == 'D',
+  ]
   <3>等式说明
   regExp: [
     {exp: "minimum", relyName: <字段intA>}, // exp 请查阅json schema

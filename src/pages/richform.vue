@@ -101,7 +101,6 @@ export default {
             title: "单选框A",
             type: "string",
             default: "单选框A",
-            description: "当我的值等于：单选框B,会隐藏第一项",
           },
           radioB: {
             title: "单选框B",
@@ -177,6 +176,7 @@ export default {
           "http://192.168.100.12:9000/images/178a383967db4bc48bcf790282d5f19f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211210T013328Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7592596bef4cdb51eab88ea7713e7e423c23d21f8d822b8d9639f5917bbdb75a",
         ],
         tree: "22",
+        radioA: "radioB",
       },
       form: {
         border: true, // 显示边框
@@ -216,7 +216,7 @@ export default {
             title: "input类型转换",
             name: "inputTypeSwitch",
             widget: "input",
-            description: "在schema中type定义的是number",
+            description: "在schema中type定义的是number,注意看值的变化",
           },
           {
             widget: "grid",
@@ -267,7 +267,7 @@ export default {
                       },
                       {
                         value: "选项3",
-                        label: "选项3",
+                        label: "蚵仔煎",
                       },
                     ],
                   },
@@ -343,8 +343,8 @@ export default {
                       "selectA == 选项2": "http://localhost:8080/form-design",
                       "input == 123456": [
                         {
-                          value: "input等于123456",
-                          label: "input等于123456",
+                          value: "【对方名称】等于123456",
+                          label: "【对方名称】等于123456",
                         },
                       ],
                     },
@@ -395,6 +395,8 @@ export default {
                     size: "small",
                     textColor: "#fff",
                     fill: "#409EFF",
+                    description:
+                      "当我的值等于：单选框B 时会触发【对方名称】隐藏",
                     options: [
                       {
                         name: "radioA",
@@ -413,11 +415,19 @@ export default {
                     ],
                   },
                   {
+                    title: "被依赖",
+                    widget: "input",
+                    name: "beHide",
+                    type: "text",
+                    placeholder: "当我等于 hello 时会触发【对方名称】隐藏",
+                    description: "当我等于 hello 时会触发【对方名称】隐藏",
+                  },
+                  {
                     title: "对方名称",
                     widget: "input",
                     name: "input",
                     type: "text",
-                    hideRely: "radioA==radioB",
+                    hideRely: ["radioA==radioB", "beHide == hello"],
                   },
                 ],
               },
