@@ -410,7 +410,7 @@ export default {
                     textColor: "#fff",
                     fill: "#409EFF",
                     description:
-                      "当我的值等于：单选框B 时会触发【对方名称】隐藏",
+                      "1、当我的值等于 单选框B 时会触发【对方名称】隐藏。2、注意看action触发的console.log()",
                     options: [
                       {
                         name: "radioA",
@@ -893,7 +893,7 @@ export default {
   },
   methods: {
     formAction(event) {
-      console.log(event.name);
+      console.log(event);
     },
   },
 };

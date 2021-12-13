@@ -15,6 +15,7 @@
       :text-color="field.textColor"
       :fill="field.fill"
       v-model="value"
+      @change="onChange"
     >
       <div v-if="field.isButton">
         <RadioButton
@@ -48,8 +49,10 @@
 
 <script>
 import baseMixin from "./baseMixin";
+import eventbus from "../utils/eventbus";
 import { Radio, RadioGroup, RadioButton } from "element-ui";
 export default {
+  inject: ["formId"],
   mixins: [baseMixin],
   components: { Radio, RadioGroup, RadioButton },
   methods: {
@@ -62,7 +65,14 @@ export default {
         size: "small", // medium / small / mini
         textColor: "#fff", // 当isButton为true时有效
         fill: "#409EFF", // 当isButton为true时有效
+        options: [],
       };
+    },
+    onChange(val) {
+      eventbus.$emit(`${this.formId}:action`, {
+        value: val,
+        name: this.field.name,
+      });
     },
   },
 };

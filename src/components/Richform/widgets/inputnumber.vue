@@ -2,6 +2,7 @@
   <div class="inputnumber-widget" :id="widgetId">
     <InputNumber
       v-model="value"
+      style="width: 100%"
       :disabled="field.disabled"
       :step="field.step"
       :min="field.min"
@@ -37,4 +38,7 @@ export default {
 };
 </script>
 <style lang="scss">
+.inputnumber-widget {
+  width: 100%;
+}
 </style>
