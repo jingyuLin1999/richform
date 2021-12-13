@@ -177,6 +177,8 @@ export default {
         ],
         tree: "22",
         radioA: "radioB",
+        selectA: "选项1",
+        selectB: "选项1",
       },
       form: {
         border: true, // 显示边框
@@ -340,7 +342,19 @@ export default {
                           label: "根据[下拉选框A]的值变化B",
                         },
                       ],
-                      "selectA == 选项2": "http://localhost:8080/form-design",
+                      // "selectA == 选项2": "http://localhost:8080/form-design",
+                      "selectA == 选项2": [
+                        {
+                          value: "选项1",
+                          label: "根据[下拉选框A]的值变化A",
+                        },
+                      ],
+                      "selectA==选项3": [
+                        {
+                          value: "测试默认值是否会被清空",
+                          label: "测试默认值是否会被清空",
+                        },
+                      ],
                       "input == 123456": [
                         {
                           value: "【对方名称】等于123456",

@@ -55,9 +55,14 @@ export default {
                         let filterOptions = dictItem.options.filter(item => (item[filterKey] == this.values[fieldName]));
                         this.$set(dictItem.field, "options", filterOptions);
                     }
-                    // 只有选项改变了，对应值才应清零
+                    // 只有选项改变了且新的选项中没有对应值，那么对应值才应清零
                     let newOptions = JSON.stringify(dictItem.field.options);
-                    if (oldOptions != newOptions) this.values[dictItem.field.name] = null;
+                    let hasMatch;
+                    const { defaultProp, name } = dictItem.field;
+                    if (defaultProp) {
+                        hasMatch = dictItem.field.options.find(option => option[defaultProp.value] == this.values[name]);
+                    }
+                    if (oldOptions != newOptions && !hasMatch) this.values[dictItem.field.name] = null;
                 }
             }
         },
