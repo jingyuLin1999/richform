@@ -31,7 +31,7 @@ export default {
         stepStrictly: false, // 严格步数,只能输入 step 的倍数
         precision: undefined, // 精度,设置计数器最小值
         controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
-        size: "small",
+        size: "medium",
       };
     },
   },

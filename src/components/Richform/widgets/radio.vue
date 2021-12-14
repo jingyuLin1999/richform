@@ -68,6 +68,9 @@ export default {
         options: [],
       };
     },
+    beforeChange(val) {
+      return this.schema.type == "number" ? parseFloat(val) : val;
+    },
     onChange(val) {
       eventbus.$emit(`${this.formId}:action`, {
         value: val,

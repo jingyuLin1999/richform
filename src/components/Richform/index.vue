@@ -215,8 +215,8 @@ export default {
             eval("this.values" + "['" + valueKeys.join("']['") + "'] = value"); // TODO 防止注入
         }
         // handle bug 实际值已经更新，但dom没有变化
-        // this.$delete(this.richValues, fieldName);
-        this.$set(this.richValues, fieldName, null);
+        this.$delete(this.richValues, fieldName);
+        // this.$set(this.richValues, fieldName, null);
         this.$set(this.richValues, fieldName, value);
       } catch (e) {
         console.warn("全局设置值出错：" + e);
@@ -272,8 +272,6 @@ export default {
       this.friendSchema.required = this.requireds;
       // 处理验证一次后，schem规则改变，再次验证错误信息还是保留第一次的
       // https://ajv.js.org/api.html#api-validateschema
-      AJV.removeSchema();
-      AJV.addSchema(this.friendSchema);
       let valid = AJV.validate(this.friendSchema, this.richValues);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文

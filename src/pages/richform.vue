@@ -122,6 +122,10 @@ export default {
             widget: "slider",
             description: "滑块测试",
           },
+          radioNumber: {
+            type: "number",
+            default: 1,
+          },
           mode: {
             type: "object",
             properties: {
@@ -214,6 +218,41 @@ export default {
           },
         ],
         layout: [
+          {
+            widget: "radio",
+            title: "单选数字",
+            name: "radioNumber",
+            isGroup: true,
+            isButton: true,
+            disabled: false,
+            border: true,
+            size: "small",
+            textColor: "#fff",
+            fill: "#409EFF",
+            options: [
+              {
+                name: "1",
+                title: "Number1",
+                disabled: false,
+                border: false,
+                size: "default",
+              },
+              {
+                name: "2",
+                title: "Number2",
+                disabled: false,
+                border: false,
+                size: "default",
+              },
+              {
+                name: "3",
+                title: "Number3",
+                disabled: false,
+                border: false,
+                size: "default",
+              },
+            ],
+          },
           {
             title: "input类型转换",
             name: "inputTypeSwitch",
