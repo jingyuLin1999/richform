@@ -1,3 +1,4 @@
+import { type } from "ramda"
 import { isUrl, loadDict } from "./";
 export default {
     methods: {
@@ -57,12 +58,23 @@ export default {
                     }
                     // 只有选项改变了且新的选项中没有对应值，那么对应值才应清零
                     let newOptions = JSON.stringify(dictItem.field.options);
-                    let hasMatch;
+                    let matchOne = false;
                     const { defaultProp, name } = dictItem.field;
                     if (defaultProp) {
-                        hasMatch = dictItem.field.options.find(option => option[defaultProp.value] == this.values[name]);
+                        let valueList = Array.isArray(this.values[name]) ? JSON.parse(JSON.stringify(this.values[name])) : [this.values[name]]
+                        // 值可能是数组，这种情况需要每个到options中匹配，匹配成功保留，否则删除
+                        // 只要有一个匹配成功，就不会清空
+                        let pickMatchValue = [];
+                        valueList.map((valItem) => {
+                            let matchValue = type(valItem) == "Object" ? valItem[defaultProp.value] : valItem;
+                            let hasMatch = matchValue ? dictItem.field.options.find(option => option[defaultProp.value] == matchValue) : false;
+                            if (hasMatch && !matchOne) matchOne = true; // 只要有一个匹配
+                            if (hasMatch) pickMatchValue.push(valItem)
+                        })
+                        if (pickMatchValue.length > 0 && Array.isArray(this.values[name]))
+                            this.values[name] = pickMatchValue;
                     }
-                    if (oldOptions != newOptions && !hasMatch) this.values[dictItem.field.name] = null;
+                    if (oldOptions != newOptions && !matchOne) this.values[dictItem.field.name] = null;
                 }
             }
         },

@@ -729,6 +729,14 @@ export default {
             name: "selectMultiple",
             multiple: true,
             filterable: true,
+            dict: {
+              "inputnumber == 2": [
+                {
+                  value: "选项1",
+                  label: "黄金糕12",
+                },
+              ],
+            },
             options: [
               {
                 value: "选项1",
@@ -744,7 +752,7 @@ export default {
             name: "inputnumber",
             widget: "inputnumber",
             title: "计数器",
-            disabled: true,
+            disabled: false,
             step: 1, // 步数
             min: undefined,
             max: undefined,
