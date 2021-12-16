@@ -69,7 +69,9 @@ export default {
                 this.$set(this.field, key, value)
         },
         beforeChange(value) {
-            return value;
+            return this.schema.type == "number"
+                ? parseFloat(value) ? parseFloat(value) : value
+                : value;
         },
         changeValue(value) {
             this.updateValue++;
