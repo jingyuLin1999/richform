@@ -174,7 +174,18 @@ export default {
   },
   computed: {
     treeValue() {
-      return this.field.options.length > 0 ? this.field.options : this.value;
+      let { label, value } = this.field.defaultProps;
+      return this.field.options.length > 0
+        ? this.field.options
+        : Array.isArray(this.value)
+        ? this.value
+        : [
+            {
+              [this.field.nodeKey]: this.uuid(),
+              [label]: this.value,
+              [value]: this.value,
+            },
+          ];
     },
     defaultCheckedKeys() {
       let defaultCheckedKeys = [];
@@ -279,15 +290,16 @@ export default {
           break;
       }
     },
+    uuid() {
+      return Math.random().toString(16).slice(2, 12);
+    },
     addNodeModal(data, node) {
       this.isModal = true;
       this.modalTitle = "新增";
       this.modalType = "add";
       this.clickNode = { data, node };
       this.template = JSON.parse(this.field.template);
-      this.template[this.field.nodeKey] = Math.random()
-        .toString(16)
-        .slice(2, 12);
+      this.template[this.field.nodeKey] = this.uuid();
     },
     addNode() {
       let { data, node } = this.clickNode;
