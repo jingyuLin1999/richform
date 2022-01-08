@@ -16,25 +16,28 @@
     </div>
     <div class="gird-content">
       <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
-      <div
-        :class="[
-          'grid-column',
-          form.grid ? 'grid-column-border' : '',
-          form.grid ? 'grid-column-padding' : '',
-        ]"
-        v-for="(columnItem, index) in gridItem.fields"
-        :key="index"
-      >
-        <layout
-          :layout="columnItem"
-          :isDesign="isDesign"
-          :form="form"
-          :values="values"
-          :schema="schema"
-          :fieldErrors="fieldErrors"
-          :hideFields="hideFields"
-          :realyValues="realyValues"
-        ></layout>
+      <div class="grid-flex">
+        <div
+          :class="[
+            'grid-column',
+            form.grid ? 'grid-column-border' : '',
+            form.grid ? 'grid-column-padding' : '',
+          ]"
+          v-for="(columnItem, index) in gridItem.fields"
+          :key="index"
+          :style="{ flex: ratio[index] || 1 }"
+        >
+          <layout
+            :layout="columnItem"
+            :isDesign="isDesign"
+            :form="form"
+            :values="values"
+            :schema="schema"
+            :fieldErrors="fieldErrors"
+            :hideFields="hideFields"
+            :realyValues="realyValues"
+          ></layout>
+        </div>
       </div>
     </div>
     <!--拖拽-->
@@ -74,6 +77,11 @@ export default {
   beforeCreate: function () {
     this.$options.components.Layout = () => import("../layout.vue");
   },
+  computed: {
+    ratio() {
+      return this.gridItem.ratio ? this.gridItem.ratio.split(":") : [];
+    },
+  },
 };
 </script>
 
@@ -108,6 +116,11 @@ export default {
     display: flex;
     position: relative;
     box-sizing: border-box;
+    .grid-flex {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
     .grid-column {
       width: 100%;
       min-height: 62px;

@@ -97,6 +97,11 @@ export const attribute = {
                     { value: false, label: "否" }
                 ],
             },
+            {
+                title: "颜色选择器",
+                widget: "colorpicker",
+                name: "colorPrimary",
+            },
         ],
     }
 }

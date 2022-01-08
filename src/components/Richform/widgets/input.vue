@@ -1,4 +1,5 @@
 <template>
+  <!-- 自定义组件 id 和 class 必须有，请原样保留 -->
   <Input
     :id="widgetId"
     :class="[
@@ -30,12 +31,13 @@
 </template>
 
 <script>
-import baseMixin from "./baseMixin";
+import baseMixin from "./baseMixin"; // 混入必须引入，一些公共逻辑放在该处
 import { Input } from "element-ui";
 export default {
   mixins: [baseMixin],
   components: { Input },
   methods: {
+    // 该组件的默认属性，下面字段可自行定义，且可根据this.field获取数据
     defaultFieldAttr() {
       return {
         type: "text", // text，textarea
@@ -68,7 +70,6 @@ export default {
           : val.indexOf("-") == 0 && val.length == 1
           ? val
           : parseFloat(val);
-
       return val;
     },
   },

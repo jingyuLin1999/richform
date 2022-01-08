@@ -219,6 +219,12 @@ export default {
         ],
         layout: [
           {
+            widget: "icon",
+            title: "图标",
+            name: "icon",
+            size: "small",
+          },
+          {
             widget: "radio",
             title: "单选数字",
             name: "radioNumber",
@@ -264,6 +270,7 @@ export default {
             title: "regExp属性例子",
             showTitle: true,
             isClicked: false,
+            ratio: "",
             fields: [
               [
                 {
@@ -424,10 +431,10 @@ export default {
                     title: "字典过滤",
                     widget: "select",
                     name: "dictTest",
-                    dict: {
-                      "factoryid == any":
-                        "http://192.168.100.11:8080/manage/dict/getWorkshopByFactoryId.do",
-                    },
+                    // dict: {
+                    //   "factoryid == any":
+                    //     "http://192.168.100.11:8080/manage/dict/getWorkshopByFactoryId.do",
+                    // },
                     options: [],
                   },
                 ],

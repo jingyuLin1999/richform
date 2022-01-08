@@ -76,6 +76,7 @@
           <Tabs class="tab-attribute" v-model="activeTabName">
             <TabPane label="属性配置" name="attribute" class="design-tab">
               <RichForm
+                deepValues
                 :schema="attribute.schema"
                 :form="attribute.form"
                 :values="attribute.values"
@@ -249,6 +250,9 @@ export const FormMetas = loadMetas();
   flex-direction: column;
   .design-sortable-drag {
     background: #f00;
+  }
+  a {
+    text-decoration: none;
   }
   // 修改属性配置elementUi tab的样式
   .tab-attribute {

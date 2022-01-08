@@ -4,7 +4,8 @@ export const layout = [ // 布局模板数据
         title: "栅格布局",
         showTitle: false,
         isClicked: false,
-        fields: [[]]
+        fields: [[]],
+        ratio: "",
     },
 
     {
@@ -52,7 +53,10 @@ export const widgets = [
         isGroup: true,
         isButton: false,
         disabled: false,
-        border: true,
+        border: true,         title: "行显示",
+        widget: "select",
+        name: "labelInline",
+        size: "small",
         size: "small",
         fill: "#409EFF",
         textColor: "#fff",
@@ -238,6 +242,14 @@ export const widgets = [
         limit: 3, // 上传限制
         disabled: false,
         showFileList: true, // 是否显示已上传文件列表
+    },
+    {
+        title: "图标",
+        widget: "icon",
+        name: "icon",
+        size: "small",
+        disabled: false,
+        fontSize: "13px",
     },
 ]
 
