@@ -45,6 +45,7 @@ export default {
         rangeSeparator: "至", // 选择范围时的分隔符
         startPlaceholder: "开始时间",
         endPlaceholder: "结束时间",
+        mapValues: [], // 如果是时间范围,则values会生成starttime->范围下标0，endtime两个字段->范围下标1   如：["starttime", "endtime"]
         pickerOptions: {
           // 带有快捷键
           disabledDate(time) {
@@ -80,6 +81,14 @@ export default {
     friendValue() {
       let value = this.values[this.field.name];
       return value;
+    },
+    beforeChange(val) {
+      let mapValues = this.field.mapValues;
+      if (Array.isArray(val) && mapValues.length == 2) {
+        this.values[mapValues[0]] = val[0];
+        this.values[mapValues[1]] = val[1];
+      }
+      return val;
     },
   },
 };

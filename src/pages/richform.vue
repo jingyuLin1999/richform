@@ -270,7 +270,7 @@ export default {
             title: "regExp属性例子",
             showTitle: true,
             isClicked: false,
-            ratio: "",
+            ratio: "1:3",
             fields: [
               [
                 {
