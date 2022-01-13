@@ -620,7 +620,7 @@ export default {
             editable: false, // 文本框可输入
             placeholder: "请选择", // 单个
             format: "", // 显示的格式,注意和type配套
-            valueFormat: "yyyy-MM-dd", // yyyy-MM-dd/timestamp 指定值的格式
+            valueFormat: "yyyy-MM-dd HH:mm:ss", // yyyy-MM-dd/timestamp 指定值的格式
             arrowControl: true,
             rangeSeparator: "至", // 选择范围时的分隔符
             startPlaceholder: "开始时间",
