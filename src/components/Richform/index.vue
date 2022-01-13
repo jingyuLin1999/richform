@@ -108,7 +108,7 @@ import { defaultForm, defaultSchema } from "./utils/defaultData";
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
-import variables from "./utils/element-variables.scss";
+// import variables from "./utils/element-variables.scss";
 
 export default {
   name: "RichForm",
@@ -152,7 +152,7 @@ export default {
         // 全局变量
         loadCompleted: null, // 是否加载完成
       },
-      theme: variables.theme,
+      // theme: variables.theme,
     };
   },
   mounted() {
