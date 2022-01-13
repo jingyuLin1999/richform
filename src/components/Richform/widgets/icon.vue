@@ -40,7 +40,7 @@ export default {
     },
     clickIcon(val) {
       this.value = this.latestIcon == val ? null : val;
-      this.latestIcon = val;
+      this.latestIcon = this.value;
     },
   },
   data() {

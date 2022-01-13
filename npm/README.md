@@ -17,10 +17,19 @@
     * 已签核状态显示
     * 错误处理
 
-## 预览
-[表单设计器](https://www.shandawang.com/richform/#/)  
 
-[完整功能](https://www.shandawang.com/richform/#/form-design)  
+## 预览
+```
+npm install
+
+npm run serve
+```
+[表单设计器](http://localhost:8080/#/ )  
+http://localhost:8080/#/  
+ 
+[富表单完整功能](http://localhost:8080/#/form-design )   
+http://localhost:8080/#/form-design   
+
 
 ## 用法
 ```

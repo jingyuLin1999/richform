@@ -4,7 +4,7 @@
       <dd
         class="draggable-list-item"
         v-for="(item, index) in value"
-        :key="item.id"
+        :key="typeof item == 'string' ? index : item.id"
       >
         <i
           :class="[
@@ -85,7 +85,7 @@ export default {
         showLabel: false,
         icon: "el-icon-circle-plus", // 添加图标
         showOperation: true, // 是否显示操作图标
-        template: { label: "", value: "" }, // 新增模板
+        template: { label: "", value: "" }, // 新增模板,可以是对象也可以是字符串： { label: "", value: "" } 或 ""
         atLeastOne: true, // 选项至少要有一个
         editKeys: ["label", "value"], // 可编辑的键值
       };
@@ -93,13 +93,13 @@ export default {
     // 增加项目
     addItem() {
       let template = null;
-      if (Object.keys(this.field.template).length > 0) {
+      if (typeof this.field.template == "string")
+        template = this.field.template;
+      else if (Object.keys(this.field.template).length > 0) {
         template = JSON.parse(JSON.stringify(this.field.template));
         let key = ++this.id;
         template[this.field.idKey] = key.toString();
-      } else if (typeof this.field.template == "string")
-        template = this.field.template;
-      else if (Array.isArray(this.field.template))
+      } else if (Array.isArray(this.field.template))
         template = JSON.parse(JSON.stringify(this.field.template));
       this.value.push(template);
       this.getWidgetHeight();

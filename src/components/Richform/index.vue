@@ -60,8 +60,9 @@
     ]"
     :id="formId"
   >
+    <!-- <button @click="onTest">test</button> -->
     <!-- 画布遮罩，用于全局点击事件 -->
-    <div class="canvas-mask" @click="onClickCanvas"></div>
+    <!-- <div class="canvas-mask" @click="onClickCanvas"></div> -->
     <perfect-scrollbar :style="{ 'min-height': '20px' }">
       <!-- 顶部按钮 -->
       <actions
@@ -107,6 +108,7 @@ import { defaultForm, defaultSchema } from "./utils/defaultData";
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
+import variables from "./utils/element-variables.scss";
 
 export default {
   name: "RichForm",
@@ -150,6 +152,7 @@ export default {
         // 全局变量
         loadCompleted: null, // 是否加载完成
       },
+      theme: variables.theme,
     };
   },
   mounted() {
@@ -184,6 +187,10 @@ export default {
     },
   },
   methods: {
+    // onTest() {
+    //   this.$set(this.globalVars, "theme", "#f00");
+    //   console.log(123);
+    // },
     load() {
       this.onAuthorize();
       this._registerEvents();
