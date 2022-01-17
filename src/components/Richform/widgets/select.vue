@@ -75,11 +75,9 @@ export default {
         },
       };
     },
-    // 清空的时候为"",后端要求最好是null
+    // 清空的时候为"",后端要求最好是null,故强制转换一下
     clearOptions() {
-      if (!this.field.multiple) {
-        this.beforeChange(null);
-      }
+      if (!this.field.multiple) this.values[this.field.name] = null;
     },
     // 有延迟，重复计算高度
     calcuHeight() {
