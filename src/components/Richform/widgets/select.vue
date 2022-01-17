@@ -16,6 +16,7 @@
       :allow-create="field.allowCreate"
       :filterable="field.filterable"
       :size="field.size"
+      @clear="clearOptions"
       @change="calcuHeight"
     >
       <!-- 不分组 -->
@@ -73,6 +74,12 @@ export default {
           value: "value",
         },
       };
+    },
+    // 清空的时候为"",后端要求最好是null
+    clearOptions() {
+      if (!this.field.multiple) {
+        this.beforeChange(null);
+      }
     },
     // 有延迟，重复计算高度
     calcuHeight() {

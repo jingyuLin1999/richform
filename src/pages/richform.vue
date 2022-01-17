@@ -304,6 +304,7 @@ export default {
                     title: "下拉选框A", // 优先级小于shema中定义的title
                     widget: "select",
                     name: "selectA",
+                    clearable: true,
                     options: [
                       {
                         value: "选项1",

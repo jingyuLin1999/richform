@@ -36,7 +36,11 @@ export default {
             },
             set(value) {
                 if (this.isFriendValue) {
-                    let emitValue = this.beforeChange(value);
+                    if (!value) {
+                        this.changeValue(null);
+                        return;
+                    }
+                    let emitValue = this.beforeChange(value)
                     this.changeValue(emitValue)
                 } else this.values[this.field.name] = value
             }
