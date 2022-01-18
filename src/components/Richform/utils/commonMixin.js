@@ -86,7 +86,7 @@ export default {
         // 检查隐藏依赖
         dispatchHide(key) {
             let hideFields = this.hideFields[key];
-            if (hideFields && this.values[key]) {
+            if (hideFields && (this.values[key] || this.values[key] == 0)) { // 值有可能是0
                 let hideHistory = [];
                 for (let index = 0; index < hideFields.length; index++) {
                     let item = hideFields[index];
