@@ -68,6 +68,11 @@ export default {
         options: [],
       };
     },
+    friendValue() {
+      let value = this.values[this.field.name];
+      if (typeof value == "number") return value.toString();
+      return value;
+    },
     beforeChange(val) {
       return this.schema.type == "number" ? parseFloat(val) : val;
     },
