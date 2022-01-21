@@ -21,3 +21,13 @@ export function strToObj(str) {
         return str
     }
 }
+
+export function deleteIteration(obj = {}, keys = []) {
+    if (keys.length == 1) {
+        delete obj[keys[0]];
+        return;
+    }
+    obj = obj[keys[0]];
+    keys.shift();
+    return deleteIteration(obj, keys);
+}

@@ -205,6 +205,7 @@ export default {
                 this.regExpFields[relyName].push({
                     ...regItem,
                     dispatchName: this.field.name,
+                    field: this.field,
                 })
             })
         }

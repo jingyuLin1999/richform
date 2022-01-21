@@ -147,7 +147,7 @@ export default {
         errorMessage: {
           // 自定义信息
           properties: {
-            intB: "必须大于等于数字A，这是自定义错误信息",
+            intB: "必须大于数字A，这是自定义错误信息",
           },
         },
         if: {
@@ -277,6 +277,7 @@ export default {
                   title: "数字A",
                   name: "intA",
                   widget: "inputnumber",
+                  regExp: [{ exp: "exclusiveMaximum", relyName: "intB" }],
                 },
               ],
               [
@@ -285,7 +286,8 @@ export default {
                   name: "intB",
                   widget: "inputnumber",
                   description: "我的校验规则是值大于【数字A】",
-                  regExp: [{ exp: "minimum", relyName: "intA" }],
+                  regExp: [{ exp: "exclusiveMinimum", relyName: "intA" }],
+                  hideRely: ["radioA==radioA"],
                 },
               ],
             ],
@@ -425,7 +427,7 @@ export default {
                     widget: "input",
                     name: "factoryid",
                     prefixIcon: "el-icon-search",
-                    prepend: "D", // 当type等于text有效。
+                    // prepend: "D", // 当type等于text有效。
                     append: "KB",
                   },
                   {

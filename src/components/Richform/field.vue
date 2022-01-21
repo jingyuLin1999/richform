@@ -271,15 +271,7 @@ export default {
         schema = this.pickFieldSchema(fieldName) || schema;
         if (!Object.keys(schema).length) return;
         const pickSchema = pick(
-          [
-            "errorMessage",
-            "if",
-            "else",
-            "then",
-            "allOf",
-            "anyOf",
-            "oneOf",
-          ],
+          ["errorMessage", "if", "else", "then", "allOf", "anyOf", "oneOf"],
           this.schema
         );
         let require = [];
@@ -327,27 +319,8 @@ export default {
         console.error("单个字段验证错误了：" + e);
       }
     },
-    // 派发表达式，并修改schema
-    dispatchRegExp(fieldName) {
-      const regExps = this.regExpFields[fieldName];
-      if (!regExps) return;
-      regExps.forEach((element) => {
-        const { dispatchName, exp } = element;
-        const fieldSchema = path(
-          dispatchName.split("."),
-          this.schema.properties
-        ); // 有可能找不到
-        if (fieldSchema) fieldSchema[exp] = this.values[fieldName];
-        else {
-          this.$set(this.schema.properties, dispatchName, {
-            [exp]: this.values[fieldName],
-          });
-        }
-      });
-    },
     onChange(fieldName, value, schema) {
       this.emit("field:change", fieldName, value);
-      this.dispatchRegExp(fieldName);
       this.removeErrorAndRequire();
       this.validateField(fieldName, schema, value);
       this.onDispatch(fieldName);

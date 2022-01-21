@@ -1,30 +1,23 @@
-import { type } from "ramda"
-import { isUrl, loadDict } from "./";
+import { type, path } from "ramda"
+import { isUrl, loadDict, deleteIteration } from "./";
 export default {
     methods: {
         friendDefaultValue(type) {
             let value = null;
             switch (type) {
-                case "null":
-                    value = null;
-                    break;
-                case "string":
-                    value = "";
-                    break;
-                case "array":
-                    value = [];
-                    break;
-                case "object":
-                    value = {};
-                    break;
-                case "boolean":
-                    value = false;
-                    break;
-                case "number":
-                    value = 0;
-                    break;
+                case "null": value = null; break;
+                case "string": value = ""; break;
+                case "array": value = []; break;
+                case "object": value = {}; break;
+                case "boolean": value = false; break;
+                case "number": value = 0; break;
             }
             return value;
+        },
+        tofriendValue(value) {
+            let type = Array.isArray(value) ? "array"
+                : value == null ? "null" : typeof value;
+            return this.friendDefaultValue(type);
         },
         // 对依赖本字段的字典进行派发
         async dispatchOptions(fieldName) {
@@ -82,6 +75,7 @@ export default {
         onDispatch(fieldName) {
             this.dispatchHide(fieldName);
             this.dispatchOptions(fieldName);
+            this.dispatchRegExp(fieldName);
         },
         // 检查隐藏依赖
         dispatchHide(key) {
@@ -95,11 +89,50 @@ export default {
                     if (!hideHistory.includes(nameKey) && isEquality) {
                         hideHistory.push(nameKey)
                         this.$set(item.field, "hide", isEquality);
+                        this.values[item.name] = this.tofriendValue(this.values[item.name]); // TODO 被隐藏的字段是否应该把值清空
+                        // 隐藏状态删除表达式的验证规则
+                        this.updateSchemaInHide(item);
                     } else if (hideHistory.includes(nameKey)) {
                         // 这种情况，表示重复的name和key已有一个验证通过
-                    } else this.$set(item.field, "hide", isEquality);
+                    } else {
+                        this.$set(item.field, "hide", isEquality);
+                    }
                 }
             }
-        }
+        },
+        // 更新schema当字段隐藏时
+        updateSchemaInHide(fieldItem) {
+            if (this.schema && this.schema.properties) {
+                const fieldSchema = path(this.schema.properties, fieldItem.name.split("."));
+                if (fieldItem.field.regExp && fieldSchema) // 删除
+                    deleteIteration(this.schema.properties, fieldItem.name.split("."));
+                // 你都不存在了，依赖你的表达式也不应该存在
+                const regExps = this.regExpFields[fieldItem.name];
+                if (!regExps) return;
+                regExps.map(item => {
+                    const { dispatchName } = item;
+                    const fieldSchema = path(this.schema.properties, dispatchName.split("."));
+                    if (fieldSchema) deleteIteration(this.schema.properties, dispatchName.split(".")); // 删除
+                })
+            }
+        },
+        // 派发表达式，并修改schema
+        dispatchRegExp(fieldName) {
+            const regExps = this.regExpFields[fieldName];
+            if (!regExps) return;
+            regExps.map((item) => {
+                const { dispatchName, exp, field } = item;
+                const fieldSchema = path(
+                    dispatchName.split("."),
+                    this.schema.properties
+                );
+                if (fieldSchema) fieldSchema[exp] = this.values[fieldName]; // 找到更新
+                else if (!fieldSchema && !field.hide) { // 有可能找不到
+                    this.$set(this.schema.properties, dispatchName, {
+                        [exp]: this.values[fieldName],
+                    });
+                }
+            });
+        },
     }
 }

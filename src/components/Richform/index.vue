@@ -262,12 +262,11 @@ export default {
     },
     onReset() {
       for (let key in this.richValues) {
-        let type = Array.isArray(this.richValues[key])
-          ? "array"
-          : this.richValues[key] == null
-          ? "null"
-          : typeof this.richValues[key];
-        this.$set(this.richValues, key, this.friendDefaultValue(type));
+        this.$set(
+          this.richValues,
+          key,
+          this.tofriendValue(this.richValues[key])
+        );
       }
     },
     // 全局校验
@@ -278,8 +277,9 @@ export default {
       this.fieldErrors = {};
       this.friendSchema.required = this.requireds;
       // 处理验证一次后，schem规则改变，再次验证错误信息还是保留第一次的
+      // 故必须克隆一份改变地址，不然即使schema改变了也不会更新
       // https://ajv.js.org/api.html#api-validateschema
-      let valid = AJV.validate(this.friendSchema, this.richValues);
+      let valid = AJV.validate(clone(this.friendSchema), this.richValues);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);
