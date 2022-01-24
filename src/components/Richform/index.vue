@@ -97,11 +97,11 @@
 </template>
 
 <script>
-import { hasPath, clone, pick } from "ramda";
 import Actions from "./actions";
 import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
 import eventbus from "./utils/eventbus";
+import { hasPath, clone, pick } from "ramda";
 import CommonMixin from "./utils/commonMixin";
 import "element-ui/lib/theme-chalk/index.css";
 import { defaultForm, defaultSchema } from "./utils/defaultData";
@@ -136,6 +136,16 @@ export default {
       regExpFields: this.regExpFields,
     };
   },
+  watch: {
+    values: {
+      // 当加载完成手动进行赋值时，此时下拉选项要重新派发
+      handler() {
+        if (!this.globalVars.loadCompleted) return;
+        for (let key in this.values) this.dispatchOptions(key);
+      },
+      deep: true,
+    },
+  },
   data() {
     return {
       defaultForm,
@@ -150,7 +160,8 @@ export default {
       regExpFields: {}, // 表达式
       globalVars: {
         // 全局变量
-        loadCompleted: null, // 是否加载完成
+        loadCompleted: false, // 是否加载完成
+        loadCompletedTimeout: null,
       },
       // theme: variables.theme,
     };

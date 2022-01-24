@@ -54,12 +54,14 @@ export default {
             this.loadCompleteDispatch();
         },
         loadCompleteDispatch() {
-            for (let key in this.values)// 隐藏字段需要立马派发，不然视觉体验不友好
+            for (let key in this.values) // 隐藏字段需要立马派发，不然视觉体验不友好
                 this.dispatchHide(key);
-            if (this.globalVars.loadCompleted)
-                clearTimeout(this.globalVars.loadCompleted);
-            this.globalVars.loadCompleted = setTimeout(() => {
+            // 等所有字段都渲染完成在派发options依赖
+            if (this.globalVars.loadCompletedTimeout)
+                clearTimeout(this.globalVars.loadCompletedTimeout);
+            this.globalVars.loadCompletedTimeout = setTimeout(() => {
                 for (let key in this.values) this.dispatchOptions(key);
+                this.globalVars.loadCompleted = true;
             }, 500)
         },
         $setFieldAttr() {

@@ -22,6 +22,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 <template>
   <div class="rich-form-app">
     {{ values }}
+    <Button @click="onSetValues"></Button>
     <Button
       size="small"
       type="success"
@@ -395,7 +396,7 @@ export default {
                       "selectA == 选项2": [
                         {
                           value: "选项1",
-                          label: "根据[下拉选框A]的值变化A",
+                          label: "根据[下拉选框A]选项1,的值变化A",
                         },
                       ],
                       "selectA==选项3": [
@@ -427,7 +428,7 @@ export default {
                     widget: "input",
                     name: "factoryid",
                     prefixIcon: "el-icon-search",
-                    // prepend: "D", // 当type等于text有效。
+                    prepend: "D", // 当type等于text有效。
                     append: "KB",
                   },
                   {
@@ -951,6 +952,9 @@ export default {
   methods: {
     formAction(event) {
       console.log(event);
+    },
+    onSetValues() {
+      this.$set(this.values, "selectA", "选项2");
     },
   },
 };

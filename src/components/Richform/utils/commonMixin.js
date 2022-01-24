@@ -44,6 +44,7 @@ export default {
                         // 若是数组，则直接赋值给options
                         this.$set(dictItem.field, "options", dictItem.dictValue);
                     } else if (Object.prototype.toString.call(dictItem.dictValue) === '[object Object]') {
+                        // 若是对象，则根据对象过滤出符合条件的options
                         let filterKey = dictItem.dictValue.filterKey;
                         if (!filterKey || !dictItem.options.length) return;
                         let filterOptions = dictItem.options.filter(item => (item[filterKey] == this.values[fieldName]));
