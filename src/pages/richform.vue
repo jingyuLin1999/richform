@@ -308,18 +308,22 @@ export default {
                     widget: "select",
                     name: "selectA",
                     clearable: true,
+                    // filter: { key: "isdelete", value: 1 },
                     options: [
                       {
                         value: "选项1",
                         label: "黄金糕",
+                        isdelete: 1,
                       },
                       {
                         value: "选项2",
                         label: "双皮奶",
+                        isdelete: 0,
                       },
                       {
                         value: "选项3",
                         label: "蚵仔煎",
+                        isdelete: 0,
                       },
                     ],
                   },

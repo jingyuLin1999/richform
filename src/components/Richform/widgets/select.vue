@@ -21,13 +21,15 @@
     >
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
-        <Option
-          v-for="(option, index) in field.options"
-          :key="index"
-          :label="option[field.defaultProp.label]"
-          :value="option[field.defaultProp.value]"
-          :disabled="option.disabled"
-        ></Option>
+        <template v-for="(option, index) in field.options">
+          <Option
+            v-if="isFilter(option)"
+            :key="index"
+            :label="option[field.defaultProp.label]"
+            :value="option[field.defaultProp.value]"
+            :disabled="option.disabled"
+          ></Option>
+        </template>
       </div>
       <!-- 分组 -->
       <div v-else>
@@ -36,12 +38,14 @@
           :key="index"
           :label="group.label"
         >
-          <Option
-            v-for="option in group.options"
-            :key="option[field.defaultProp.value]"
-            :label="option[field.defaultProp.label]"
-            :value="option[field.defaultProp.value]"
-          ></Option>
+          <template v-for="option in group.options">
+            <Option
+              v-if="isFilter(option)"
+              :key="option[field.defaultProp.value]"
+              :label="option[field.defaultProp.label]"
+              :value="option[field.defaultProp.value]"
+            ></Option>
+          </template>
         </OptionGroup>
       </div>
     </Select>
@@ -73,6 +77,7 @@ export default {
           label: "label",
           value: "value",
         },
+        filter: { key: null, value: null }, // 过滤掉符合条件的
       };
     },
     // 清空的时候为"",后端要求最好是null,故强制转换一下
@@ -84,6 +89,11 @@ export default {
       setTimeout(() => {
         this.getWidgetHeight();
       }, 80);
+    },
+    // 过滤出符合条件的
+    isFilter(option) {
+      let { key, value } = this.field.filter;
+      return !(key && value != null && option[key] == value);
     },
   },
 };
