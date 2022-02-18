@@ -11,8 +11,6 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 1、表单数据采用标准的JSON Schema
 2、ajv校验
 3、字段依赖关联
-
-
 4、无layout时，自动布局
 
 
@@ -22,7 +20,9 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 <template>
   <div class="rich-form-app">
     {{ values }}
-    <Button @click="onSetValues"></Button>
+    <br />
+    <Button type="info" size="small" @click="onSetValues">赋值values</Button>
+    <Button type="primary" size="small" @click="changeTheme">改变主题</Button>
     <Button
       size="small"
       type="success"
@@ -36,8 +36,9 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :values="values"
       :isDesign="false"
       :hooks="hooks"
+      :theme="theme"
       :authorization="{
-        value: '4Ff16dcf98Pv01q0d3241448f0P08abb4W767OPqr6179fd16edd174DJc15',
+        value: '21f16dcf98j09x40d3248448fE5J8abbtrE631n6K7179fd16edd17161Tgf',
       }"
       @action="formAction"
     ></RichForm>
@@ -52,6 +53,7 @@ export default {
   data() {
     return {
       hooks: {},
+      theme: "",
       schema: {
         $schema: "http://json-schema.org/draft-07/schema#",
         title: "设备属性",
@@ -958,7 +960,11 @@ export default {
       console.log(event);
     },
     onSetValues() {
+      // 手动赋值values，是否会重新派发隐藏和下拉选项
       this.$set(this.values, "selectA", "选项2");
+    },
+    changeTheme() {
+      this.theme = "#E6A23C";
     },
   },
 };

@@ -60,9 +60,9 @@
     ]"
     :id="formId"
   >
-    <!-- <button @click="onTest">test</button> -->
+    <!-- :style="{ background: '#333' }" -->
     <!-- 画布遮罩，用于全局点击事件 -->
-    <!-- <div class="canvas-mask" @click="onClickCanvas"></div> -->
+    <div class="canvas-mask" @click="onClickCanvas"></div>
     <perfect-scrollbar :style="{ 'min-height': '20px' }">
       <!-- 顶部按钮 -->
       <actions
@@ -101,20 +101,21 @@ import Actions from "./actions";
 import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
 import eventbus from "./utils/eventbus";
+import themeMixin from "./utils/themeMixin";
 import { hasPath, clone, pick } from "ramda";
-import CommonMixin from "./utils/commonMixin";
-import "element-ui/lib/theme-chalk/index.css";
+// import "element-ui/lib/theme-chalk/index.css";
 import { defaultForm, defaultSchema } from "./utils/defaultData";
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
-// import variables from "./utils/element-variables.scss";
+import CommonMixin from "./utils/commonMixin";
 
 export default {
   name: "RichForm",
-  mixins: [CommonMixin],
+  mixins: [CommonMixin, themeMixin],
   components: { FormLayout, AutoLayout, PerfectScrollbar, Actions },
   props: {
+    theme: { type: String, default: "" }, // 主题颜色
     schema: { type: Object, default: () => ({}) }, // 表单的字段描述
     values: { type: Object, default: () => ({}) }, // 表单的值
     form: { type: Object, default: () => ({}) }, // 表单布局
@@ -142,6 +143,7 @@ export default {
       handler() {
         if (!this.globalVars.loadCompleted) return;
         for (let key in this.values) {
+          // values手动赋值，重新派发
           this.dispatchHide(key);
           this.dispatchOptions(key);
         }
@@ -166,7 +168,6 @@ export default {
         loadCompleted: false, // 是否加载完成
         loadCompletedTimeout: null,
       },
-      // theme: variables.theme,
     };
   },
   mounted() {
@@ -201,10 +202,6 @@ export default {
     },
   },
   methods: {
-    // onTest() {
-    //   this.$set(this.globalVars, "theme", "#f00");
-    //   console.log(123);
-    // },
     load() {
       this.onAuthorize();
       this._registerEvents();

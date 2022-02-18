@@ -65,8 +65,11 @@ export default {
                             if (hasMatch && !matchOne) matchOne = true; // 只要有一个匹配
                             if (hasMatch) pickMatchValue.push(valItem)
                         })
-                        if (pickMatchValue.length > 0 && Array.isArray(this.values[name]))
-                            this.values[name] = pickMatchValue;
+                        if (pickMatchValue.length > 0 && Array.isArray(this.values[name])) {
+                            // 在index.html中watch values，加这个判断避免无限循环
+                            if (JSON.stringify(this.values[name]) != JSON.stringify(pickMatchValue))
+                                this.values[name] = pickMatchValue;
+                        }
                     }
                     if (oldOptions != newOptions && !matchOne) this.values[dictItem.field.name] = null;
                 }
