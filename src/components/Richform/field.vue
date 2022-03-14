@@ -42,6 +42,7 @@
         </div>
         <span
           class="label-suffix"
+          :style="{ color: colors.fontColor }"
           v-if="
             isShyTitle &&
             form.labelSuffix.length > 0 &&

@@ -969,7 +969,7 @@ export default {
     },
     changeTheme() {
       this.colors = {
-        theme: "#2E7FF7",
+        theme: "#121B2C",
         fontColor: "#F8F4F4",
         btnColor: "#F8F4F4",
         btnBgColor: "#040C19",

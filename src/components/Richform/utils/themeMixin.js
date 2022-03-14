@@ -27,7 +27,9 @@ export default {
         },
         updateStyle(style) {
             let newStyle = style;
-            let { theme, fontColor, btnColor, activeColor, btnBgColor, dateRangeBgColor, multiOptionBgColor } = Object.assign(this.colors, { ...defaultColors }, this.colors);
+            let mergeColor = Object.assign({ ...defaultColors }, this.colors);
+            let { theme, fontColor, btnColor, activeColor, btnBgColor, dateRangeBgColor, multiOptionBgColor } = mergeColor;
+            Object.assign(this.colors, mergeColor);
             fontColor = fontColor.replace("#", "");
             // brand color
             newStyle = newStyle.replace(new RegExp('409EFF', 'ig'), activeColor.replace("#", "")) // 复选框,tab,选中的背景颜色
