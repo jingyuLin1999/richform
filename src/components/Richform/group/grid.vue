@@ -10,13 +10,17 @@
       class="grid-title"
       v-if="gridItem.showTitle"
       :class="[form.grid ? 'grid-title-border' : '']"
+      :style="{ color: colors.fontColor }"
       @click="onClickedItem(gridItem)"
     >
       {{ gridItem.title }}
     </div>
     <div class="gird-content">
       <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
-      <div class="grid-flex">
+      <div
+        class="grid-flex"
+        :style="{ flexWrap: gridItem.flexWrap ? 'wrap' : 'nowrap' }"
+      >
         <div
           :class="[
             'grid-column',
@@ -32,6 +36,7 @@
             :isDesign="isDesign"
             :form="form"
             :values="values"
+            :colors="colors"
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"

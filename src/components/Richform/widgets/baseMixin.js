@@ -7,6 +7,7 @@ export default {
         field: { type: Object, default: () => ({}) },
         schema: { type: Object, default: () => ({}) },
         values: { type: Object, default: () => ({}) },
+        colors: { type: Object, default: () => ({}) },
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
     },

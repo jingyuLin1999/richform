@@ -8,6 +8,7 @@ export default {
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
         realyValues: { type: Object, default: () => ({}) },
+        colors: { type: Object, default: () => ({}) },
     },
     inject: ["formId", "isFriendValue"],
     data() {

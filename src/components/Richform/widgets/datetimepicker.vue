@@ -16,7 +16,7 @@
       :start-placeholder="field.startPlaceholder"
       :end-placeholder="field.endPlaceholder"
       :picker-options="field.pickerOptions"
-      :style="{ width: '100%' }"
+      :style="{ width: '100%', '--range-input-bgcolor': colors.theme }"
     ></DatePicker>
   </div>
 </template>
@@ -94,8 +94,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .date-picker-widget {
   width: 100%;
+  .el-range-input {
+    background: var(--range-input-bgcolor) !important;
+  }
 }
 </style>

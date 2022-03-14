@@ -23,3 +23,13 @@ export const defaultSchema = {
     anyOf: [],
     oneOf: [],
 }
+
+export const defaultColors = {
+    theme: "#121B2C", 
+    fontColor: "#F8F4F4",
+    btnColor: "#F8F4F4",
+    btnBgColor: "#040C19",
+    activeColor: "#4F9FFE",
+    dateRangeBgColor: "#999",
+    multiOptionBgColor: "#ddd"
+}

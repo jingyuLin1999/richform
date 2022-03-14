@@ -26,6 +26,7 @@
             :isDesign="isDesign"
             :form="form"
             :values="values"
+            :colors="colors"
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"

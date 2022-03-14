@@ -14,6 +14,7 @@
         :schema="schema"
         :values="values"
         :form="form"
+        :colors="colors"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
       />
@@ -24,6 +25,7 @@
           :schema="schema"
           :values="values"
           :form="form"
+          :colors="colors"
           :tabsItem="item"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
@@ -39,6 +41,7 @@
           :schema="schema"
           :values="values"
           :form="form"
+          :colors="colors"
           :gridItem="item"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
@@ -56,6 +59,7 @@
           :schema="schema"
           :values="values"
           :form="form"
+          :colors="colors"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
@@ -70,6 +74,7 @@
         :schema="schema"
         :values="values"
         :form="form"
+        :colors="colors"
         :isDesign="isDesign"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
@@ -108,6 +113,7 @@ export default {
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
     realyValues: { type: Object, default: () => ({}) },
+    colors: { type: Object, default: () => ({}) },
   },
   methods: {},
 };

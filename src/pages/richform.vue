@@ -36,7 +36,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :values="values"
       :isDesign="false"
       :hooks="hooks"
-      :theme="theme"
+      :colors="colors"
       :authorization="{
         value: '21f16dcf98j09x40d3248448fE5J8abbtrE631n6K7179fd16edd17161Tgf',
       }"
@@ -54,6 +54,7 @@ export default {
     return {
       hooks: {},
       theme: "",
+      colors: {},
       schema: {
         $schema: "http://json-schema.org/draft-07/schema#",
         title: "设备属性",
@@ -273,6 +274,7 @@ export default {
             title: "regExp属性例子",
             showTitle: true,
             isClicked: false,
+            flexWrap: true,
             ratio: "1:3",
             fields: [
               [
@@ -574,6 +576,7 @@ export default {
             title: "文件上传",
             showTitle: true,
             isClicked: false,
+            flexWrap: true,
             fields: [
               [
                 {
@@ -824,6 +827,7 @@ export default {
             title: "栅格布局",
             showTitle: true,
             isClicked: false,
+            flexWrap: true,
             fields: [
               [
                 {
@@ -964,7 +968,15 @@ export default {
       this.$set(this.values, "selectA", "选项2");
     },
     changeTheme() {
-      this.theme = "#E6A23C";
+      this.colors = {
+        theme: "#2E7FF7",
+        fontColor: "#F8F4F4",
+        btnColor: "#F8F4F4",
+        btnBgColor: "#040C19",
+        activeColor: "#4F9FFE",
+        dateRangeBgColor: "#999",
+        multiOptionBgColor: "#ddd",
+      };
     },
   },
 };

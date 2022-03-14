@@ -36,6 +36,7 @@
               ? 'required-field'
               : '',
           ]"
+          :style="{ color: colors.fontColor }"
         >
           {{ fieldTitle }}
         </div>
@@ -75,6 +76,7 @@
           :schema="fieldSchema"
           :values="values"
           :field="field"
+          :colors="colors"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
           @change="onChange"
@@ -134,6 +136,7 @@ export default {
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
     realyValues: { type: Object, default: () => ({}) },
+    colors: { type: Object, default: () => ({}) },
   },
   data() {
     return {
