@@ -36,7 +36,6 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :values="values"
       :isDesign="false"
       :hooks="hooks"
-      :colors="colors"
       :authorization="{
         value: '21f16dcf98j09x40d3248448fE5J8abbtrE631n6K7179fd16edd17161Tgf',
       }"
@@ -53,8 +52,6 @@ export default {
   data() {
     return {
       hooks: {},
-      theme: "",
-      colors: {},
       schema: {
         $schema: "http://json-schema.org/draft-07/schema#",
         title: "设备属性",
@@ -196,6 +193,7 @@ export default {
         validator: "input", // submit
         labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left/center
         labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
+        colors: {}, // 颜色
         actions: [
           //声明显示在下方和动作按钮
           {
@@ -222,6 +220,44 @@ export default {
           },
         ],
         layout: [
+          {
+            widget: "button",
+            name: "button",
+            title: "按钮",
+            type: "primary",
+            size: "small",
+            isGroup: true,
+            options: [
+              {
+                title: "按钮一",
+                type: "success", // primary / success / warning / danger / info / text
+                disabled: false,
+                loading: false,
+                style: {},
+                isGroup: false,
+                size: "small",
+                round: false,
+                plain: false,
+                circle: false,
+                leftIcon: "",
+                rightIcon: "",
+              },
+              {
+                title: "按钮二",
+                type: "warning",
+                disabled: false,
+                loading: false,
+                style: {},
+                isGroup: false,
+                size: "small",
+                round: false,
+                plain: false,
+                circle: false,
+                leftIcon: "",
+                rightIcon: "",
+              },
+            ],
+          },
           {
             widget: "icon",
             title: "图标",
@@ -968,7 +1004,7 @@ export default {
       this.$set(this.values, "selectA", "选项2");
     },
     changeTheme() {
-      this.colors = {
+      this.form.colors = {
         theme: "#121B2C",
         fontColor: "#F8F4F4",
         btnColor: "#F8F4F4",

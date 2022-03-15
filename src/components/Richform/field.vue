@@ -81,6 +81,7 @@
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
           @change="onChange"
+          @buttonEvent="onButtonEvent"
           @widgetHeight="getWidgetHeight"
         />
         <!-- 错误信息 -->
@@ -328,6 +329,9 @@ export default {
       this.removeErrorAndRequire();
       this.validateField(fieldName, schema, value);
       this.onDispatch(fieldName);
+    },
+    onButtonEvent(info) {
+      this.emit("action", info);
     },
   },
 };

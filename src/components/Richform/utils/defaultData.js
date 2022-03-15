@@ -6,7 +6,15 @@ export const defaultForm = {
     validator: "input", // submit
     labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
     labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
-    theme: {} // 定制颜色
+    colors: {  // 主题颜色
+        theme: "", // #121B2C
+        fontColor: "", // #F8F4F4
+        btnColor: "", // #F8F4F4
+        btnBgColor: "", // #040C19
+        activeColor: "", // #4F9FFE
+        dateRangeBgColor: "", // #999
+        multiOptionBgColor: "" // #ddd
+    },
 }
 
 export const defaultSchema = {
@@ -22,14 +30,4 @@ export const defaultSchema = {
     allOf: [],
     anyOf: [],
     oneOf: [],
-}
-
-export const defaultColors = {
-    theme: "#121B2C", 
-    fontColor: "#F8F4F4",
-    btnColor: "#F8F4F4",
-    btnBgColor: "#040C19",
-    activeColor: "#4F9FFE",
-    dateRangeBgColor: "#999",
-    multiOptionBgColor: "#ddd"
 }

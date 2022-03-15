@@ -59,7 +59,7 @@
       form.activeDesign && isDesign ? 'active-form-design' : '',
     ]"
     :id="formId"
-    :style="{ background: colors.theme }"
+    :style="{ background: friendForm.colors.theme || '#fff' }"
   >
     <!-- 画布遮罩，用于全局点击事件 -->
     <div class="canvas-mask" @click="onClickCanvas"></div>
@@ -77,7 +77,7 @@
         :values="richValues"
         :isDesign="isDesign"
         :form="form"
-        :colors="colors"
+        :colors="friendForm.colors"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
         :realyValues="realyValues"
@@ -103,7 +103,7 @@ import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
 import eventbus from "./utils/eventbus";
 import themeMixin from "./utils/themeMixin";
-import { hasPath, clone, pick } from "ramda";
+import { hasPath, clone, pick, mergeDeepRight } from "ramda";
 import "element-ui/lib/theme-chalk/index.css";
 import { defaultForm, defaultSchema } from "./utils/defaultData";
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
@@ -125,7 +125,6 @@ export default {
     deepValues: { type: Boolean, default: false }, // 值是否开启深度编辑模式
     isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址，若需要转换类型，需要在shema中指明要转换的数据类型
     authorization: { type: Object, default: () => ({}) }, // 权限
-    colors: { type: Object, default: () => ({}) }, // 表单颜色
   },
   provide() {
     return {
@@ -154,7 +153,6 @@ export default {
   },
   data() {
     return {
-      defaultForm,
       formId: Math.random().toString(15).slice(2, 15), // 表单id
       fieldErrors: {}, // 字段错误信息收集
       dependencies: {}, // 字段相互依赖信息
@@ -184,7 +182,7 @@ export default {
       return friendSchema;
     },
     friendForm() {
-      return Object.assign({}, this.defaultForm, this.form);
+      return mergeDeepRight(defaultForm, this.form);
     },
     topActions() {
       if (!this.form.actions) return [];

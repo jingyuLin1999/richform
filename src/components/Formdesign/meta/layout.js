@@ -53,7 +53,7 @@ export const widgets = [
         isGroup: true,
         isButton: false,
         disabled: false,
-        border: true,         title: "行显示",
+        border: true, title: "行显示",
         widget: "select",
         name: "labelInline",
         size: "small",
@@ -250,6 +250,23 @@ export const widgets = [
         size: "small",
         disabled: false,
         fontSize: "13px",
+    },
+    {
+        title: "按钮",
+        name: "button",
+        widget: "button",
+        type: "default", // primary / success / warning / danger / info / text
+        disabled: false,
+        loading: false,
+        style: {},
+        size: "default",
+        round: false,
+        plain: false,
+        circle: false,
+        leftIcon: "",
+        rightIcon: "",
+        isGroup: false,
+        options: []
     },
 ]
 

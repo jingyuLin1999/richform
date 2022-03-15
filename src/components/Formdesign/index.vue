@@ -81,6 +81,7 @@
                 :form="attribute.form"
                 :values="attribute.values"
                 :isDesign="false"
+                @action="attributeAction"
               ></RichForm>
             </TabPane>
             <TabPane label="校验规则" name="rules" class="design-tab">
@@ -124,6 +125,15 @@ export default {
           validator: "input", // submit
           labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
           labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
+          colors: {
+            theme: "",
+            fontColor: "",
+            btnColor: "",
+            btnBgColor: "",
+            activeColor: "",
+            dateRangeBgColor: "",
+            multiOptionBgColor: "",
+          }, // 颜色
           layout: [],
         },
         values: {},
@@ -152,6 +162,12 @@ export default {
     };
   },
   methods: {
+    attributeAction(info) {
+      if (info.name == "resetTheme") {
+        for (let key in this.design.form.colors)
+          this.design.form.colors[key] = "";
+      }
+    },
     // 拖拽option参数：https://github.com/SortableJS/Sortable#options
     // 拖拽迁移记录：https://github.com/SortableJS/Vue.Draggable/blob/master/documentation/migrate.md#options-props
     dragOptions() {

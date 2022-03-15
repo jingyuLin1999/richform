@@ -98,10 +98,59 @@ export const attribute = {
                 ],
             },
             {
-                title: "颜色选择器",
-                widget: "colorpicker",
-                name: "colorPrimary",
+                widget: "grid",
+                title: "颜色设置",
+                showTitle: false,
+                isClicked: false,
+                fields: [
+                    [
+                        {
+                            title: "主题",
+                            widget: "colorpicker",
+                            name: "colors.theme",
+                        },
+                        {
+                            title: "按钮字体",
+                            widget: "colorpicker",
+                            name: "colors.btnColor",
+                        },
+                        {
+                            title: "激活字体",
+                            widget: "colorpicker",
+                            name: "colors.activeColor",
+                        },
+                        {
+                            title: "多选选项背景",
+                            widget: "colorpicker",
+                            name: "colors.multiOptionBgColor",
+                        },
+                    ],
+                    [
+                        {
+                            title: "字体",
+                            widget: "colorpicker",
+                            name: "colors.fontColor",
+                        },
+                        {
+                            title: "按钮背景",
+                            widget: "colorpicker",
+                            name: "colors.btnBgColor",
+                        },
+                        {
+                            title: "日期范围背景",
+                            widget: "colorpicker",
+                            name: "colors.dateRangeBgColor",
+                        },
+                    ]
+                ]
             },
+            // {
+            //     title: "恢复主题",
+            //     widget: "button",
+            //     name: "resetTheme",
+            //     size: "small",
+            //     type: "primary"
+            // },
         ],
     }
 }

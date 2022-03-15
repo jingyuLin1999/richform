@@ -337,7 +337,7 @@ export default {
 .icon-container {
   display: flex;
   flex-wrap: wrap;
-  height: 500px;
+  max-height: 400px;
   overflow: auto;
   border-left: 1px solid #eee;
   border-top: 1px solid #eee;
