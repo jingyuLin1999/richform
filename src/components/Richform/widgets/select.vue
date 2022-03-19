@@ -21,7 +21,7 @@
     >
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
-        <template v-for="(option, index) in field.options">
+        <template v-for="(option, index) in friendOptions">
           <Option
             v-if="isFilter(option)"
             :key="index"
@@ -34,7 +34,7 @@
       <!-- 分组 -->
       <div v-else>
         <OptionGroup
-          v-for="(group, index) in field.options"
+          v-for="(group, index) in friendOptions"
           :key="index"
           :label="group.label"
         >
@@ -60,6 +60,25 @@ export default {
   components: { Select, Option, OptionGroup },
   mounted() {
     this.calcuHeight();
+  },
+  computed: {
+    // 有可能是直接给个数组字符串格式，需要转化一下
+    friendOptions() {
+      let { options, defaultProp } = this.field;
+      if (typeof options[0] == "object") return options;
+      let friendOptions = [];
+      options.map((item) => {
+        let option =
+          typeof item == "string"
+            ? {
+                [defaultProp.value]: item,
+                [defaultProp.label]: item,
+              }
+            : item;
+        friendOptions.push(option);
+      });
+      return friendOptions;
+    },
   },
   methods: {
     defaultFieldAttr() {

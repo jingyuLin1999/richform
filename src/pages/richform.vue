@@ -90,7 +90,7 @@ export default {
             require: true,
             // default: "选项1",
           },
-          factoryid: {
+          product_code: {
             type: "string",
             require: true,
           },
@@ -156,7 +156,7 @@ export default {
         },
         then: {
           properties: {
-            factoryid: {
+            product_code: {
               type: "string",
               minLength: 1,
               require: true,
@@ -470,7 +470,7 @@ export default {
                   {
                     title: "触发字典过滤",
                     widget: "input",
-                    name: "factoryid",
+                    name: "product_code",
                     prefixIcon: "el-icon-search",
                     prepend: "D", // 当type等于text有效。
                     append: "KB",
@@ -479,10 +479,14 @@ export default {
                     title: "字典过滤",
                     widget: "select",
                     name: "dictTest",
-                    // dict: {
-                    //   "factoryid == any":
-                    //     "http://192.168.100.11:8080/manage/dict/getWorkshopByFactoryId.do",
-                    // },
+                    dictConfig: {
+                      method: "post",
+                      respProp: "data",
+                    },
+                    dict: {
+                      "product_code == any":
+                        "http://192.168.100.217:8899/ae_cnc/chk_detect/getProGroupList",
+                    },
                     options: [],
                   },
                 ],

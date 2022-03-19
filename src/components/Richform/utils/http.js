@@ -34,12 +34,12 @@ service.interceptors.request.use(
 // response interceptor
 service.interceptors.response.use(
   response => {
-    const res = response.data
-    if (res.status !== 200) {
+    const { data, status } = response
+    if (status != 200) {
       Message({ message: res.msg || 'Error', type: 'error', duration: 5 * 1000 })
       return Promise.reject(new Error(res.msg || 'Error'))
     }
-    return res
+    return data
   },
   error => {
     console.log('err' + error) // for debug

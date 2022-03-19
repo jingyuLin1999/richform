@@ -5,11 +5,11 @@ export function isUrl(url) {
     return Exp.test(url);
 }
 
-export function loadDict(url, data) {
+export function loadDict(url, data, method) {
     return request({
-        method: 'post',
         url,
-        data,
+        method: method,
+        [method == "post" ? "data" : "params"]: data
     })
 }
 

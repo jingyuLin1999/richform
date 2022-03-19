@@ -19,6 +19,16 @@ export default {
                 : value == null ? "null" : typeof value;
             return this.friendDefaultValue(type);
         },
+        deepPick(keys = [], obj) {
+            let pickObj = null;
+            if (keys.length == 0) return obj;
+            keys.map((key, index) => {
+                pickObj = obj[key];
+                if (pickObj && keys.length != index + 1)
+                    obj = pickObj;
+            })
+            return pickObj;
+        },
         // 对依赖本字段的字典进行派发
         async dispatchOptions(fieldName) {
             let dicts = this.dependencies[fieldName];
@@ -34,8 +44,12 @@ export default {
                         let options = [];
                         try {
                             // 若是url则发起http请求获取字典
-                            const { payload } = await loadDict(dictItem.dictValue, { [fieldName]: this.values[fieldName] });
-                            if (Array.isArray(payload)) options = payload;
+                            if (this.values[fieldName] != null && this.values[fieldName] != "") {
+                                const { method, respProp } = Object.assign({ method: "post", respProp: "" }, dictItem.field.dictConfig);
+                                const response = await loadDict(dictItem.dictValue, { [fieldName]: this.values[fieldName] }, method);
+                                const payload = this.deepPick(respProp.split("."), response);
+                                if (Array.isArray(payload) && payload.length > 0) options = payload;
+                            }
                         } catch (e) {
                             console.error(e);
                         }
