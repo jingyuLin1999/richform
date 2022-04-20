@@ -18,6 +18,14 @@
     * 错误处理
 
 ## 预览
+
+### 在线预览
+
+[表单设计器](http://117.73.12.76/demo/richform/#/ )  
+
+[富表单完整功能](http://117.73.12.76/demo/richform/#/form-design )   
+
+### 本地预览
 ```
 npm install
 

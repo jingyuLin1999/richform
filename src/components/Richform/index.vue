@@ -216,8 +216,8 @@ export default {
         { key: "Authorization", value: "Authorization" },
         this.authorization
       );
-      sessionStorage.setItem("auth-key", key);
-      sessionStorage.setItem("auth-value", value);
+      sessionStorage.setItem("richform-key", key);
+      sessionStorage.setItem("richform-value", value);
     },
     noReady() {
       return Object.keys(this.form).length == 0;

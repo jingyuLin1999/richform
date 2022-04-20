@@ -18,6 +18,7 @@
       @click="onClickedItem(field)"
     >
       <div
+        v-show="field.widget != 'button'"
         :class="[
           'title-wrapper',
           'label-' + (form.labelAlign || 'right'),
@@ -62,6 +63,7 @@
       </div>
       <div
         v-if="form.grid && form.labelInline"
+        v-show="field.showLabel != 'button'"
         class="label-right-border"
         :style="{ height: lableRightBorder + 'px' }"
       ></div>

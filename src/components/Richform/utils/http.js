@@ -3,25 +3,16 @@ import { Message } from 'element-ui'
 
 // create an axios instance
 const service = axios.create({
-  // headers: {
-  //   'Content-Type': 'application/json;charset=UTF-8' // application/x-www-form-urlencoded
-  // },
   timeout: 5000 // request timeout
 })
 
 // request interceptor
 service.interceptors.request.use(
   config => {
-    const authKey = sessionStorage.getItem("auth-key");
-    const authValue = sessionStorage.getItem("auth-value");
-    if (authKey == "" || authValue == "") {
-      Message({
-        message: '无法请求数据，token未定义',
-        type: 'error'
-      })
-      return Promise.reject('无法请求数据，token未定义')
-    }
-    config.headers[authKey] = authValue
+    const authKey = sessionStorage.getItem("richform-key");
+    const authValue = sessionStorage.getItem("richform-value");
+    if (authKey == "" || authValue == "") console.warn("未定义token信息")
+    else config.headers[authKey] = authValue
     return config;
   },
   error => {
