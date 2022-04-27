@@ -25,7 +25,11 @@
           form.labelInline ? 'label-hori' : 'label-vert',
         ]"
         :style="{
-          width: form.labelInline ? form.labelWidth : '100%',
+          width: form.labelInline
+            ? isShyTitle
+              ? form.labelWidth
+              : '0px'
+            : '100%',
         }"
       >
         <div
@@ -139,7 +143,6 @@ export default {
     values: { type: Object, default: () => ({}) },
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
-    realyValues: { type: Object, default: () => ({}) },
     colors: { type: Object, default: () => ({}) },
   },
   data() {
@@ -153,7 +156,7 @@ export default {
     this.load();
   },
   watch: {
-    realyValues: {
+    values: {
       handler() {
         if (!this.isDeepValues) return;
         this.createValue();
@@ -166,7 +169,7 @@ export default {
       let widget = this.field.widget || this.fieldSchema.widget;
       if (!widget) return;
       return () => ({
-        // to handle bug of after build error.
+        // to handle bug in buildding.
         component: new Promise(async (resolve) => {
           resolve(await require(`./widgets/${widget}`));
         }),
@@ -190,9 +193,14 @@ export default {
       this.createValue();
     },
     getWidgetHeight(valueHeight) {
-      const labelHeight = this.$refs.fieldLabel.offsetHeight;
-      const height = labelHeight > valueHeight ? labelHeight : valueHeight;
-      this.$set(this.$data, "lableRightBorder", height);
+      this.$nextTick(() => {
+        const labelDom = this.$refs.fieldLabel;
+        if (labelDom) {
+          const labelHeight = labelDom.offsetHeight;
+          const height = labelHeight > valueHeight ? labelHeight : valueHeight;
+          this.$set(this.$data, "lableRightBorder", height);
+        }
+      });
     },
     emit() {
       // 全局总线
@@ -228,30 +236,33 @@ export default {
         this.requireds.push(this.field.name);
     },
     createValue() {
-      // 引用地址不能改变，直接返回
-      if (!this.isFriendValue) return;
-      // TODO 提供两种模式，树型结构或普通结构
+      // 提供两种模式，树型结构或普通结构
       // 有值则不需要创建，即values的优先级大于default的值
-      if (this.values[this.field.name] != undefined && !this.isDeepValues)
-        return;
+      let fieldValue = this.isDeepValues
+        ? path(this.field.name.split("."), this.values)
+        : this.values[this.field.name];
+      if (fieldValue != undefined && fieldValue != null) return;
       // 是否立即触发验证
-      const defaultValue = this.isDeepValues
-        ? path(this.field.name.split("."), this.realyValues)
+      let defaultValue = this.isDeepValues
+        ? path(this.field.name.split("."), this.values)
         : this.values[this.field.name] ||
           this.fieldSchema.default ||
           this.field.default;
       // 若有默认值，则需要直接进行校验
       if (defaultValue)
         this.validateField(this.field.name, this.fieldSchema, defaultValue);
-
       // 生成默认值
-      this.$set(
-        this.values,
-        this.field.name,
-        defaultValue
+      defaultValue =
+        defaultValue != null && defaultValue != undefined
           ? defaultValue
-          : this.friendDefaultValue(this.fieldSchema.type)
-      );
+          : this.friendDefaultValue(this.fieldSchema.type);
+      if (this.isDeepValues)
+        this.deepSetValue(
+          this.field.name.split("."),
+          this.values,
+          defaultValue
+        );
+      else this.$set(this.values, this.field.name, defaultValue);
     },
     pickFieldSchema(fieldName) {
       const fieldSchema =

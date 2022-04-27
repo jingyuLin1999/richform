@@ -7,10 +7,9 @@ export default {
         isDesign: { type: Boolean, default: false },
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
-        realyValues: { type: Object, default: () => ({}) },
         colors: { type: Object, default: () => ({}) },
     },
-    inject: ["formId", "isFriendValue"],
+    inject: ["formId"],
     data() {
         return {
             designValid: true,

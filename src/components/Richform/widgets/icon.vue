@@ -30,6 +30,9 @@ import { Popover, Button } from "element-ui";
 export default {
   mixins: [baseMixin],
   components: { Popover, Button },
+  mounted() {
+    this.latestIcon = this.value;
+  },
   methods: {
     defaultFieldAttr() {
       return {

@@ -1,4 +1,4 @@
-import { type } from "ramda";
+import { type, mergeDeepRight } from "ramda";
 import { isUrl, loadDict, strToObj } from "../utils";
 import CommonMixin from "../utils/commonMixin";
 
@@ -17,7 +17,7 @@ export default {
             widgetId: Math.random().toString(15).slice(2, 15)
         }
     },
-    inject: ["dependencies", "isFriendValue", "globalVars", "regExpFields"],
+    inject: ["dependencies", "globalVars", "regExpFields", "isDeepValues"],
     mixins: [CommonMixin],
     created() {
         this.load();
@@ -28,18 +28,17 @@ export default {
     computed: {
         value: {
             get() {
-                if (this.isFriendValue) {
-                    this.updateValue++; // 强制更新
-                    let friendValue = { value: this.friendValue() }; // 必须改变地址，否则会出现无限循环
-                    return friendValue.value;
-                }
-                else return this.values[this.field.name];
+                this.updateValue++; // 强制更新
+                let friendValue = {  // 必须改变地址，否则会出现无限循环
+                    value: this.isDeepValues ?
+                        this.deepPick(this.field.name.split("."), this.values) :
+                        this.friendValue()
+                };
+                return friendValue.value;
             },
             set(value) {
-                if (this.isFriendValue) {
-                    let emitValue = this.beforeChange(value)
-                    this.changeValue(emitValue)
-                } else this.values[this.field.name] = value
+                let emitValue = this.beforeChange(value)
+                this.changeValue(emitValue)
             }
         },
         dict() {
@@ -67,7 +66,7 @@ export default {
         },
         $setFieldAttr() {
             const defaultFieldAttr = this.defaultFieldAttr();
-            let fieldAttr = Object.assign(defaultFieldAttr, this.field)
+            let fieldAttr = mergeDeepRight(defaultFieldAttr, this.field);
             for (const [key, value] of Object.entries(fieldAttr))
                 this.$set(this.field, key, value)
         },
@@ -151,9 +150,14 @@ export default {
             if (!this.field.hasOwnProperty("dict") || this.field.length == 0) return;
             if (typeof this.field.dict == "string" && isUrl(this.field.dict)) {
                 // dict字段是url则直接获取数据，并赋值给options
-                // TODO 未调试
-                let options = await loadDict(this.field.dict);
-                this.$set(this.field, "options", options);
+                const { method, respProp, params } = this.field.dictConfig;
+                const response = await loadDict(this.field.dict, params, method);
+                const options = this.deepPick(respProp.split("."), response);
+                if (Array.isArray(options) && options.length > 0) this.$set(this.field, "options", options);
+                if (this.field.defaultOption >= 0 && this.field.options.length > 0) {
+                    let option = options[this.field.defaultOption];
+                    this.values[this.field.name] = typeof option == "object" ? option[this.field.defaultProp.value] : option
+                }
             } else if (Object.keys(this.field.dict).length > 0) {
                 for (let key in this.field.dict) {
                     let dictItem = this.field.dict[key];
@@ -176,6 +180,7 @@ export default {
                             keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
                             dictValue: dictItem,
                             field: this.field,
+                            type: this.schema.type, // 在派发时为了友好值，需要知道字段类型
                             options: JSON.parse(JSON.stringify(this.field.options))
                         });
                     }

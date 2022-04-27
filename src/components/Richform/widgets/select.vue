@@ -61,6 +61,12 @@ export default {
   mounted() {
     this.calcuHeight();
   },
+  watch: {
+    // 多选和单选切换，value数据类型需跟着转换
+    "field.multiple"(newVal) {
+      this.value = newVal ? [] : "";
+    },
+  },
   computed: {
     // 有可能是直接给个数组字符串格式，需要转化一下
     friendOptions() {
@@ -92,6 +98,13 @@ export default {
         collapseTags: false, // 多选用tags显示
         filterable: false, // 说明：搜索label
         allowCreate: false, // 说明：是否允许创建条目,谨慎使用  注意：filterable为true时有效
+        defaultOption: -1, // 当字典从服务器加载后默认选中的选项下标
+        dictConfig: {
+          // 字典配置
+          method: "post",
+          respProp: "",
+          params: {}, // 一些固定的过滤参数
+        },
         defaultProp: {
           label: "label",
           value: "value",
@@ -105,9 +118,9 @@ export default {
     },
     // 有延迟，重复计算高度
     calcuHeight() {
-      setTimeout(() => {
+      this.$nextTick((_) => {
         this.getWidgetHeight();
-      }, 80);
+      });
     },
     // 过滤出符合条件的
     isFilter(option) {

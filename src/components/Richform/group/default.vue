@@ -8,7 +8,6 @@
       :schema="schema"
       :fieldErrors="fieldErrors"
       :hideFields="hideFields"
-      :realyValues="realyValues"
     ></layout>
   </div>
 </template>
@@ -19,7 +18,6 @@ export default {
   props: {
     fields: { type: Array, default: () => [] },
     form: { type: Object, default: () => ({}) },
-    realyValues: { type: Object, default: () => ({}) },
   },
   beforeCreate: function () {
     this.$options.components.Layout = () => import("../layout.vue");

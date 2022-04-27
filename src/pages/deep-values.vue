@@ -21,14 +21,17 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="richform-deep-value">
-    {{ values }}
-    <Button @click="onAddValues">新增values</Button>
-    <Button @click="changeValue">改变values</Button>
+    所有值：{{ values }}<br />
+    脏值：{{ hooks.dirtyValues }}<br />
+    <Button size="small" type="success" @click="onAddValues">新增values</Button>
+    <Button size="small" type="warning" @click="changeValue">改变values</Button>
+    <br />
     <RichForm
       :schema="schema"
       :form="form"
       :values="values"
       :isDesign="false"
+      :hooks="hooks"
       deepValues
     ></RichForm>
   </div>
@@ -42,6 +45,9 @@ export default {
   components: { RichForm, Button },
   data() {
     return {
+      hooks: {
+        dirtyValues: {},
+      },
       schema: {
         $schema: "http://json-schema.org/draft-07/schema#",
         title: "设备属性",
@@ -69,7 +75,10 @@ export default {
             title: "你好",
             widget: "select",
             name: "hello",
-            options: [{ label: "nihao", value: "hello" }],
+            options: [
+              { label: "nihao", value: "hello" },
+              { label: "richform", value: "richform" },
+            ],
           },
           {
             title: "主标题",

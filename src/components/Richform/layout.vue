@@ -30,7 +30,6 @@
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
-          :realyValues="realyValues"
         ></field-tabs>
       </template>
       <!-- 栅格布局 -->
@@ -46,7 +45,6 @@
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
-          :realyValues="realyValues"
         ></field-grid>
       </template>
       <!-- 折叠面板 -->
@@ -63,7 +61,6 @@
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
-          :realyValues="realyValues"
         ></field-collapse>
       </template>
       <!-- 普通字段 -->
@@ -78,7 +75,6 @@
         :isDesign="isDesign"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
-        :realyValues="realyValues"
       ></field>
     </template>
   </draggable>
@@ -112,7 +108,6 @@ export default {
     isDesign: { type: Boolean, default: false },
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
-    realyValues: { type: Object, default: () => ({}) },
     colors: { type: Object, default: () => ({}) },
   },
   methods: {},

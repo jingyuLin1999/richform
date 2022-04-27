@@ -11,6 +11,7 @@ export default {
                 case "object": value = {}; break;
                 case "boolean": value = false; break;
                 case "number": value = 0; break;
+                case "undefined": value = undefined; break;
             }
             return value;
         },
@@ -19,9 +20,20 @@ export default {
                 : value == null ? "null" : typeof value;
             return this.friendDefaultValue(type);
         },
+        // 深度模式设置值
+        deepSetValue(keys = [], obj = {}, value) {
+            let pickObj = null;
+            if (keys.length == 0 || !keys[0]) return;
+            keys.map((key, index) => {
+                pickObj = obj[key];
+                if (pickObj && keys.length != index + 1) obj = pickObj;
+                if (obj && keys.length == index + 1) this.$set(obj, key, value);
+            });
+        },
+        // 深度获取
         deepPick(keys = [], obj) {
             let pickObj = null;
-            if (keys.length == 0) return obj;
+            if (keys.length == 0 || !keys[0]) return obj;
             keys.map((key, index) => {
                 pickObj = obj[key];
                 if (pickObj && keys.length != index + 1)
@@ -45,8 +57,9 @@ export default {
                         try {
                             // 若是url则发起http请求获取字典
                             if (this.values[fieldName] != null && this.values[fieldName] != "") {
-                                const { method, respProp } = Object.assign({ method: "post", respProp: "" }, dictItem.field.dictConfig);
-                                const response = await loadDict(dictItem.dictValue, { [fieldName]: this.values[fieldName] }, method);
+                                const { method, respProp, params } = dictItem.field.dictConfig;
+                                const rqParams = Object.assign({ ...params }, { [fieldName]: this.values[fieldName] });
+                                const response = await loadDict(dictItem.dictValue, rqParams, method);
                                 const payload = this.deepPick(respProp.split("."), response);
                                 if (Array.isArray(payload) && payload.length > 0) options = payload;
                             }
@@ -85,7 +98,20 @@ export default {
                                 this.values[name] = pickMatchValue;
                         }
                     }
-                    if (oldOptions != newOptions && !matchOne) this.values[dictItem.field.name] = null;
+                    // 重置值
+                    if (oldOptions != newOptions && !matchOne) {
+                        let field = dictItem.field;
+                        let friendType = dictItem.type || (type(this.values[field.name]).toLowerCase());
+                        let friendValue = this.friendDefaultValue(friendType);
+                        if (field.widget == "select") {
+                            let { defaultOption, options, defaultProp } = field;
+                            if (options.length > 0 && defaultOption >= 0) {
+                                let option = options[defaultOption];
+                                friendValue = typeof option == "object" ? option[defaultProp.value] : option
+                            }
+                        }
+                        this.values[dictItem.field.name] = friendValue;
+                    }
                 }
             }
         },

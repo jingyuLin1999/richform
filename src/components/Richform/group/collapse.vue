@@ -30,7 +30,6 @@
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"
-            :realyValues="realyValues"
           ></layout>
           <actions
             v-if="Array.isArray(collapse.actions)"

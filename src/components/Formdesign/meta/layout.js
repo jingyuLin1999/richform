@@ -253,6 +253,7 @@ export const widgets = [
         title: "按钮",
         name: "button",
         widget: "button",
+        showTitle: false,
         type: "default", // primary / success / warning / danger / info / text
         disabled: false,
         loading: false,

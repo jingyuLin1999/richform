@@ -74,13 +74,12 @@
       <form-layout
         :schema="friendSchema"
         :layout="friendForm.layout"
-        :values="richValues"
+        :values="values"
         :isDesign="isDesign"
         :form="form"
         :colors="friendForm.colors"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
-        :realyValues="realyValues"
       >
       </form-layout>
       <!-- 底部按钮 -->
@@ -123,7 +122,6 @@ export default {
     hooks: { type: Object, default: () => ({}) }, // 钩子，挂载一些函数或数据供外部使用
     showBtns: { type: Boolean, default: true }, // 是否显示按钮
     deepValues: { type: Boolean, default: false }, // 值是否开启深度编辑模式
-    isFriendValue: { type: Boolean, default: true }, // 值是否是友好模式，开启这种方法会改变引用地址，若需要转换类型，需要在shema中指明要转换的数据类型
     authorization: { type: Object, default: () => ({}) }, // 权限
   },
   provide() {
@@ -131,10 +129,10 @@ export default {
       formId: this.formId,
       dependencies: this.dependencies,
       requireds: this.requireds,
-      isFriendValue: this.isFriendValue,
       isDeepValues: this.deepValues,
       globalVars: this.globalVars,
       regExpFields: this.regExpFields,
+      hooks: this.hooks,
     };
   },
   watch: {
@@ -160,7 +158,6 @@ export default {
       requireds: [], // 收集必须字段
       hideFields: {}, // 收集隐藏的字段
       dirtyValues: {}, // 脏值即values中有变化的键值对
-      rubbishyValues: {}, // 垃圾值
       regExpFields: {}, // 表达式
       globalVars: {
         // 全局变量
@@ -192,13 +189,6 @@ export default {
       if (!this.form.actions) return [];
       return this.form.actions.filter((actionItem) => !actionItem.top);
     },
-    richValues() {
-      return this.deepValues ? this.rubbishyValues : this.values;
-    },
-    realyValues() {
-      // 开启deepValues时richValues返回的实际是rubbishyValues值,在field无法根据values赋初值，故需传入
-      return this.values;
-    },
   },
   methods: {
     load() {
@@ -209,6 +199,7 @@ export default {
     initHooks() {
       this.hooks.validate = this.globalValidate;
       this.hooks.reset = this.onReset;
+      this.hooks.dirtyValues = this.dirtyValues;
     },
     onAuthorize() {
       if (Object.keys(this.authorization).length == 0) return;
@@ -226,15 +217,16 @@ export default {
       try {
         // 若是deepValues需要values进行赋值
         if (this.deepValues) {
-          let valueKeys = fieldName.split(".");
+          let valueKeys = (fieldName || "").split(".");
           let checkPath = hasPath(valueKeys, this.values);
-          if (checkPath)
-            eval("this.values" + "['" + valueKeys.join("']['") + "'] = value"); // TODO 防止注入
+          if (checkPath) this.deepSetValue(valueKeys, this.values, value);
+        } else {
+          // handle bug 实际值已经更新，但dom没有变化
+          // this.$delete(this.values, fieldName);
+          this.$set(this.values, fieldName, value);
         }
-        // handle bug 实际值已经更新，但dom没有变化
-        this.$delete(this.richValues, fieldName);
-        // this.$set(this.richValues, fieldName, null);
-        this.$set(this.richValues, fieldName, value);
+        // 收集有变化的键值对
+        if (this.globalVars.loadCompleted) this.dirtyValues[fieldName] = value;
       } catch (e) {
         console.warn("全局设置值出错：" + e);
       }
@@ -271,12 +263,8 @@ export default {
       this.$emit("action", action); // 外部可获取当前点击了哪个事件
     },
     onReset() {
-      for (let key in this.richValues) {
-        this.$set(
-          this.richValues,
-          key,
-          this.tofriendValue(this.richValues[key])
-        );
+      for (let key in this.values) {
+        this.$set(this.values, key, this.tofriendValue(this.values[key]));
       }
     },
     // 全局校验
@@ -289,7 +277,7 @@ export default {
       // 处理验证一次后，schem规则改变，再次验证错误信息还是保留第一次的
       // 故必须克隆一份改变地址，不然即使schema改变了也不会更新
       // https://ajv.js.org/api.html#api-validateschema
-      let valid = AJV.validate(clone(this.friendSchema), this.richValues);
+      let valid = AJV.validate(clone(this.friendSchema), this.values);
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);
@@ -316,7 +304,6 @@ export default {
     },
   },
   beforeDestroy() {
-    this.rubbishyValues = {};
     this._unregisterEvents();
   },
 };
