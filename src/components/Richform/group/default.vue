@@ -8,6 +8,7 @@
       :schema="schema"
       :fieldErrors="fieldErrors"
       :hideFields="hideFields"
+      :isDark="isDark"
     ></layout>
   </div>
 </template>

@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { type } from "ramda";
 import baseMixin from "./baseMixin";
 import { Select, Option, OptionGroup } from "element-ui";
 export default {
@@ -99,6 +100,7 @@ export default {
         filterable: false, // 说明：搜索label
         allowCreate: false, // 说明：是否允许创建条目,谨慎使用  注意：filterable为true时有效
         defaultOption: -1, // 当字典从服务器加载后默认选中的选项下标
+        forceType: null, // 重置数据类型
         dictConfig: {
           // 字典配置
           method: "post",
@@ -114,7 +116,11 @@ export default {
     },
     // 清空的时候为"",后端要求最好是null,故强制转换一下
     clearOptions() {
-      if (!this.field.multiple) this.values[this.field.name] = null;
+      let friendType =
+        this.field.forceType ||
+        this.schema.type ||
+        type(this.values[this.field.name]).toLowerCase();
+      this.values[this.field.name] = this.friendDefaultValue(friendType);
     },
     // 有延迟，重复计算高度
     calcuHeight() {

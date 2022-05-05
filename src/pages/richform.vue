@@ -19,6 +19,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
+    <RichForm :form="tempForm" :values="values" :isDesign="false"></RichForm>
     {{ values }}
     <br />
     <Button type="info" size="small" @click="onSetValues">赋值values</Button>
@@ -184,7 +185,7 @@ export default {
         selectA: "选项1",
         selectB: "选项1",
       },
-      form: {
+      tempForm: {
         border: true, // 显示边框
         grid: true, // 表单内部栅栏
         labelSuffix: ":", // 字段标题后缀内容，默认' : '
@@ -193,6 +194,68 @@ export default {
         labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left/center
         labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
         colors: {}, // 颜色
+        actions: [],
+        layout: [
+          {
+            widget: "radio",
+            title: "单选数字",
+            name: "radioNumber",
+            isGroup: true,
+            isButton: true,
+            disabled: false,
+            border: true,
+            size: "small",
+            textColor: "#fff",
+            fill: "#409EFF",
+            options: [
+              {
+                name: "1",
+                title: "Number1",
+                disabled: false,
+                border: false,
+                size: "default",
+              },
+              {
+                name: "2",
+                title: "Number2",
+                disabled: false,
+                border: false,
+                size: "default",
+              },
+              {
+                name: "3",
+                title: "Number3",
+                disabled: false,
+                border: false,
+                size: "default",
+              },
+            ],
+          },
+          {
+            title: "input类型转换",
+            name: "inputTypeSwitch",
+            widget: "input",
+            description: "在schema中type定义的是number,注意看值的变化",
+          },
+        ],
+      },
+      form: {
+        border: true, // 显示边框
+        grid: true, // 表单内部栅栏
+        labelSuffix: ":", // 字段标题后缀内容，默认' : '
+        labelWidth: "110px", // 标签宽度,默认50px
+        validator: "input", // submit
+        labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left/center
+        labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
+        colors: {
+          // theme: "#121B2C",
+          // fontColor: "#F8F4F4",
+          // btnColor: "#F8F4F4",
+          // btnBgColor: "#040C19",
+          // activeColor: "#4F9FFE",
+          // dateRangeBgColor: "#999",
+          // multiOptionBgColor: "#ddd",
+        }, // 颜色
         actions: [
           //声明显示在下方和动作按钮
           {
@@ -398,6 +461,7 @@ export default {
                     title: "下拉选框D",
                     widget: "select",
                     name: "selectD",
+                    clearable: true,
                     description: "我的选项依赖于【下拉选框A】等于黄金糕",
                     dict: {
                       "selectA==any": { filterKey: "macCtrlTypeId" },

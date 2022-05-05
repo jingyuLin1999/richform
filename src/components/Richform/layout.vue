@@ -17,6 +17,7 @@
         :colors="colors"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
+        :isDark="isDark"
       />
       <!-- 标签页 -->
       <template v-else-if="typeof item == 'object' && item.widget == 'tabs'">
@@ -30,6 +31,7 @@
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
+          :isDark="isDark"
         ></field-tabs>
       </template>
       <!-- 栅格布局 -->
@@ -45,6 +47,7 @@
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
+          :isDark="isDark"
         ></field-grid>
       </template>
       <!-- 折叠面板 -->
@@ -61,6 +64,7 @@
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
+          :isDark="isDark"
         ></field-collapse>
       </template>
       <!-- 普通字段 -->
@@ -75,6 +79,7 @@
         :isDesign="isDesign"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
+        :isDark="isDark"
       ></field>
     </template>
   </draggable>
@@ -109,6 +114,7 @@ export default {
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
     colors: { type: Object, default: () => ({}) },
+    isDark: { type: Boolean, default: false },
   },
   methods: {},
 };

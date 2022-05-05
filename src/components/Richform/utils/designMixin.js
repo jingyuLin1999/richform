@@ -8,6 +8,7 @@ export default {
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
         colors: { type: Object, default: () => ({}) },
+        isDark: { type: Boolean, default: false },
     },
     inject: ["formId"],
     data() {

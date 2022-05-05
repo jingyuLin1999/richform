@@ -60,7 +60,7 @@
           :content="fieldSchema.description || field.description"
           class="field-question"
           placement="bottom"
-          effect="light"
+          :effect="isDark ? 'dark' : 'light'"
         >
           <i class="el-icon-question"></i>
         </Tooltip>
@@ -86,6 +86,7 @@
           :colors="colors"
           :fieldErrors="fieldErrors"
           :hideFields="hideFields"
+          :isDark="isDark"
           @change="onChange"
           @buttonEvent="onButtonEvent"
           @widgetHeight="getWidgetHeight"
@@ -133,7 +134,13 @@ import AJV, { localize as localizeErrors } from "./utils/validator";
 export default {
   name: "field",
   components: { Tooltip },
-  inject: ["dependencies", "requireds", "isDeepValues", "regExpFields"],
+  inject: [
+    "dependencies",
+    "requireds",
+    "isDeepValues",
+    "regExpFields",
+    "pickDeepValueKeys",
+  ],
   mixins: [DesignMixin, CommonMixin],
   props: {
     schema: { type: Object, default: () => ({}) },
@@ -144,6 +151,7 @@ export default {
     fieldErrors: { type: Object, default: () => ({}) },
     hideFields: { type: Object, default: () => ({}) },
     colors: { type: Object, default: () => ({}) },
+    isDark: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -236,6 +244,12 @@ export default {
         this.requireds.push(this.field.name);
     },
     createValue() {
+      // 深度模式收集键值
+      if (
+        this.isDeepValues &&
+        !this.pickDeepValueKeys.includes(this.field.name)
+      )
+        this.pickDeepValueKeys.push(this.field.name);
       // 提供两种模式，树型结构或普通结构
       // 有值则不需要创建，即values的优先级大于default的值
       let fieldValue = this.isDeepValues

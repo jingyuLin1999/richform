@@ -80,6 +80,7 @@
         :colors="friendForm.colors"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
+        :isDark="isDark"
       >
       </form-layout>
       <!-- 底部按钮 -->
@@ -109,6 +110,7 @@ import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 import CommonMixin from "./utils/commonMixin";
+import { getRgbValueFromHex } from "./utils";
 
 export default {
   name: "RichForm",
@@ -133,6 +135,7 @@ export default {
       globalVars: this.globalVars,
       regExpFields: this.regExpFields,
       hooks: this.hooks,
+      pickDeepValueKeys: this.pickDeepValueKeys,
     };
   },
   watch: {
@@ -151,7 +154,7 @@ export default {
   },
   data() {
     return {
-      formId: Math.random().toString(15).slice(2, 15), // 表单id
+      formId: "richform-" + Math.random().toString(15).slice(2, 15), // 表单id,不能以数字开头，否则替换css会报错
       fieldErrors: {}, // 字段错误信息收集
       dependencies: {}, // 字段相互依赖信息
       lastClicked: {}, // 记录最后的点击事件，用于取消事件
@@ -159,6 +162,7 @@ export default {
       hideFields: {}, // 收集隐藏的字段
       dirtyValues: {}, // 脏值即values中有变化的键值对
       regExpFields: {}, // 表达式
+      pickDeepValueKeys: [], // 深度模式收集键值，重置
       globalVars: {
         // 全局变量
         loadCompleted: false, // 是否加载完成
@@ -188,6 +192,15 @@ export default {
     buttomActions() {
       if (!this.form.actions) return [];
       return this.form.actions.filter((actionItem) => !actionItem.top);
+    },
+    isDark() {
+      // 计算主题是否为暗颜色
+      let theme = this.friendForm.colors.theme;
+      if (!theme) return false;
+      let rgbTheme = getRgbValueFromHex(theme);
+      let $grayLevel =
+        rgbTheme[0] * 0.299 + rgbTheme[1] * 0.587 + rgbTheme[2] * 0.114;
+      return $grayLevel < 192;
     },
   },
   methods: {
@@ -262,10 +275,17 @@ export default {
       }
       this.$emit("action", action); // 外部可获取当前点击了哪个事件
     },
+
     onReset() {
-      for (let key in this.values) {
-        this.$set(this.values, key, this.tofriendValue(this.values[key]));
-      }
+      if (this.deepValues) {
+        this.pickDeepValueKeys.map((key) => {
+          let friendValue = this.deepPick(key.split("."), this.values);
+          friendValue = this.tofriendValue(friendValue);
+          this.deepSetValue(key.split("."), this.values, friendValue);
+        });
+      } else
+        for (let key in this.values)
+          this.$set(this.values, key, this.tofriendValue(this.values[key]));
     },
     // 全局校验
     globalValidate() {

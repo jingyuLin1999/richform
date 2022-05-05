@@ -25,6 +25,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
     脏值：{{ hooks.dirtyValues }}<br />
     <Button size="small" type="success" @click="onAddValues">新增values</Button>
     <Button size="small" type="warning" @click="changeValue">改变values</Button>
+    <Button size="small" type="success" @click="hooks.reset()">重置</Button>
     <br />
     <RichForm
       :schema="schema"

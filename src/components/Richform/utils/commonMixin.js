@@ -101,7 +101,7 @@ export default {
                     // 重置值
                     if (oldOptions != newOptions && !matchOne) {
                         let field = dictItem.field;
-                        let friendType = dictItem.type || (type(this.values[field.name]).toLowerCase());
+                        let friendType = field.forceType || dictItem.type || (type(this.values[field.name]).toLowerCase());
                         let friendValue = this.friendDefaultValue(friendType);
                         if (field.widget == "select") {
                             let { defaultOption, options, defaultProp } = field;

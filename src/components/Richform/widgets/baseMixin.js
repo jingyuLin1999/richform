@@ -10,6 +10,7 @@ export default {
         colors: { type: Object, default: () => ({}) },
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
+        isDark: { type: Boolean, default: false },
     },
     data() {
         return {

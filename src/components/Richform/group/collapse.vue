@@ -30,6 +30,7 @@
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"
+            :isDark="isDark"
           ></layout>
           <actions
             v-if="Array.isArray(collapse.actions)"

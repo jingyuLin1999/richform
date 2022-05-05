@@ -55,3 +55,19 @@ export function observerDomResize(dom, callback) {
 
     return observer
 }
+
+/**
+ * @description Get the rgb value of the hex color
+ * @param {String} color Hex color
+ * @return {Array<Number>} Rgb value of the color
+ */
+export function getRgbValueFromHex(color) {
+    color = color.replace('#', '');
+    if (color.length === 3) color = Array.from(color).map(function (hexNum) {
+        return hexNum + hexNum;
+    }).join('');
+    color = color.split('');
+    return new Array(3).fill(0).map(function (t, i) {
+        return parseInt("0x".concat(color[i * 2]).concat(color[i * 2 + 1]));
+    });
+}
