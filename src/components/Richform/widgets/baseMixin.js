@@ -150,8 +150,9 @@ export default {
         async pickDependencies() {
             if (!this.field.hasOwnProperty("dict") || this.field.length == 0) return;
             if (typeof this.field.dict == "string" && isUrl(this.field.dict)) {
-                // dict字段是url则直接获取数据，并赋值给options
-                const { method, respProp, params } = this.field.dictConfig;
+                // dict字段是url则直接获取数据，并赋值给options     
+                const { method, respProp, params, pickValues } = this.field.dictConfig;
+                pickValues.map(key => { if (this.values[key] != undefined) params[key] = this.values[key] });
                 const response = await loadDict(this.field.dict, params, method);
                 const options = this.deepPick(respProp.split("."), response);
                 if (Array.isArray(options) && options.length > 0) this.$set(this.field, "options", options);

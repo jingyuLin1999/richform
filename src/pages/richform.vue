@@ -550,6 +550,7 @@ export default {
                       method: "post",
                       respProp: "data",
                       params: {}, // 一些固定的过滤参数
+                      pickValues: ['map']
                     },
                     dict: {
                       "product_code == any":

@@ -106,6 +106,7 @@ export default {
           method: "post",
           respProp: "",
           params: {}, // 一些固定的过滤参数
+          pickValues: [], // 获取values的数据做请求参数
         },
         defaultProp: {
           label: "label",

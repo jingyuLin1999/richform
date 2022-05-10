@@ -57,8 +57,10 @@ export default {
                         try {
                             // 若是url则发起http请求获取字典
                             if (this.values[fieldName] != null && this.values[fieldName] != "") {
-                                const { method, respProp, params } = dictItem.field.dictConfig;
-                                const rqParams = Object.assign({ ...params }, { [fieldName]: this.values[fieldName] });
+                                const { method, respProp, params, pickValues } = dictItem.field.dictConfig;
+                                let pickValueMap = {};
+                                pickValues.map(key => { if (this.values[key] != undefined) pickValueMap[key] = this.values[key] });
+                                const rqParams = Object.assign({ ...params }, pickValueMap, { [fieldName]: this.values[fieldName] });
                                 const response = await loadDict(dictItem.dictValue, rqParams, method);
                                 const payload = this.deepPick(respProp.split("."), response);
                                 if (Array.isArray(payload) && payload.length > 0) options = payload;
