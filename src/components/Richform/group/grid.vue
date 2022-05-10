@@ -30,6 +30,7 @@
           v-for="(columnItem, index) in gridItem.fields"
           :key="index"
           :style="{ flex: ratio[index] || 1 }"
+          v-show="isShowColumn(columnItem)"
         >
           <layout
             :layout="columnItem"
@@ -85,6 +86,15 @@ export default {
   computed: {
     ratio() {
       return this.gridItem.ratio ? this.gridItem.ratio.split(":") : [];
+    },
+  },
+  methods: {
+    // 当该列的所有数据都是隐藏的，则该列不显示
+    isShowColumn(columnList) {
+      let needShow = columnList.find(
+        (item) => item.hide == false || item.hide == undefined
+      );
+      return needShow ? true : false;
     },
   },
 };
