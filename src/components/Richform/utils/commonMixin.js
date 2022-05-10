@@ -1,4 +1,4 @@
-import { type, path } from "ramda"
+import { type, path, isEmpty } from "ramda"
 import { isUrl, loadDict, deleteIteration } from "./";
 export default {
     methods: {
@@ -110,7 +110,7 @@ export default {
                                 friendValue = typeof option == "object" ? option[defaultProp.value] : option
                             }
                         }
-                        this.values[dictItem.field.name] = friendValue;
+                        this.deepSetValue(dictItem.field.name.split("."), this.values, friendValue);
                     }
                 }
             }
@@ -128,12 +128,24 @@ export default {
                 let hideHistory = [];
                 for (let index = 0; index < hideFields.length; index++) {
                     let item = hideFields[index];
-                    let nameKey = item.name + "@" + item.key;
-                    let isEquality = item.value == this.values[key];
+                    let { name, key, field, value } = item;
+                    let nameKey = name + "@" + key;
+                    let isEquality = (value == this.values[key]);
                     if (!hideHistory.includes(nameKey) && isEquality) {
                         hideHistory.push(nameKey)
-                        this.$set(item.field, "hide", isEquality);
-                        this.values[item.name] = this.tofriendValue(this.values[item.name]); // TODO 被隐藏的字段是否应该把值清空
+                        this.$set(field, "hide", isEquality);
+                        // 在index.html中watch values，加这个判断避免无限循环
+                        if (!isEmpty(this.values[name])) {
+                            // 日期范围带有mapValues的需要清空
+                            if (field.widget == "datetimepicker" && Array.isArray(this.values[name])) {
+                                field.mapValues.map(key => {
+                                    this.deepSetValue(key.split("."), this.values, this.tofriendValue(this.values[key]));
+                                })
+                            }
+                            // 清空被隐藏字段的值
+                            let friendType = field.forceType || (type(this.values[name]).toLowerCase());
+                            this.deepSetValue(name.split("."), this.values, this.friendDefaultValue(friendType));
+                        }
                         // 隐藏状态删除表达式的验证规则
                         this.updateSchemaInHide(item);
                     } else if (hideHistory.includes(nameKey)) {

@@ -753,7 +753,26 @@ export default {
             rangeSeparator: "至", // 选择范围时的分隔符
             startPlaceholder: "开始时间",
             endPlaceholder: "结束时间",
-            pickerOptions: {},
+            mapValues: ["starttime", "endtime"],
+            forceType: "null",
+            pickerOptions: {
+              disabledDate(time) {
+                return false;
+              },
+              shortcuts: null,
+            },
+            hideRely: ["hours == 3", "hours == 5"],
+          },
+          {
+            widget: "select",
+            name: "hours",
+            title: "时间段",
+            clearable: true,
+            forceType: "null",
+            options: [
+              { label: "3小时", value: 3 },
+              { label: "5小时", value: 5 },
+            ],
           },
           {
             title: "拖拽列表",
@@ -1030,6 +1049,7 @@ export default {
                         size: "default",
                         textColor: "#f00",
                         fill: "#00f",
+                        default: "radioA",
                         options: [
                           {
                             name: "radioA",
