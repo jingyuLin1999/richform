@@ -3,8 +3,9 @@
 
 -->
 <template>
+  <!-- 不能用v-if，否则若开始为隐藏，后续无法切换 -->
   <div
-    v-if="!field.hide"
+    v-show="!field.hide"
     :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
   >
     <div
@@ -262,21 +263,17 @@ export default {
         : this.values[this.field.name] ||
           this.fieldSchema.default ||
           this.field.default;
-      // 若有默认值，则需要直接进行校验
-      if (defaultValue)
-        this.validateField(this.field.name, this.fieldSchema, defaultValue);
       // 生成默认值
-      defaultValue =
+      let friendValue =
         defaultValue != null && defaultValue != undefined
           ? defaultValue
           : this.friendDefaultValue(this.fieldSchema.type);
       if (this.isDeepValues)
-        this.deepSetValue(
-          this.field.name.split("."),
-          this.values,
-          defaultValue
-        );
-      else this.$set(this.values, this.field.name, defaultValue);
+        this.deepSetValue(this.field.name.split("."), this.values, friendValue);
+      else this.$set(this.values, this.field.name, friendValue);
+      // 若有默认值，则需要直接进行校验
+      if (defaultValue)
+        this.validateField(this.field.name, this.fieldSchema, defaultValue);
     },
     pickFieldSchema(fieldName) {
       const fieldSchema =

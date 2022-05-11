@@ -367,6 +367,7 @@ export default {
             title: "input类型转换",
             name: "inputTypeSwitch",
             widget: "input",
+            placeholder: "只能输入数字",
             description: "在schema中type定义的是number,注意看值的变化",
           },
           {
@@ -550,7 +551,7 @@ export default {
                       method: "post",
                       respProp: "data",
                       params: {}, // 一些固定的过滤参数
-                      pickValues: ['map']
+                      pickValues: ["map"],
                     },
                     dict: {
                       "product_code == any":
@@ -884,6 +885,8 @@ export default {
             name: "selectMultiple",
             multiple: true,
             filterable: true,
+            clearable: true,
+            forceType: "string",
             dict: {
               "inputnumber == 2": [
                 {
@@ -1018,7 +1021,7 @@ export default {
                   {
                     title: "输入框",
                     widget: "input",
-                    name: "input",
+                    name: "netinput",
                   },
                   {
                     name: "network",
@@ -1071,7 +1074,7 @@ export default {
                       {
                         title: "输入框",
                         widget: "input",
-                        name: "input",
+                        name: "networkInput",
                       },
                     ],
                   },

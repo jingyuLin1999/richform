@@ -55,7 +55,9 @@
 <script>
 import { type } from "ramda";
 import baseMixin from "./baseMixin";
+import { strToObj } from "../utils";
 import { Select, Option, OptionGroup } from "element-ui";
+
 export default {
   mixins: [baseMixin],
   components: { Select, Option, OptionGroup },
@@ -101,6 +103,7 @@ export default {
         allowCreate: false, // 说明：是否允许创建条目,谨慎使用  注意：filterable为true时有效
         defaultOption: -1, // 当字典从服务器加载后默认选中的选项下标
         forceType: null, // 重置数据类型
+        join: "", // 说明： 当mutiple为true时，若设置了join,则会转换成字符串
         dictConfig: {
           // 字典配置
           method: "post",
@@ -133,6 +136,32 @@ export default {
     isFilter(option) {
       let { key, value } = this.field.filter;
       return !(key && value != null && option[key] == value);
+    },
+    friendValue() {
+      let value = this.values[this.field.name];
+      value = typeof value == "string" ? strToObj(value) : value; // 友好转换一下
+      let { multiple, join } = this.field;
+      if (
+        multiple &&
+        join.length > 0 &&
+        typeof value == "string" &&
+        value.length > 0
+      ) {
+        value = value.split(join);
+      }
+      return value;
+    },
+    beforeChange(value) {
+      value =
+        this.schema.type == "number"
+          ? parseFloat(value)
+            ? parseFloat(value)
+            : value
+          : value;
+      let { multiple, join } = this.field;
+      if (multiple && join.length > 0 && Array.isArray(value))
+        value = value.join(join);
+      return value;
     },
   },
 };

@@ -47,10 +47,11 @@ export default {
         endPlaceholder: "结束时间",
         mapValues: [], // 如果是时间范围,则values会生成starttime->范围下标0，endtime两个字段->范围下标1   如：["starttime", "endtime"]
         pickerOptions: {
-          // 带有快捷键
+          // 限制范围
           disabledDate(time) {
             return time.getTime() > Date.now();
           },
+          // 带有快捷键
           shortcuts: [
             {
               text: "今天",
