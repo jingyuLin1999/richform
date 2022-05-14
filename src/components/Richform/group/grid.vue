@@ -91,6 +91,7 @@ export default {
   methods: {
     // 当该列的所有数据都是隐藏的，则该列不显示
     isShowColumn(columnList) {
+      if (this.isDesign) return true;
       let needShow = columnList.find(
         (item) => item.hide == false || item.hide == undefined
       );
