@@ -12,6 +12,7 @@
     :collapse-tags="field.collapseTags"
     :props="field.defaultProp"
     :show-all-levels="field.showAllLevels"
+    :style="{ '--bgcolor': colors.theme }"
   ></Cascader>
 </template>
 
@@ -151,5 +152,8 @@ export default {
 <style lang="scss">
 .cascader-widget {
   width: 100%;
+  .el-cascader__search-input {
+    background: var(--bgcolor) !important;
+  }
 }
 </style>
