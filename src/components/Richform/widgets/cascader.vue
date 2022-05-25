@@ -9,6 +9,7 @@
     :separator="field.separator"
     :clearable="field.clearable"
     :filterable="field.filterable"
+    :collapse-tags="field.collapseTags"
     :props="field.defaultProp"
     :show-all-levels="field.showAllLevels"
   ></Cascader>
@@ -22,11 +23,12 @@ export default {
   components: { Cascader },
   data() {
     return {
-      cascaderDict: {},
+      optionFlatMap: {}, // options扁平数据
     };
   },
   created() {
-    this.cascaderDict = this.getDic(this.field.options);
+    this.transferOptions();
+    // this.optionFlatMap = this.treeToFlatMap(this.field.options);
   },
   methods: {
     defaultFieldAttr() {
@@ -39,9 +41,11 @@ export default {
         clearable: true,
         separator: "/", // 分隔符
         showAllLevels: true, // 结果显示所以级别如：a/b/c
+        collapseTags: false, // 折叠
         defaultProp: {
           value: "value",
           label: "label",
+          children: "children",
           parentId: "parentId",
           expandTrigger: "hover", // 	click / hover
           checkStrictly: false, // 父子节点不互相关联
@@ -49,20 +53,53 @@ export default {
         },
       };
     },
-    // 获取字典
-    getDic(tree, res = {}) {
+    // options数据类型判断，是树结构还是扁平数据,并转换
+    transferOptions() {
+      let { options, defaultProp } = this.field;
+      let isTree = options[0] && options[0][defaultProp.children];
+      if (isTree) {
+        this.optionFlatMap = this.treeToFlatMap(options);
+      } else {
+        options.map((item) => {
+          let cloneItem = JSON.parse(JSON.stringify(item));
+          let key = cloneItem[this.field.defaultProp.value];
+          this.optionFlatMap[key] = cloneItem;
+        });
+        this.$set(this.field, "options", this.toTree());
+      }
+    },
+    // 将树结构数据转化成扁平数据
+    treeToFlatMap(tree, res = {}) {
       tree.forEach((item) => {
         let cloneItem = JSON.parse(JSON.stringify(item));
         delete cloneItem.children;
         res[item[this.field.defaultProp.value]] = cloneItem;
         if (item.children && item.children.length > 0)
-          this.getDic(item.children, res);
+          this.treeToFlatMap(item.children, res);
       });
       return res;
     },
-    // 获取每代人的id
+    // 将options的扁平数据转化成树结构
+    toTree() {
+      let tree = [];
+      let searchPool = {};
+      let { options, defaultProp } = this.field;
+      let optionList = JSON.parse(JSON.stringify(options));
+      let { value, children, parentId } = defaultProp;
+      optionList.forEach((item) => {
+        if (item[children]) this.$delete(item, children);
+        searchPool[item[value]] = item;
+      });
+      optionList.forEach((item) => {
+        let parent = searchPool[item[parentId]];
+        if (parent) (parent[children] || (parent[children] = [])).push(item);
+        else tree.push(item);
+      });
+      return tree;
+    },
+    // 获取每代的id
     pickGenerationId(id, parentId = []) {
-      let curItem = this.cascaderDict[id];
+      let curItem = this.optionFlatMap[id];
       if (!curItem) return parentId;
       if (curItem) {
         switch (this.schema.type) {
@@ -79,16 +116,33 @@ export default {
       return this.pickGenerationId(curItem[parentIdKey], parentId);
     },
     friendValue() {
-      let value = this.values[this.field.name];
-      if (this.field.isLeaf && !Array.isArray(value)) {
+      let { name, isLeaf, defaultProp } = this.field;
+      let value = this.values[name];
+      // 多选且只获取枝叶节点
+      if (isLeaf && defaultProp.multiple && Array.isArray(value)) {
+        let multiValue = [];
+        value.map((id) => multiValue.push(this.pickGenerationId(id)));
+        value = multiValue;
+      } else if (isLeaf && defaultProp.checkStrictly) {
+        // 单选且枝叶节点
         value = this.pickGenerationId(value);
       }
       return value;
     },
     beforeChange(value) {
-      return this.field.isLeaf && Array.isArray(value)
-        ? value[value.length - 1]
-        : value;
+      let { isLeaf, defaultProp } = this.field;
+      if (isLeaf && defaultProp.multiple && Array.isArray(value)) {
+        // 多选且只获取枝叶节点
+        let multiValue = [];
+        value.map((itemArr) => {
+          multiValue.push(itemArr[itemArr.length - 1]);
+        });
+        return multiValue;
+      } else if (isLeaf && defaultProp.checkStrictly) {
+        // 单选且枝叶节点
+        return value[value.length - 1];
+      }
+      return value;
     },
   },
 };

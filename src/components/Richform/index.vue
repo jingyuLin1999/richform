@@ -275,7 +275,6 @@ export default {
       }
       this.$emit("action", action); // 外部可获取当前点击了哪个事件
     },
-
     onReset() {
       if (this.deepValues) {
         this.pickDeepValueKeys.map((key) => {

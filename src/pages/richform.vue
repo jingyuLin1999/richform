@@ -183,6 +183,7 @@ export default {
         tree: "22",
         radioA: "radioB",
         selectA: "选项1",
+        datetimepicker: ["2022-05-05 00:00:00", "2022-05-20 00:00:00"],
         selectB: "选项1",
       },
       tempForm: {
@@ -644,15 +645,25 @@ export default {
             clearable: true,
             separator: "/", // 分隔符
             showAllLevels: false, // 结果显示所以级别如：a/b/c
+            collapseTags: true,
             defaultProp: {
               value: "value",
               label: "bbb",
-              parentId: "parentId",
+              parentId: "parentId", // parentId必须有
+              children: "children",
               expandTrigger: "click", // 	click / hover
               checkStrictly: true, // 父子节点不互相关联,可单选
               multiple: false, // 可通过 props.multiple = true 来开启多选模
             },
             options: [
+              // 可两种类型，一种是树结构，一种是扁平数据，具体如下：
+              // parentId字段必须有
+              // { value: "jk", bbb: "bb0", parentId: "0" },
+              // { value: "bb1", bbb: "bb1", parentId: "jk" },
+              // { value: "bb2", bbb: "bb2", parentId: "jk" },
+              // { value: "ff", bbb: "bb11", parentId: "0" },
+              // { value: "f20", bbb: "f20", parentId: "ff" },
+              // { value: "f60", bbb: "f60", parentId: "ff" },
               {
                 value: 1,
                 bbb: "指南",
@@ -677,7 +688,10 @@ export default {
                 value: 5,
                 bbb: "你好",
                 parentId: "0",
-                children: [{ value: 6, bbb: "测试", parentId: "5" }],
+                children: [
+                  { value: 6, bbb: "测试1", parentId: "5" },
+                  { value: 7, bbb: "测试2", parentId: "5" },
+                ],
               },
             ],
           },
