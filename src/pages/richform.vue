@@ -63,7 +63,7 @@ export default {
             type: "number",
           },
           cascader: {
-            type: "number",
+            type: "array", //number
           },
           upload: {
             type: "array",
@@ -652,47 +652,47 @@ export default {
               parentId: "parentId", // parentId必须有
               children: "children",
               expandTrigger: "click", // 	click / hover
-              checkStrictly: true, // 父子节点不互相关联,可单选
-              multiple: false, // 可通过 props.multiple = true 来开启多选模
+              checkStrictly: false, // 父子节点不互相关联,可单选
+              multiple: true, // 可通过 props.multiple = true 来开启多选模
             },
             options: [
               // 可两种类型，一种是树结构，一种是扁平数据，具体如下：
               // parentId字段必须有
-              // { value: "jk", bbb: "bb0", parentId: "0" },
-              // { value: "bb1", bbb: "bb1", parentId: "jk" },
-              // { value: "bb2", bbb: "bb2", parentId: "jk" },
-              // { value: "ff", bbb: "bb11", parentId: "0" },
-              // { value: "f20", bbb: "f20", parentId: "ff" },
-              // { value: "f60", bbb: "f60", parentId: "ff" },
-              {
-                value: 1,
-                bbb: "指南",
-                parentId: "0",
-                children: [
-                  {
-                    value: 2,
-                    bbb: "设计原则",
-                    parentId: "1",
-                    children: [
-                      {
-                        value: 3,
-                        bbb: "严格要求",
-                        parentId: "2",
-                      },
-                    ],
-                  },
-                  { value: 4, bbb: "卡车", parentId: "1" },
-                ],
-              },
-              {
-                value: 5,
-                bbb: "你好",
-                parentId: "0",
-                children: [
-                  { value: 6, bbb: "测试1", parentId: "5" },
-                  { value: 7, bbb: "测试2", parentId: "5" },
-                ],
-              },
+              { value: "jk", bbb: "bb0", parentId: "0" },
+              { value: "bb1", bbb: "bb1", parentId: "jk" },
+              { value: "bb2", bbb: "bb2", parentId: "jk" },
+              { value: "ff", bbb: "bb11", parentId: "0" },
+              { value: "f20", bbb: "f20", parentId: "ff" },
+              { value: "f60", bbb: "f60", parentId: "ff" },
+              // {
+              //   value: 1,
+              //   bbb: "指南",
+              //   parentId: "0",
+              //   children: [
+              //     {
+              //       value: 2,
+              //       bbb: "设计原则",
+              //       parentId: "1",
+              //       children: [
+              //         {
+              //           value: 3,
+              //           bbb: "严格要求",
+              //           parentId: "2",
+              //         },
+              //       ],
+              //     },
+              //     { value: 4, bbb: "卡车", parentId: "1" },
+              //   ],
+              // },
+              // {
+              //   value: 5,
+              //   bbb: "你好",
+              //   parentId: "0",
+              //   children: [
+              //     { value: 6, bbb: "测试1", parentId: "5" },
+              //     { value: 7, bbb: "测试2", parentId: "5" },
+              //   ],
+              // },
             ],
           },
           {

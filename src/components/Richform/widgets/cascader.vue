@@ -3,7 +3,7 @@
     :id="widgetId"
     class="cascader-widget"
     v-model="value"
-    :options="field.options"
+    :options="options"
     :disabled="field.disabled"
     :placeholder="field.placeholder"
     :separator="field.separator"
@@ -27,9 +27,23 @@ export default {
       optionFlatMap: {}, // options扁平数据
     };
   },
-  created() {
-    this.transferOptions();
-    // this.optionFlatMap = this.treeToFlatMap(this.field.options);
+  computed: {
+    options() {
+      // options数据类型判断，是树结构还是扁平数据,并转换
+      let { options, defaultProp } = this.field;
+      let isTree = options[0] && options[0][defaultProp.children];
+      if (isTree) {
+        this.optionFlatMap = this.treeToFlatMap(options);
+      } else {
+        options.map((item) => {
+          let cloneItem = JSON.parse(JSON.stringify(item));
+          let key = cloneItem[this.field.defaultProp.value];
+          this.optionFlatMap[key] = cloneItem;
+        });
+        return this.toTree();
+      }
+      return options;
+    },
   },
   methods: {
     defaultFieldAttr() {
@@ -53,21 +67,6 @@ export default {
           multiple: false, // 可通过 props.multiple = true 来开启多选模
         },
       };
-    },
-    // options数据类型判断，是树结构还是扁平数据,并转换
-    transferOptions() {
-      let { options, defaultProp } = this.field;
-      let isTree = options[0] && options[0][defaultProp.children];
-      if (isTree) {
-        this.optionFlatMap = this.treeToFlatMap(options);
-      } else {
-        options.map((item) => {
-          let cloneItem = JSON.parse(JSON.stringify(item));
-          let key = cloneItem[this.field.defaultProp.value];
-          this.optionFlatMap[key] = cloneItem;
-        });
-        this.$set(this.field, "options", this.toTree());
-      }
     },
     // 将树结构数据转化成扁平数据
     treeToFlatMap(tree, res = {}) {
