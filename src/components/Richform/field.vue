@@ -93,7 +93,10 @@
           @widgetHeight="getWidgetHeight"
         />
         <!-- 错误信息 -->
-        <div class="error-message" v-if="fieldErrors[field.name]">
+        <div
+          class="error-message"
+          v-if="fieldErrors[field.name] && field.showError != false"
+        >
           <i class="el-icon-warning-outline"></i>
           <span>{{ fieldErrors[field.name] }}</span>
         </div>

@@ -19,7 +19,6 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
 -->
 <template>
   <div class="rich-form-app">
-    <RichForm :form="tempForm" :values="values" :isDesign="false"></RichForm>
     {{ values }}
     <br />
     <Button type="info" size="small" @click="onSetValues">赋值values</Button>
@@ -62,9 +61,9 @@ export default {
           inputTypeSwitch: {
             type: "number",
           },
-          cascader: {
-            type: "array", //number
-          },
+          // cascader: {
+          //   type: "array", //number
+          // },
           upload: {
             type: "array",
           },
@@ -185,60 +184,6 @@ export default {
         selectA: "选项1",
         datetimepicker: ["2022-05-05 00:00:00", "2022-05-20 00:00:00"],
         selectB: "选项1",
-      },
-      tempForm: {
-        border: true, // 显示边框
-        grid: true, // 表单内部栅栏
-        labelSuffix: ":", // 字段标题后缀内容，默认' : '
-        labelWidth: "110px", // 标签宽度,默认50px
-        validator: "input", // submit
-        labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left/center
-        labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
-        colors: {}, // 颜色
-        actions: [],
-        layout: [
-          {
-            widget: "radio",
-            title: "单选数字",
-            name: "radioNumber",
-            isGroup: true,
-            isButton: true,
-            disabled: false,
-            border: true,
-            size: "small",
-            textColor: "#fff",
-            fill: "#409EFF",
-            options: [
-              {
-                name: "1",
-                title: "Number1",
-                disabled: false,
-                border: false,
-                size: "default",
-              },
-              {
-                name: "2",
-                title: "Number2",
-                disabled: false,
-                border: false,
-                size: "default",
-              },
-              {
-                name: "3",
-                title: "Number3",
-                disabled: false,
-                border: false,
-                size: "default",
-              },
-            ],
-          },
-          {
-            title: "input类型转换",
-            name: "inputTypeSwitch",
-            widget: "input",
-            description: "在schema中type定义的是number,注意看值的变化",
-          },
-        ],
       },
       form: {
         border: true, // 显示边框
@@ -542,6 +487,10 @@ export default {
                     prepend: "D", // 当type等于text有效
                     append: "KB",
                     description: "C42G-YN-CNC2-1",
+                    showError: false,
+                    hideRely: [
+                      "selectA==选项1"
+                    ]
                   },
                   {
                     title: "字典过滤",
