@@ -23,7 +23,7 @@ export const attribute = {
                 name: "tabs",
                 widget: "draggablelist",
                 editKeys: ["label", "name"],
-                template: { label: "标签页一" }
+                template: { label: "标签页一",fields: [] }
             },
         ],
     }
