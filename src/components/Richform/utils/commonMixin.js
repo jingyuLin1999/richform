@@ -90,7 +90,10 @@ export default {
                         let pickMatchValue = [];
                         valueList.map((valItem) => {
                             let matchValue = type(valItem) == "Object" ? valItem[defaultProp.value] : valItem;
-                            let hasMatch = matchValue ? dictItem.field.options.find(option => option[defaultProp.value] == matchValue) : false;
+                            let hasMatch = matchValue ? dictItem.field.options.find(option => {
+                                let optionValue = type(option) == "Object" ? option[defaultProp.value] : option;
+                                if (optionValue == matchValue) return true;
+                            }) : false;
                             if (hasMatch && !matchOne) matchOne = true; // 只要有一个匹配
                             if (hasMatch) pickMatchValue.push(valItem)
                         })
