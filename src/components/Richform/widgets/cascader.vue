@@ -31,7 +31,10 @@ export default {
     options() {
       // options数据类型判断，是树结构还是扁平数据,并转换
       let { options, defaultProp } = this.field;
-      let isTree = options[0] && options[0][defaultProp.children];
+      // 能找到children，则说明是数，否则是扁平数据
+      let isTree = options.find((opItem) =>
+        opItem[defaultProp.children] ? true : false
+      );
       if (isTree) {
         this.optionFlatMap = this.treeToFlatMap(options);
       } else {
