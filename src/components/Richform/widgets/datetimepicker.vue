@@ -84,7 +84,11 @@ export default {
       let rangeType = ["datetimerange", "daterange", "monthrange"];
       let value = this.values[name];
       // 初始化有默认值，需要手动生成mapValues的对应值
-      if (rangeType.includes(type) && mapValues.length > 0) {
+      if (
+        rangeType.includes(type) &&
+        Array.isArray(value) &&
+        mapValues.length > 0
+      ) {
         this.values[mapValues[0]] = value[0];
         this.values[mapValues[1]] = value[1];
       }
