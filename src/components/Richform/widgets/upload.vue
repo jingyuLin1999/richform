@@ -122,7 +122,6 @@ export default {
     },
     onSuccess(response, file, fileList) {
       const { payload, msg, status } = response;
-      console.log(payload, msg, status )
       if (status != 200) {
         Message({ type: "error", message: `上传失败，${msg}` });
         fileList.splice(fileList.length - 1, 1);

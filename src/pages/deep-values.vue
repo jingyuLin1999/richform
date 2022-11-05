@@ -23,9 +23,16 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
   <div class="richform-deep-value">
     所有值：{{ values }}<br />
     脏值：{{ hooks.dirtyValues }}<br />
-    <Button size="small" type="success" @click="onAddValues">新增values</Button>
+    自动创建Schema： {{ schema }}<br />
+    <Button size="small" type="primary" @click="onAddValues">新增values</Button>
     <Button size="small" type="warning" @click="changeValue">改变values</Button>
-    <Button size="small" type="success" @click="hooks.reset()">重置</Button>
+    <Button size="small" type="success" @click="hooks.reset()"
+      >重置values</Button
+    >
+    <Button size="small" type="danger" @click="hooks.validate()"
+      >外部校验</Button
+    >
+
     <br />
     <RichForm
       :schema="schema"
@@ -54,7 +61,22 @@ export default {
         title: "设备属性",
         description: "A product from Acme's catalog",
         type: "object",
-        properties: {},
+        properties: {
+          title: {
+            type: "object",
+            properties: {
+              text: {
+                type: "string",
+                minLength: 20,
+              },
+            },
+            // required: ["text"],
+          },
+          hello: {
+            type: "string",
+            minLength: 6,
+          },
+        },
       },
       values: {
         title: {
@@ -85,11 +107,13 @@ export default {
             title: "主标题",
             widget: "input",
             name: "title.text",
+            require: true,
           },
           {
             title: "副标题",
             widget: "input",
             name: "title.subtext",
+            require: true,
           },
         ],
       },

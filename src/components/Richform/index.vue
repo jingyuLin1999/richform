@@ -101,6 +101,7 @@
 import Actions from "./actions";
 import FormLayout from "./layout";
 import AutoLayout from "./autoLayout";
+import VueScrollTo from "vue-scrollto";
 import eventbus from "./utils/eventbus";
 import themeMixin from "./utils/themeMixin";
 import { hasPath, clone, pick, mergeDeepRight } from "ramda";
@@ -292,7 +293,6 @@ export default {
       if (!Object.keys(this.friendSchema).length) return true;
       // 开始校验
       this.fieldErrors = {};
-      this.friendSchema.required = this.requireds;
       // 处理验证一次后，schem规则改变，再次验证错误信息还是保留第一次的
       // 故必须克隆一份改变地址，不然即使schema改变了也不会更新
       // https://ajv.js.org/api.html#api-validateschema
@@ -300,13 +300,18 @@ export default {
       if (!valid) {
         localizeErrors(AJV.errors); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);
+        let fieldDom = null;
         AJV.errors.map((errorItem) => {
           let fieldName = errorItem.instancePath
             .split("/")
             .slice(1, errorItem.instancePath.length)
             .join("/");
+          fieldName = fieldName.replace("/", "."); // deepValues模式需要将/替换成.
           this.$set(this.fieldErrors, fieldName, errorItem.message);
+          fieldDom = document.querySelector(`.${fieldName}`);
         });
+        // 滚动到第一个错误位置
+        if (fieldDom) VueScrollTo.scrollTo(fieldDom, 50);
       }
       return valid;
     },

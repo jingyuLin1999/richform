@@ -19,8 +19,8 @@ export const defaultForm = {
 
 export const defaultSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
-    title: "设备属性",
-    description: "A product from Acme's catalog",
+    title: "richform attribute",
+    description: "",
     type: "object",
     properties: {},
     errorMessage: {},
@@ -30,4 +30,5 @@ export const defaultSchema = {
     allOf: [],
     anyOf: [],
     oneOf: [],
+    required: [],
 }

@@ -42,6 +42,7 @@ module.exports = {
             // "vue-i18n": "vue-i18n",
             // "vue-router": "vue-router",
             // "vue-baidu-map": "vue-baidu-map",
+            // "vue-scrollto": "vue-scrollto",
             // "vue2-perfect-scrollbar": "vue2-perfect-scrollbar",
             // "vuedraggable": "vuedraggable",
             // "vxe-table": "vxe-table",

@@ -6,7 +6,7 @@
   <!-- 不能用v-if，否则若开始为隐藏，后续无法切换 -->
   <div
     v-show="!field.hide"
-    :class="['field-wrapper', form.grid ? 'field-border-top' : '']"
+    :class="['field-wrapper', field.name, form.grid ? 'field-border-top' : '']"
   >
     <div
       :class="[
@@ -162,6 +162,7 @@ export default {
       fieldSchema: {}, // 字段的schema
       lableRightBorder: 0, // 标签右侧的边
       errorFieldsHistory: [], // 记录上一次历史错误字段，用于消除本次必填和错误信息
+      fieldGrandfatherSchema: null, // schema的爷爷对象
     };
   },
   mounted() {
@@ -222,7 +223,7 @@ export default {
       }
     },
     pickSchema() {
-      // schema不是必须的或无field就无法查找
+      // schema不是必须的,若无field就无法查找
       if (
         Object.keys(this.schema).length == 0 ||
         !Object.keys(this.field).length
@@ -232,20 +233,37 @@ export default {
         .split(".")
         .join(".properties.")
         .split(".");
-
-      let schemaObj = this.schema.properties;
+      schemaKeys.unshift("properties");
+      let lastPropIdx = schemaKeys.lastIndexOf("properties");
+      let schemaObj = this.schema;
       for (let index = 0; index < schemaKeys.length; index++) {
         let key = schemaKeys[index];
         let value = schemaObj[key];
         if (value != undefined) schemaObj = value;
-        else return null;
+        else {
+          // 不存在则创建对应的schema结构
+          schemaObj[key] = {};
+          schemaObj = schemaObj[key];
+        }
+        if (index == lastPropIdx - 1) {
+          schemaObj.type = "object";
+          if (!schemaObj.required) schemaObj.required = [];
+          this.fieldGrandfatherSchema = schemaObj;
+        }
       }
+      if (!this.fieldGrandfatherSchema)
+        this.fieldGrandfatherSchema = this.schema;
       this.fieldSchema = schemaObj;
     },
     pickRequireds() {
-      if (!this.fieldSchema.require) return;
+      if (!this.fieldSchema.require && !this.field.require) return;
       if (!this.requireds.includes(this.field.name))
         this.requireds.push(this.field.name);
+      // 添加到对应scheme的required字段
+      let schemaRequired = this.field.name.split(".");
+      schemaRequired = schemaRequired[schemaRequired.length - 1];
+      if (!this.fieldGrandfatherSchema.required.includes(schemaRequired))
+        this.fieldGrandfatherSchema.required.push(schemaRequired);
     },
     createValue() {
       // 深度模式收集键值
@@ -279,20 +297,16 @@ export default {
         this.validateField(this.field.name, this.fieldSchema, defaultValue);
     },
     pickFieldSchema(fieldName) {
+      let schemaKeys = fieldName.split(".").join(".properties.").split(".");
       const fieldSchema =
-        path(fieldName.split("."), this.schema.then.properties) ||
-        path(fieldName.split("."), this.schema.properties) ||
+        path(schemaKeys, this.schema.then.properties) ||
+        path(schemaKeys, this.schema.properties) ||
         {};
       return fieldSchema;
     },
     removeErrorAndRequire() {
       // 先根据错误信息
       this.errorFieldsHistory.map((nameKey) => {
-        // 必填
-        let requireIndex = this.requireds.findIndex(
-          (require) => require == nameKey
-        );
-        if (requireIndex != -1) this.$delete(this.requireds, requireIndex);
         // 错误
         if (this.fieldErrors[nameKey]) this.$delete(this.fieldErrors, nameKey);
       });
@@ -300,25 +314,35 @@ export default {
     },
     validateField(fieldName, schema, value) {
       try {
-        schema = this.pickFieldSchema(fieldName) || schema;
-        if (!Object.keys(schema).length) return;
-        const pickSchema = pick(
+        let pickSchema = pick(
           ["errorMessage", "if", "else", "then", "allOf", "anyOf", "oneOf"],
           this.schema
         );
-        let require = [];
-        if (schema.require) require.push(fieldName);
-        const unitSchema = {
+        let fieldSchema = {
           type: "object",
-          properties: {
-            [fieldName]: schema,
-          },
-          // required: require,
+          properties: {},
           ...pickSchema,
         };
-        let valid = AJV.validate(unitSchema, this.values);
+        let schemaKeys = fieldName.split(".").join(".properties.").split(".");
+        schemaKeys.unshift("properties");
+        let fieldSchemaT = fieldSchema;
+        let lastPropIdx = schemaKeys.lastIndexOf("properties");
+        for (let index = 0; index < schemaKeys.length; index++) {
+          let key = schemaKeys[index];
+          let curSchema = fieldSchemaT[key];
+          if (curSchema != undefined) fieldSchemaT = curSchema;
+          else if (index == schemaKeys.length - 1) {
+            fieldSchemaT[key] = schema;
+          } else {
+            fieldSchemaT[key] = {};
+            fieldSchemaT = fieldSchemaT[key];
+          }
+          if (index == lastPropIdx - 1) {
+            fieldSchemaT.type = "object";
+          }
+        }
+        let valid = AJV.validate(fieldSchema, this.values);
         localizeErrors(AJV.errors); // 将错误信息转化成中文
-
         if (valid) this.$delete(this.fieldErrors, fieldName);
         // 验证正常需要从错误池中移除
         else {
@@ -326,18 +350,9 @@ export default {
             let fieldName = errorItem.instancePath
               .split("/")
               .slice(1, errorItem.instancePath.length)
-              .join("/");
-
+              .join(".");
             // 收集错误字段
             this.errorFieldsHistory.push(fieldName);
-            // 收集是否有必填信息
-            let fieldSchema = this.pickFieldSchema(fieldName);
-            if (
-              Object.keys(fieldSchema).length > 0 &&
-              fieldSchema.require &&
-              !this.requireds.includes(fieldName)
-            )
-              this.requireds.push(fieldName);
             // 错误信息收集
             if (
               fieldName != this.field.name &&
