@@ -208,3 +208,4 @@ layout: [{
   name: "title.text",
 }]
 ```
+[例子](http://117.73.12.76/demo/richform/#/deep-values )  

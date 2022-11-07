@@ -302,9 +302,9 @@ export default {
         console.error("全局校验失败字段集：", AJV.errors);
         let fieldDom = null;
         AJV.errors.map((errorItem) => {
-          let fieldName = errorItem.instancePath
+          let fieldName = errorItem.dataPath
             .split("/")
-            .slice(1, errorItem.instancePath.length)
+            .slice(1, errorItem.dataPath.length)
             .join("/");
           fieldName = fieldName.replace("/", "."); // deepValues模式需要将/替换成.
           this.$set(this.fieldErrors, fieldName, errorItem.message);

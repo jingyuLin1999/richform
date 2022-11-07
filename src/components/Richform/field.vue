@@ -347,9 +347,9 @@ export default {
         // 验证正常需要从错误池中移除
         else {
           AJV.errors.map((errorItem) => {
-            let fieldName = errorItem.instancePath
+            let fieldName = errorItem.dataPath
               .split("/")
-              .slice(1, errorItem.instancePath.length)
+              .slice(1, errorItem.dataPath.length)
               .join(".");
             // 收集错误字段
             this.errorFieldsHistory.push(fieldName);
@@ -363,7 +363,7 @@ export default {
           });
         }
       } catch (e) {
-        console.error("单个字段验证错误了：" + e);
+        console.error("单个字段验证错误了：", e);
       }
     },
     onChange(fieldName, value, schema) {
