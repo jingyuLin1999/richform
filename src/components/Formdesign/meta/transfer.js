@@ -40,7 +40,11 @@ export const attribute = {
                 widget: "draggablelist",
                 name: "options",
                 template: { label: "", key: "" },
-                editKeys: ["label", "key"],
+                attribute: {
+                    label: { widget: "input", placeholder: "", editable: true },
+                    key: { widget: "input", placeholder: "", editable: true },
+                    value: { widget: "", placeholder: "", editable: false },
+                },
                 default: [],
             },
             {

@@ -308,7 +308,6 @@ export default {
       }
       data.children.push(this.template);
       this.isModal = false;
-      this.getWidgetHeight();
     },
     editNodeModal(data, node) {
       this.isModal = true;
@@ -333,7 +332,6 @@ export default {
       this.template[this.field.nodeKey] = Math.random()
         .toString(16)
         .slice(2, 12);
-      this.getWidgetHeight();
     },
     addSiblingNode() {
       this.treeValue.push(this.template);

@@ -62,6 +62,7 @@
           </div>
         </template>
         <template slot="center">
+          <!-- {{design.values}} -->
           <RichForm
             class="design-canvas"
             :isDesign="isDesign"

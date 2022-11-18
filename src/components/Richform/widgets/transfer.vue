@@ -23,12 +23,6 @@ export default {
   name: "TransferWidget",
   components: { Transfer },
   mixins: [baseMixin],
-  beforeMount() {
-    window.addEventListener("resize", this.resizeHandler);
-  },
-  beforeDestroy() {
-    window.removeEventListener("resize", this.resizeHandler);
-  },
   methods: {
     defaultFieldAttr() {
       return {
@@ -37,9 +31,6 @@ export default {
         titles: ["Source1", "Target"], // 标题
         buttonTexts: [], // "到左边", "到右边"
       };
-    },
-    resizeHandler() {
-      this.getWidgetHeight();
     },
   },
 };

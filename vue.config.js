@@ -34,6 +34,7 @@ module.exports = {
             // "ajv-errors": "ajv-errors",
             // "ajv-i18n": "ajv-i18n",
             // "axios": "axios",
+            // "element-resize-detector": "element-resize-detector",
             // "core-js": "core-js",
             // "element-ui": "element-ui",
             // "jquery": "jquery",

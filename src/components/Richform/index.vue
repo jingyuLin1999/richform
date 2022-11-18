@@ -59,6 +59,7 @@
       form.activeDesign && isDesign ? 'active-form-design' : '',
     ]"
     :id="formId"
+    :ref="formId"
     :style="{ background: friendForm.colors.theme || '#fff' }"
   >
     <!-- 画布遮罩，用于全局点击事件 -->
@@ -311,7 +312,9 @@ export default {
           fieldDom = document.querySelector(`.${fieldName}`);
         });
         // 滚动到第一个错误位置
-        if (fieldDom) VueScrollTo.scrollTo(fieldDom, 50);
+        let richformEl = this.$refs[this.formId].parentElement;
+        if (fieldDom && richformEl)
+          VueScrollTo.scrollTo(fieldDom, 50, { el: richformEl });
       }
       return valid;
     },

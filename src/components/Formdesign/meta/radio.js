@@ -40,8 +40,11 @@ export const attribute = {
                 title: "选项",
                 widget: "draggablelist",
                 name: "options",
-                editKeys: ["name", "title"],
-                template: { title: "", name: "" }
+                template: { title: "", name: "" },
+                attribute: {
+                    title: { widget: "input", placeholder: "", editable: true },
+                    name: { widget: "input", placeholder: "", editable: true },
+                },
             },
             {
                 widget: "grid",

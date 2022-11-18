@@ -73,6 +73,7 @@
         :style="{ height: lableRightBorder + 'px' }"
       ></div>
       <div
+        ref="fieldValue"
         :class="[
           'field-value',
           isDesign ? 'field-mask' : '',
@@ -90,7 +91,6 @@
           :isDark="isDark"
           @change="onChange"
           @buttonEvent="onButtonEvent"
-          @widgetHeight="getWidgetHeight"
         />
         <!-- 错误信息 -->
         <div
@@ -134,11 +134,14 @@ import { Tooltip } from "element-ui";
 import eventbus from "./utils/eventbus";
 import DesignMixin from "./utils/designMixin";
 import CommonMixin from "./utils/commonMixin";
+import elementResizeDetectorMaker from "element-resize-detector";
 import AJV, { localize as localizeErrors } from "./utils/validator";
+
 export default {
   name: "field",
   components: { Tooltip },
   inject: [
+    "globalVars",
     "dependencies",
     "requireds",
     "isDeepValues",
@@ -204,15 +207,13 @@ export default {
       this.pickSchema();
       this.pickRequireds();
       this.createValue();
+      this.listenFieldEl();
     },
-    getWidgetHeight(valueHeight) {
-      this.$nextTick(() => {
-        const labelDom = this.$refs.fieldLabel;
-        if (labelDom) {
-          const labelHeight = labelDom.offsetHeight;
-          const height = labelHeight > valueHeight ? labelHeight : valueHeight;
-          this.$set(this.$data, "lableRightBorder", height);
-        }
+    listenFieldEl() {
+      this.detector = elementResizeDetectorMaker();
+      this.detector.listenTo(this.$refs.fieldValue, (element) => {
+        let height = element.offsetHeight < 40 ? 40 : element.offsetHeight;
+        this.lableRightBorder = height + 8;
       });
     },
     emit() {
@@ -407,6 +408,7 @@ export default {
     align-items: center;
     position: relative;
     min-height: 48px;
+    box-sizing: border-box;
     > .title-wrapper {
       display: flex;
       align-items: center;

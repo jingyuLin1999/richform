@@ -17,7 +17,6 @@
       :filterable="field.filterable"
       :size="field.size"
       @clear="clearOptions"
-      @change="calcuHeight"
     >
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
@@ -61,9 +60,6 @@ import { Select, Option, OptionGroup } from "element-ui";
 export default {
   mixins: [baseMixin],
   components: { Select, Option, OptionGroup },
-  mounted() {
-    this.calcuHeight();
-  },
   watch: {
     // 多选和单选切换，value数据类型需跟着转换
     "field.multiple"(newVal) {
@@ -125,12 +121,6 @@ export default {
         this.schema.type ||
         type(this.values[this.field.name]).toLowerCase();
       this.values[this.field.name] = this.friendDefaultValue(friendType);
-    },
-    // 有延迟，重复计算高度
-    calcuHeight() {
-      this.$nextTick((_) => {
-        this.getWidgetHeight();
-      });
     },
     // 过滤出符合条件的
     isFilter(option) {

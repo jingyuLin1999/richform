@@ -22,8 +22,12 @@ export const attribute = {
                 title: "标签",
                 name: "tabs",
                 widget: "draggablelist",
-                editKeys: ["label", "name"],
-                template: { label: "标签页一",fields: [] }
+                template: { label: "标签页一", fields: [] },
+                attribute: {
+                    label: { widget: "input", placeholder: "", editable: true },
+                    name: { widget: "input", placeholder: "", editable: true },
+                    value: { widget: "", placeholder: "", editable: false },
+                },
             },
         ],
     }

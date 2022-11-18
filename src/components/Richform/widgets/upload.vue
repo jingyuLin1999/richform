@@ -74,12 +74,6 @@ export default {
       dialogImageUrl: null,
     };
   },
-  watch: {
-    "field.listType"() {
-      // 类型改变了，可能导致高度发生变化，需重新计算高度
-      this.getWidgetHeight();
-    },
-  },
   mounted() {
     this.onFileList();
   },
@@ -157,9 +151,6 @@ export default {
         let rqData = this.getRemoveParams(file);
         loadDict(this.field.deleteUrl, rqData)
           .then((response) => {
-            setTimeout(() => {
-              this.getWidgetHeight();
-            }, 1300);
             if (response.status != 200) {
               Message({
                 type: "error",

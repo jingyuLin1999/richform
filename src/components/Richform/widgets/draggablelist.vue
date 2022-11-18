@@ -24,17 +24,52 @@
         <!-- 对象 -->
         <div
           v-else
-          class="input-wrapper"
+          class="column-wrapper"
           v-for="(key, index) in Object.keys(item)"
           :key="index"
         >
           <Input
             class="input-draggable"
-            v-if="field.editKeys && field.editKeys.includes(key)"
+            v-if="
+              field.attribute[key] &&
+              field.attribute[key].editable &&
+              field.attribute[key].widget == 'input'
+            "
             v-model="item[key]"
             :size="field.size"
-            :placeholder="key"
+            :disabled="field.attribute[key].disabled == true"
+            :placeholder="field.attribute[key].placeholder || key"
           />
+          <ColorPicker
+            v-else-if="
+              field.attribute[key] &&
+              field.attribute[key].editable &&
+              field.attribute[key].widget == 'colorpicker'
+            "
+            :disabled="field.attribute[key].disabled == true"
+            v-model="item[key]"
+            :size="field.size"
+          >
+          </ColorPicker>
+          <Select
+            v-else-if="
+              field.attribute[key] &&
+              field.attribute[key].editable &&
+              field.attribute[key].widget == 'select'
+            "
+            v-model="item[key]"
+            :size="field.size"
+            :disabled="field.attribute[key].disabled == true"
+            :placeholder="field.attribute[key].placeholder || key"
+          >
+            <Option
+              v-for="item in field.attribute[key].options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </Option>
+          </Select>
         </div>
         <i
           v-if="field.showOperation"
@@ -54,13 +89,13 @@
   </dl>
 </template>
 <script>
-import { Input } from "element-ui";
 import baseMixin from "./baseMixin";
 import Draggable from "vuedraggable";
+import { Input, ColorPicker, Select, Option } from "element-ui";
 export default {
   name: "DraggableListWidget",
   mixins: [baseMixin],
-  components: { Draggable, Input },
+  components: { Draggable, Input, ColorPicker, Select, Option },
   data() {
     return {
       id: 1,
@@ -82,12 +117,27 @@ export default {
         idKey: "id", // id的键值
         size: "small", // "mini/medium"
         title: "拖拽列表",
-        showLabel: false,
+        atLeastOne: true, // 选项至少要有一个D
         icon: "el-icon-circle-plus", // 添加图标
         showOperation: true, // 是否显示操作图标
         template: { label: "", value: "" }, // 新增模板,可以是对象也可以是字符串： { label: "", value: "" } 或 ""
-        atLeastOne: true, // 选项至少要有一个
-        editKeys: ["label", "value"], // 可编辑的键值
+        attribute: {
+          // template各个字段属性
+          label: {
+            widget: "input", // colorpicker|input|select
+            placeholder: "",
+            editable: true, // 是否可编辑
+            disabled: false,
+            options: [],
+          },
+          value: {
+            widget: "input",
+            placeholder: "",
+            editable: true,
+            disabled: false,
+            options: [], // { label: "sss", value: "s" }
+          },
+        },
       };
     },
     // 增加项目
@@ -102,13 +152,11 @@ export default {
       } else if (Array.isArray(this.field.template))
         template = JSON.parse(JSON.stringify(this.field.template));
       this.value.push(template);
-      this.getWidgetHeight();
     },
     // 删除项目
     deleteItem(index) {
       if (this.value.length === 1 && this.field.atLeastOne) return;
       this.value.splice(index, 1);
-      this.getWidgetHeight();
     },
     // 拖拽配置
     dragOptions() {
@@ -163,7 +211,7 @@ export default {
     .input-draggable {
       min-width: 60px;
     }
-    .input-wrapper {
+    .column-wrapper {
       margin-right: 3px;
     }
   }
