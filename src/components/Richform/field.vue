@@ -20,6 +20,7 @@
     >
       <div
         v-show="field.widget != 'button'"
+        ref="fieldTitle"
         :class="[
           'title-wrapper',
           'label-' + (form.labelAlign || 'right'),
@@ -212,7 +213,15 @@ export default {
     listenFieldEl() {
       this.detector = elementResizeDetectorMaker();
       this.detector.listenTo(this.$refs.fieldValue, (element) => {
-        let height = element.offsetHeight < 40 ? 40 : element.offsetHeight;
+        let titleHeight = this.$refs.fieldTitle.offsetHeight;
+        let valueHeight = element.offsetHeight < 40 ? 40 : element.offsetHeight;
+        let height = Math.max(titleHeight, valueHeight);
+        this.lableRightBorder = height + 8;
+      });
+      this.detector.listenTo(this.$refs.fieldTitle, (element) => {
+        let titleHeight = element.offsetHeight < 40 ? 40 : element.offsetHeight;
+        let valueHeight = this.$refs.fieldValue.offsetHeight;
+        let height = Math.max(titleHeight, valueHeight);
         this.lableRightBorder = height + 8;
       });
     },
