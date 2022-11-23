@@ -21,10 +21,11 @@ export default {
             return this.friendDefaultValue(type);
         },
         // 深度模式设置值
-        deepSetValue(keys = [], obj = {}, value) {
+        deepSetValue(keys = [], obj = {}, value, notExistAddObj = false) {
             let pickObj = null;
             if (keys.length == 0 || !keys[0]) return;
             keys.map((key, index) => {
+                if (notExistAddObj && !obj[key]) this.$set(obj, key, {})
                 pickObj = obj[key];
                 if (pickObj && keys.length != index + 1) obj = pickObj;
                 if (obj && keys.length == index + 1) this.$set(obj, key, value);
@@ -47,7 +48,8 @@ export default {
             if (!Array.isArray(dicts) || !dicts.length) return;
             for (let index = 0; index < dicts.length; index++) {
                 let dictItem = dicts[index];
-                if (dictItem.keyValue == this.values[fieldName] || dictItem.keyValue == "any") {
+                let fieldValue = this.deepPick(fieldName.split("."), this.values);
+                if (dictItem.keyValue == fieldValue || dictItem.keyValue == "any") {
                     let oldOptions = JSON.stringify(dictItem.field.options);
                     if (
                         typeof dictItem.dictValue == "string" &&
@@ -56,11 +58,14 @@ export default {
                         let options = [];
                         try {
                             // 若是url则发起http请求获取字典
-                            if (this.values[fieldName] != null && this.values[fieldName] != "") {
+                            if (fieldValue != null && fieldValue != "") {
                                 const { method, respProp, params, pickValues } = dictItem.field.dictConfig;
                                 let pickValueMap = {};
-                                pickValues.map(key => { if (this.values[key] != undefined) pickValueMap[key] = this.values[key] });
-                                const rqParams = Object.assign({ ...params }, pickValueMap, { [fieldName]: this.values[fieldName] });
+                                pickValues.map(key => {
+                                    let value = this.deepPick(key.split("."), this.values);
+                                    if (value != undefined) { pickValueMap[key] = value }
+                                });
+                                const rqParams = Object.assign({ ...params }, pickValueMap, { [fieldName]: fieldValue });
                                 const response = await loadDict(dictItem.dictValue, rqParams, method);
                                 const payload = this.deepPick(respProp.split("."), response);
                                 if (Array.isArray(payload) && payload.length > 0) options = payload;
@@ -76,7 +81,7 @@ export default {
                         // 若是对象，则根据对象过滤出符合条件的options
                         let filterKey = dictItem.dictValue.filterKey;
                         if (!filterKey || !dictItem.options.length) return;
-                        let filterOptions = dictItem.options.filter(item => (item[filterKey] == this.values[fieldName]));
+                        let filterOptions = dictItem.options.filter(item => (item[filterKey] == fieldValue));
                         this.$set(dictItem.field, "options", filterOptions);
                     }
                     // 只有选项改变了且新的选项中没有对应值，那么对应值才应清零
@@ -84,8 +89,9 @@ export default {
                     let matchOne = false;
                     const { defaultProp, name } = dictItem.field;
                     if (defaultProp) {
-                        let valueList = Array.isArray(this.values[name]) ? JSON.parse(JSON.stringify(this.values[name])) : [this.values[name]]
-                        // 值可能是数组，这种情况需要每个到options中匹配，匹配成功保留，否则删除
+                        let fieldValue = this.deepPick(name.split("."), this.values);
+                        let valueList = Array.isArray(fieldValue) ? JSON.parse(JSON.stringify(fieldValue)) : [fieldValue]
+                        // 值可能是数组(select可多选)，这种情况需要每个到options中匹配，匹配成功保留，否则删除
                         // 只要有一个匹配成功，就不会清空
                         let pickMatchValue = [];
                         valueList.map((valItem) => {
@@ -99,8 +105,9 @@ export default {
                         })
                         if (pickMatchValue.length > 0 && Array.isArray(this.values[name])) {
                             // 在index.html中watch values，加这个判断避免无限循环
-                            if (JSON.stringify(this.values[name]) != JSON.stringify(pickMatchValue))
-                                this.values[name] = pickMatchValue;
+                            if (JSON.stringify(fieldValue) != JSON.stringify(pickMatchValue)) {
+                                this.deepSetValue(name.split("."), this.values, pickMatchValue);
+                            }
                         }
                     }
                     // 重置值
@@ -129,22 +136,24 @@ export default {
         // 检查隐藏依赖
         dispatchHide(key) {
             let hideFields = this.hideFields[key];
-            if (hideFields && (this.values[key] || this.values[key] == 0)) { // 值有可能是0
+            let beRelyValue = this.deepPick(key.split("."), this.values);
+            if (hideFields && (beRelyValue || beRelyValue == 0)) { // 值有可能是0
                 let hideHistory = [];
                 for (let index = 0; index < hideFields.length; index++) {
                     let item = hideFields[index];
                     let { name, key, field, value } = item;
                     let nameKey = name + "@" + key;
-                    let isEquality = (value == this.values[key]);
+                    let isEquality = (value == beRelyValue);
                     if (!hideHistory.includes(nameKey) && isEquality) {
                         hideHistory.push(nameKey)
                         this.$set(field, "hide", isEquality);
                         // 在index.html中watch values，加这个判断避免无限循环
-                        if (!isEmpty(this.values[name])) {
+                        let hideValue = this.deepPick(name.split("."), this.values)
+                        if (!isEmpty(hideValue)) {
                             // 日期范围带有mapValues的需要清空
                             if (field.widget == "datetimepicker" && Array.isArray(this.values[name])) {
                                 field.mapValues.map(key => {
-                                    this.deepSetValue(key.split("."), this.values, this.tofriendValue(this.values[key]));
+                                    // this.deepSetValue(key.split("."), this.values, this.tofriendValue(beRelyValue));
                                 })
                             }
                             // 清空被隐藏字段的值
@@ -189,8 +198,10 @@ export default {
                 );
                 if (fieldSchema) fieldSchema[exp] = this.values[fieldName]; // 找到更新
                 else if (!fieldSchema && !field.hide) { // 有可能找不到
-                    this.$set(this.schema.properties, dispatchName, {
-                        [exp]: this.values[fieldName],
+                    let schemaKeys = dispatchName.split(".").join(".properties.").split(".");
+                    let fieldValue = this.deepPick(fieldName.split("."), this.values)
+                    this.deepSetValue(schemaKeys, this.schema.properties, {
+                        [exp]: fieldValue,
                     });
                 }
             });

@@ -52,13 +52,13 @@ export default {
             this.loadCompleteDispatch();
         },
         loadCompleteDispatch() {
-            for (let key in this.values) // 隐藏字段需要立马派发，不然视觉体验不友好
-                this.dispatchHide(key);
+            // 隐藏字段需要立马派发，不然视觉体验不友好
+            for (let key in this.hideFields) this.dispatchHide(key);
             // 等所有字段都渲染完成在派发options依赖
             if (this.globalVars.loadCompletedTimeout)
                 clearTimeout(this.globalVars.loadCompletedTimeout);
             this.globalVars.loadCompletedTimeout = setTimeout(() => {
-                for (let key in this.values) this.dispatchOptions(key);
+                for (let key in this.dependencies) this.dispatchOptions(key);
                 this.globalVars.loadCompleted = true;
             }, 500)
         },
@@ -134,7 +134,6 @@ export default {
                     });
                     if (hasExit) return;
                 }
-                let convertKey = ["true", "false"];
                 this.hideFields[relyKey].push({
                     name: this.field.name,
                     key: relyKey,

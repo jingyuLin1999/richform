@@ -23,13 +23,10 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
     <br />
     <Button type="info" size="small" @click="onSetValues">赋值values</Button>
     <Button type="primary" size="small" @click="changeTheme">改变主题</Button>
-    <Button
-      size="small"
-      type="success"
-      @click="hooks.validate()"
-      :style="{ 'margin-bottom': '3px' }"
+    <Button type="success" size="small" @click="hooks.validate()"
       >外部校验</Button
     >
+    <Button type="danger" size="small" @click="onHidden">触发隐藏</Button>
     <RichForm
       :schema="schema"
       :form="form"
@@ -170,7 +167,7 @@ export default {
         },
       },
       values: {
-        cascader: 4,
+        // cascader: 4,
         a: "",
         select: "",
         map: "阳新花园城",
@@ -180,7 +177,7 @@ export default {
           "http://192.168.100.12:9000/images/178a383967db4bc48bcf790282d5f19f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211210T013328Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7592596bef4cdb51eab88ea7713e7e423c23d21f8d822b8d9639f5917bbdb75a",
         ],
         tree: "22",
-        radioA: "radioB",
+        radioA: "radioA",
         selectA: "选项1",
         datetimepicker: ["2022-05-05 00:00:00", "2022-05-20 00:00:00"],
         selectB: "选项1",
@@ -493,7 +490,7 @@ export default {
                   {
                     title: "字典过滤",
                     widget: "select",
-                    name: "dictTest",
+                    name: "dictUrl",
                     defaultOption: 0, // 当字典从服务器加载后默认选中的选项下标
                     dictConfig: {
                       method: "post",
@@ -1066,6 +1063,9 @@ export default {
     onSetValues() {
       // 手动赋值values，是否会重新派发隐藏和下拉选项
       this.$set(this.values, "selectA", "选项2");
+    },
+    onHidden() {
+      this.$set(this.values, "radioA", "radioB");
     },
     changeTheme() {
       this.form.colors = {

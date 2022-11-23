@@ -145,11 +145,8 @@ export default {
       // 当加载完成手动进行赋值时，此时下拉选项要重新派发
       handler() {
         if (!this.globalVars.loadCompleted) return;
-        for (let key in this.values) {
-          // values手动赋值，重新派发
-          this.dispatchHide(key);
-          this.dispatchOptions(key);
-        }
+        for (let key in this.hideFields) this.dispatchHide(key);
+        for (let key in this.dependencies) this.dispatchOptions(key);
       },
       deep: true,
     },

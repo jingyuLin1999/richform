@@ -23,7 +23,6 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
   <div class="richform-deep-value">
     所有值：{{ values }}<br />
     脏值：{{ hooks.dirtyValues }}<br />
-    自动创建Schema： {{ schema }}<br />
     <Button size="small" type="primary" @click="onAddValues">新增values</Button>
     <Button size="small" type="warning" @click="changeValue">改变values</Button>
     <Button size="small" type="success" @click="hooks.reset()"
@@ -32,8 +31,8 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
     <Button size="small" type="danger" @click="hooks.validate()"
       >外部校验</Button
     >
-
     <br />
+
     <RichForm
       :schema="schema"
       :form="form"
@@ -69,12 +68,12 @@ export default {
                 type: "string",
                 minLength: 20,
               },
+              hello: {
+                type: "string",
+                minLength: 6,
+              },
             },
             // required: ["text"],
-          },
-          hello: {
-            type: "string",
-            minLength: 6,
           },
         },
       },
@@ -82,6 +81,7 @@ export default {
         title: {
           text: "ECharts 入门示例",
           subtext: "Living Expenses in Shenzhen",
+          hello: "",
         },
       },
       form: {
@@ -97,11 +97,32 @@ export default {
           {
             title: "你好",
             widget: "select",
-            name: "hello",
+            name: "title.hello",
             options: [
-              { label: "nihao", value: "hello" },
+              { label: "nihao", value: "nihao" },
               { label: "richform", value: "richform" },
             ],
+          },
+          {
+            title: "richform",
+            widget: "select",
+            name: "title.richform",
+            description: "我的选项依赖于【你好】",
+            dict: {
+              "title.hello == nihao": [
+                {
+                  value: "nihaoOption",
+                  label: "nihaoOption",
+                },
+              ],
+              "title.hello == richform": [
+                {
+                  value: "richformOption",
+                  label: "richformOption",
+                },
+              ],
+            },
+            options: [],
           },
           {
             title: "主标题",
@@ -114,6 +135,53 @@ export default {
             widget: "input",
             name: "title.subtext",
             require: true,
+            hideRely: ["title.hello==nihao"],
+            description: "当你好等于nihao时，我隐藏",
+          },
+          {
+            widget: "grid",
+            title: "deepValues模式regExp例子",
+            showTitle: true,
+            isClicked: false,
+            flexWrap: true,
+            fields: [
+              [
+                {
+                  title: "数字A",
+                  name: "title.intA",
+                  widget: "inputnumber",
+                  min: -9999,
+                  regExp: [{ exp: "exclusiveMaximum", relyName: "title.intB" }],
+                },
+              ],
+              [
+                {
+                  title: "数字B",
+                  name: "title.intB",
+                  widget: "inputnumber",
+                  description: "我的校验规则是值大于【数字A】",
+                  regExp: [{ exp: "exclusiveMinimum", relyName: "title.intA" }],
+                },
+              ],
+            ],
+          },
+          {
+            title: "字典URL",
+            widget: "select",
+            name: "title.dictUrl",
+            defaultOption: 0,
+            dictConfig: {
+              method: "post",
+              respProp: "data",
+              params: {}, // 一些固定的过滤参数
+              pickValues: ["title.text"],
+            },
+            description: "当【你好】的值改变，就发起请求",
+            dict: {
+              "title.hello == any":
+                "http://192.168.100.217:8899/ae_cnc/chk_detect/getProGroupList",
+            },
+            options: [],
           },
         ],
       },
@@ -122,8 +190,8 @@ export default {
   methods: {
     onAddValues() {
       this.$set(this.$data, "values", {
-        hello: "hello",
         title: {
+          hello: "nihao",
           text: "ECharts 入门示例",
           subtext: "Living Expenses in Shenzhen",
         },
@@ -131,8 +199,8 @@ export default {
     },
     changeValue() {
       this.$set(this.$data, "values", {
-        hello: "hello",
         title: {
+          hello: "richform",
           text: "ECharts 入门示例123",
           subtext: "Liv88888",
         },
@@ -143,8 +211,9 @@ export default {
 </script>
 
 <style lang="scss">
-.rich-form-app {
+.richform-deep-value {
   padding: 10px;
+  overflow: auto;
 }
 </style>
 

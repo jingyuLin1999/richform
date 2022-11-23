@@ -89,5 +89,8 @@ export default {
     position: absolute;
     z-index: 2;
   }
+  .tab-container {
+    min-height: 15px;
+  }
 }
 </style>

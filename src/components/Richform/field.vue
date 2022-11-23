@@ -172,15 +172,6 @@ export default {
   mounted() {
     this.load();
   },
-  watch: {
-    values: {
-      handler() {
-        if (!this.isDeepValues) return;
-        this.createValue();
-      },
-      deep: true,
-    },
-  },
   computed: {
     asyncComponent() {
       let widget = this.field.widget || this.fieldSchema.widget;
@@ -252,7 +243,7 @@ export default {
         if (value != undefined) schemaObj = value;
         else {
           // 不存在则创建对应的schema结构
-          schemaObj[key] = {};
+          this.$set(schemaObj, key, {});
           schemaObj = schemaObj[key];
         }
         if (index == lastPropIdx - 1) {
@@ -299,9 +290,14 @@ export default {
         defaultValue != null && defaultValue != undefined
           ? defaultValue
           : this.friendDefaultValue(this.fieldSchema.type);
-      if (this.isDeepValues)
-        this.deepSetValue(this.field.name.split("."), this.values, friendValue);
-      else this.$set(this.values, this.field.name, friendValue);
+      if (this.isDeepValues) {
+        this.deepSetValue(
+          this.field.name.split("."),
+          this.values,
+          friendValue,
+          true
+        );
+      } else this.$set(this.values, this.field.name, friendValue);
       // 若有默认值，则需要直接进行校验
       if (defaultValue)
         this.validateField(this.field.name, this.fieldSchema, defaultValue);
