@@ -11,6 +11,7 @@ export default {
         fieldErrors: { type: Object, default: () => ({}) },
         hideFields: { type: Object, default: () => ({}) },
         isDark: { type: Boolean, default: false },
+        form: { type: Object, default: () => ({}) },
     },
     data() {
         return {

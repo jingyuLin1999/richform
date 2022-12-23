@@ -6,6 +6,7 @@
         :key="index"
         :type="action.type"
         v-if="action.visible != false"
+        :loading="action.loading == true"
         :size="action.size || form.size"
         @click="onActionClick(action, $event)"
         :native-type="getButtonType(action)"
@@ -23,6 +24,7 @@
           v-if="action.visible != false"
           @click="onActionClick(action, $event)"
           :native-type="getButtonType(action)"
+          :loading="action.loading"
           :disabled="isDesign"
         >
           <i :class="action.icon" v-if="action.icon"></i> {{ action.title }}

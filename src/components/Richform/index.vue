@@ -64,7 +64,10 @@
   >
     <!-- 画布遮罩，用于全局点击事件 -->
     <div class="canvas-mask" @click="onClickCanvas"></div>
-    <perfect-scrollbar :style="{ 'min-height': '20px' }">
+    <perfect-scrollbar
+      :style="{ 'min-height': '20px' }"
+      :ref="formId + '-scrollbar'"
+    >
       <!-- 顶部按钮 -->
       <actions
         v-if="showBtns"
@@ -113,6 +116,7 @@ import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 import CommonMixin from "./utils/commonMixin";
 import { getRgbValueFromHex } from "./utils";
+import elementResizeDetectorMaker from "element-resize-detector";
 
 export default {
   name: "RichForm",
@@ -207,6 +211,7 @@ export default {
       this.onAuthorize();
       this._registerEvents();
       this.initHooks();
+      this.listenFormHeight();
     },
     initHooks() {
       this.hooks.validate = this.globalValidate;
@@ -221,6 +226,19 @@ export default {
       );
       sessionStorage.setItem("richform-key", key);
       sessionStorage.setItem("richform-value", value);
+    },
+    listenFormHeight() {
+      if (!this.isDesign) return;
+      let detector = elementResizeDetectorMaker();
+      this.$nextTick(() => {
+        let formEl = this.$refs[this.formId];
+        let scrollEl = this.$refs[this.formId + "-scrollbar"];
+        detector.listenTo(scrollEl.$el, (element) => {
+          if (element.offsetHeight > formEl.offsetHeight) {
+            this.$refs[this.formId].style.height = element.offsetHeight + "px";
+          }
+        });
+      });
     },
     noReady() {
       return Object.keys(this.form).length == 0;

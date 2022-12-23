@@ -202,7 +202,7 @@ export default {
         actions: [
           //声明显示在下方和动作按钮
           {
-            name: "reset", // 按键的唯一标识符
+            name: "reset1", // 按键的唯一标识符
             type: "primary", // 按键类型,默认为primary，具体可见element button
             title: "重置", // 按键的文字
             icon: "el-icon-star-off", // 按键图标 具体可见element icon
@@ -211,6 +211,7 @@ export default {
             tips: "提示信息", // 鼠标悬浮在按键的提示信息
             top: true, // 是否在上面, false则在下面
             size: "medium", // medium / small / mini, 若未指明，则等同于form.size
+            loading: false,
           },
           {
             name: "submit", // 按键的唯一标识符
@@ -222,9 +223,29 @@ export default {
             tips: "提示信息", // 鼠标悬浮在按键的提示信息
             top: true, // 是否在上面, false则在下面
             size: "medium", // medium / small / mini, 若未指明，则等同于form.size
+            loading: false,
           },
         ],
         layout: [
+          {
+            widget: "expression",
+            name: "expression",
+            title: "表达式",
+            key: {
+              options: [
+                { label: "姓名", value: "name" },
+                { label: "年龄", value: "age" },
+                { label: "身高", value: "height" },
+                { label: "爱好", value: "like" },
+                { label: "头发", value: "hair" },
+                { label: "鞋子", value: "shoes" },
+                { label: "皮肤", value: "skin" },
+              ],
+            },
+            val: {
+              options: [{ label: "123", value: "123" }],
+            },
+          },
           {
             widget: "button",
             name: "button",
@@ -997,6 +1018,7 @@ export default {
                         tips: "提示信息", // 鼠标悬浮在按键的提示信息
                         top: false, // 是否在上面, false则在下面
                         size: "medium", // medium / small / mini, 若未指明，则等同于form.size
+                        loading: false,
                       },
                     ],
                     fields: [
@@ -1058,6 +1080,7 @@ export default {
   },
   methods: {
     formAction(event) {
+      event.loading = true;
       console.log(event);
     },
     onSetValues() {

@@ -76,6 +76,7 @@ export const rules = {
                 widget: "select",
                 name: "type",
                 size: "small",
+                default: "number",
                 options: [
                     {
                         value: "string",
@@ -84,6 +85,10 @@ export const rules = {
                     {
                         value: "number",
                         label: "数字",
+                    },
+                    {
+                        value: "boolean",
+                        label: "布尔",
                     },
                 ],
             },

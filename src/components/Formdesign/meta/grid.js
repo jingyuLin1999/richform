@@ -4,7 +4,7 @@ export const attribute = {
 
     },
     values: {
-        ratio: "1:1:1"
+ 
     },
     form: {
         ...baseForm,
@@ -16,6 +16,7 @@ export const attribute = {
                 widget: "input",
                 description: "和列数对应,中间用英文字符:隔开",
                 size: "small",
+                placeholder: "如： 1:1"
             },
             {
                 title: "列数",

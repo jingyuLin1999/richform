@@ -69,7 +69,7 @@
       </div>
       <div
         v-if="form.grid && form.labelInline"
-        v-show="field.showLabel != 'button'"
+        v-show="isShyTitle"
         class="label-right-border"
         :style="{ height: lableRightBorder + 'px' }"
       ></div>
@@ -83,6 +83,7 @@
       >
         <component
           :is="asyncComponent"
+          :form="form"
           :schema="fieldSchema"
           :values="values"
           :field="field"
