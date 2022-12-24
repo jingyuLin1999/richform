@@ -1,6 +1,12 @@
 
 <template>
-  <Popover placement="bottom-start" title="请选择" width="800" trigger="click">
+  <Popover
+    placement="bottom-start"
+    ref="iconRef"
+    title="请选择"
+    width="800"
+    trigger="click"
+  >
     <div class="icon-container">
       <div
         v-for="icon in iconList"
@@ -11,6 +17,9 @@
         <i :class="icon"></i>
       </div>
     </div>
+    <Button type="primary" size="mini" class="sure-icon" @click="onSureIcon"
+      >确定
+    </Button>
     <Button
       slot="reference"
       :size="field.size"
@@ -44,6 +53,9 @@ export default {
     clickIcon(val) {
       this.value = this.latestIcon == val ? null : val;
       this.latestIcon = this.value;
+    },
+    onSureIcon() {
+      this.$refs.iconRef.doClose();
     },
   },
   data() {
@@ -363,5 +375,9 @@ export default {
   .icon-cell:hover {
     color: #4f9ffe;
   }
+}
+.sure-icon {
+  float: right;
+  margin-top: 4px;
 }
 </style>

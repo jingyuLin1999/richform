@@ -4,7 +4,7 @@
       <Input
         :class="['el-form-item', isError ? 'is-error' : '']"
         ref="expressionInput"
-        v-model="value"
+        v-model="expValue"
         clearable
         placeholder="输入条件表达式"
       ></Input>
@@ -19,10 +19,10 @@
             </div>
             <perfect-scrollbar class="option-list">
               <div
-                class="option"
                 v-for="(item, index) in obj.options"
                 :key="index"
-                @click="clickOption(item.value)"
+                :class="['option', item.disabled ? 'disabled-option' : '']"
+                @click="clickOption(item)"
               >
                 {{ item.label }}
               </div>
@@ -54,16 +54,27 @@ export default {
     });
   },
   watch: {
-    value(val) {
+    expValue(val) {
       this.validateExpression(val);
     },
   },
   computed: {
     cardOptions() {
-      let { key, exp, val } = this.field;
-      let options = [key, exp, val];
+      let options = [];
+      for (let key in this.field) {
+        if (["key", "exp", "val"].includes(key)) {
+          this.field[key].name = key;
+          options.push(this.field[key]);
+        }
+      }
       options.sort((a, b) => a.order - b.order);
       return options;
+    },
+    buttonLable() {
+      let label = Array.isArray(this.value)
+        ? this.value[this.field.index]
+        : this.value;
+      return label || "请选择";
     },
   },
   methods: {
@@ -97,17 +108,30 @@ export default {
       if (startPos === undefined || endPos === undefined) return;
       this.cursorPosition = startPos;
     },
+    // 迭代获取值
+    iterationFindValue(obj) {
+      let result = {};
+      for (let key in obj) {
+        if (typeof obj[key] == "object") {
+          result[key] = this.iterationFindValue(obj[key]);
+        } else {
+          result[key] = obj[key];
+        }
+      }
+      return result;
+    },
     // 设置值
-    async clickOption(value) {
+    async clickOption({ value, disabled }) {
+      if (disabled == true) return;
       this.getCursorPosition();
       let newCursorPosition = this.cursorPosition + value.length;
-      let oldValue = this.value || "";
+      let oldValue = this.expValue || "";
       let expressionValue =
         oldValue.slice(0, this.cursorPosition) +
         value +
         oldValue.slice(this.cursorPosition);
       this.cursorPosition = newCursorPosition;
-      this.value = expressionValue;
+      this.expValue = expressionValue;
       await this.$nextTick();
       this.expressionInputEl.focus();
       this.expressionInputEl.setSelectionRange(
@@ -134,14 +158,16 @@ export default {
     },
     onSureExp() {
       if (this.isError) return;
-      this.buttonLable = this.value ? this.value : "请选择";
+      if (Array.isArray(this.value)) {
+        this.$set(this.value, this.field.index, this.expValue);
+      } else this.value = this.expValue;
       this.$refs.popoverRef.doClose();
     },
   },
   data() {
     return {
+      expValue: "",
       isError: false, // 是否错误
-      buttonLable: "请选择", //
       cursorPosition: 0, // 光标位置
     };
   },
@@ -178,6 +204,20 @@ export default {
       > .option:hover {
         background: #bbb;
         color: #fff;
+      }
+      > .disabled-option {
+        position: relative;
+      }
+      > .disabled-option::after {
+        content: "";
+        background: "#f00";
+        z-index: 1000;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        cursor: not-allowed;
       }
     }
   }

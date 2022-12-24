@@ -760,6 +760,25 @@ export default {
             widget: "draggablelist",
             name: "draggablelist",
             default: [],
+            template: { label: "", value: "" },
+            strAttr: {
+              // 当template: "",时有效
+              widget: "expression", // 或 input
+              key: {
+                options: [
+                  { label: "姓名", value: "name" },
+                  { label: "年龄", value: "age" },
+                  { label: "身高", value: "height" },
+                  { label: "爱好", value: "like" },
+                  { label: "头发", value: "hair" },
+                  { label: "鞋子", value: "shoes" },
+                  { label: "皮肤", value: "skin" },
+                ],
+              },
+              val: {
+                options: [{ label: "123", value: "123" }],
+              },
+            },
           },
           {
             title: "Ip输入框",

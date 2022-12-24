@@ -6,6 +6,9 @@ export const baseForm = {
     validator: "input", // submit
     labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
     labelInline: true, // 字段标题显示位置, 默认true左侧left,false显示在top上方
+    colors: {
+        btnBgColor: ""
+    }
 }
 
 export const baseValues = {
@@ -17,8 +20,11 @@ export const baseLayout = [
         title: "名称",
         name: "name",
         size: "small",
-        widget: "input",
-        description: "对应数据库字段"
+        widget: "select",
+        filterable: true,
+        allowCreate: true,
+        description: "对应数据库字段",
+        options: [],
     },
     {
         title: "标题",
@@ -26,6 +32,30 @@ export const baseLayout = [
         size: "small",
         widget: "input"
     },
+    {
+        title: "隐藏",
+        name: "hideRely",
+        size: "small",
+        widget: "draggablelist",
+        // description: "隐藏依赖设置",
+        template: "",
+        default: [],
+        strAttr: {
+            widget: "expression",
+            key: {
+                title: "字段",
+                show: true,
+                order: 1,
+                options: [],
+            },
+            val: {
+                title: "值",
+                show: true,
+                order: 3,
+                options: [],
+            },
+        }
+    }
 ]
 
 export const baseRules = {

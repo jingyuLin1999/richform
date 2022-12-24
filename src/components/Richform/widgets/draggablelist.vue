@@ -14,13 +14,21 @@
           ]"
         ></i>
         <!-- 字符串 -->
-        <Input
-          class="input-draggable"
-          v-if="typeof item == 'string'"
-          :size="field.size"
-          v-model="value[index]"
-          :placeholder="value[index]"
-        />
+        <template v-if="typeof item == 'string'">
+          <Input
+            v-if="field.strAttr.widget == 'input'"
+            class="input-draggable"
+            :size="field.size"
+            v-model="value[index]"
+            :placeholder="value[index]"
+          />
+          <Expression
+            v-else-if="field.strAttr.widget == 'expression'"
+            :form="form"
+            :values="values"
+            :field="{ name: field.name, index, ...field.strAttr }"
+          />
+        </template>
         <!-- 对象 -->
         <div
           v-else
@@ -91,18 +99,19 @@
 <script>
 import baseMixin from "./baseMixin";
 import Draggable from "vuedraggable";
+import Expression from "./expression";
 import { Input, ColorPicker, Select, Option } from "element-ui";
 export default {
   name: "DraggableListWidget",
   mixins: [baseMixin],
-  components: { Draggable, Input, ColorPicker, Select, Option },
+  components: { Draggable, Input, ColorPicker, Select, Option, Expression },
   data() {
     return {
       id: 1,
     };
   },
   mounted() {
-    if (!this.value) this.value = [];
+    if (!Array.isArray(this.value)) this.value = [];
     if (this.field.atLeastOne && this.value.length == 0) this.addItem();
     // 找出最大id
     for (let key in this.value) {
@@ -136,6 +145,29 @@ export default {
             editable: true,
             disabled: false,
             options: [], // { label: "sss", value: "s" }
+          },
+        },
+        strAttr: {
+          // 当template为字符串时有效
+          size: "mini",
+          widget: "input", // input|expression
+          key: {
+            title: "字段",
+            show: true,
+            order: 1,
+            options: [],
+          },
+          exp: {
+            title: "不等式",
+            show: true,
+            order: 2,
+            options: [{ label: "等于", value: "==" }],
+          },
+          val: {
+            title: "值",
+            show: true,
+            order: 3,
+            options: [],
           },
         },
       };

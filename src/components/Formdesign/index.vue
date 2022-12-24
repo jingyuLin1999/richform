@@ -102,15 +102,31 @@
 <script>
 import RichForm from "../Richform";
 import Draggable from "vuedraggable";
+import { mergeDeepRight } from "ramda";
 import SplitLayout from "../SplitLayout";
 import { layout, widgets } from "./meta/layout";
 import { Tabs, TabPane } from "element-ui";
+
 export default {
   name: "FormDesign",
   components: { Draggable, SplitLayout, RichForm, Tabs, TabPane },
   props: {
     fields: { type: Array, default: () => [] }, // 表的字段
     authorization: { type: Object, default: () => ({}) }, // 权限
+  },
+  computed: {
+    friendlyFields() {
+      return this.fields.map((item) => {
+        if (typeof item == "string") return { label: item, value: item };
+        else if (
+          Object.prototype.toString.call(item) === "[object Object]" &&
+          !item.value
+        ) {
+          item.value = item.label;
+        }
+        return item;
+      });
+    },
   },
   data() {
     return {
@@ -198,10 +214,16 @@ export default {
     },
     setAttribute(item, attribute) {
       let attributeMeta = JSON.parse(JSON.stringify(attribute));
-      let assignValues = Object.assign({}, item, attributeMeta.values);
-      for (let key in assignValues) {
-        this.$set(item, key, assignValues[key]);
-      }
+      mergeDeepRight(attributeMeta.values, item);
+      // 数据库字段
+      let name = attributeMeta.form.layout.find((item) => item.name == "name");
+      name.options = this.friendlyFields;
+      // 依赖
+      let hideRely = attributeMeta.form.layout.find(
+        (item) => item.name == "hideRely"
+      );
+      hideRely.strAttr.key.options = this.friendlyFields;
+      // 设置属性值
       this.$set(this.attribute, "values", item);
       this.$set(this.attribute, "form", attributeMeta.form);
       this.$set(this.attribute, "schema", attributeMeta.schema);

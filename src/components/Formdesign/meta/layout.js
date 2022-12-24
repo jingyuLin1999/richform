@@ -39,12 +39,14 @@ export const widgets = [
         title: "输入框",
         widget: "input",
         name: "input",
+        hideRely: [],
     },
     {
         title: "下拉选框", // 优先级小于shema中定义的title
         widget: "select",
         name: "select",
         options: [],
+        hideRely: [],
     },
     {
 
@@ -58,6 +60,7 @@ export const widgets = [
         size: "small",
         fill: "#409EFF",
         textColor: "#fff",
+        hideRely: [],
         options: [
             {
                 title: "选项A",
@@ -88,6 +91,7 @@ export const widgets = [
         max: 10000,
         min: 0,
         default: [],
+        hideRely: [],
         options: [
             {
                 title: "复选框A",
@@ -114,6 +118,7 @@ export const widgets = [
         stepStrictly: false, // 严格步数,只能输入 step 的倍数
         precision: undefined, // 精度,设置计数器最小值
         controlsPosition: "", // 按钮位置。计数器增减按钮的位置, 默认"", 可设置为 "right"
+        hideRely: [],
     },
     {
         name: "switch",
@@ -129,6 +134,7 @@ export const widgets = [
         inactiveValue: 2, // 关闭的值，支持Boolean, String或Number
         activeIconClass: "",
         inactiveIconClass: "",
+        hideRely: [],
     },
     {
         widget: "slider",
@@ -138,22 +144,26 @@ export const widgets = [
         minimum: 0,
         maximum: 1000,
         step: 1,
+        hideRely: [],
     },
     {
         title: "颜色选择器",
         widget: "colorpicker",
         name: "colorpicker",
+        hideRely: [],
     },
     {
         title: "评分",
         widget: "rate",
         name: "rate",
+        hideRely: [],
     },
     {
         title: "穿梭框",
         name: "transfer",
         widget: "transfer",
         default: [],
+        hideRely: [],
         options: [
             {
                 label: `备选项1`,
@@ -169,6 +179,7 @@ export const widgets = [
         title: "时间选择器",
         widget: "timepicker",
         name: "timepicker",
+        hideRely: [],
     },
     {
         title: "日期选择器",
@@ -188,6 +199,7 @@ export const widgets = [
         startPlaceholder: "开始时间",
         endPlaceholder: "结束时间",
         pickerOptions: {},
+        hideRely: [],
     },
     {
         title: "级联选择器",
@@ -204,6 +216,7 @@ export const widgets = [
         expandTrigger: "hover", // 	click / hover
         checkStrictly: false,
         multiple: false, // 可通过 props.multiple = true 来开启多选模
+        hideRely: [],
         options: [
             {
                 id: "zhinan",
@@ -221,10 +234,12 @@ export const widgets = [
         widget: "slot",
         name: "slot",
         html: "你好，我是自定义文本",
+        hideRely: [],
     },
     {
         title: "IP输入框",
         widget: "ipinput",
+        hideRely: [],
     },
     {
         title: "上传",
@@ -240,6 +255,7 @@ export const widgets = [
         limit: 3, // 上传限制
         disabled: false,
         showFileList: true, // 是否显示已上传文件列表
+        hideRely: [],
     },
     {
         title: "图标",
@@ -248,6 +264,7 @@ export const widgets = [
         size: "small",
         disabled: false,
         fontSize: "13px",
+        hideRely: [],
     },
     {
         title: "按钮",
@@ -265,7 +282,8 @@ export const widgets = [
         leftIcon: "",
         rightIcon: "",
         isGroup: false,
-        options: []
+        options: [],
+        hideRely: [],
     },
 ]
 
