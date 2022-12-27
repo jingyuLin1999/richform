@@ -217,12 +217,12 @@ export default {
       mergeDeepRight(attributeMeta.values, item);
       // 数据库字段
       let name = attributeMeta.form.layout.find((item) => item.name == "name");
-      name.options = this.friendlyFields;
+      if (name) name.options = this.friendlyFields;
       // 依赖
       let hideRely = attributeMeta.form.layout.find(
         (item) => item.name == "hideRely"
       );
-      hideRely.strAttr.key.options = this.friendlyFields;
+      if (hideRely) hideRely.strAttr.key.options = this.friendlyFields;
       // 设置属性值
       this.$set(this.attribute, "values", item);
       this.$set(this.attribute, "form", attributeMeta.form);

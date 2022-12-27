@@ -24,6 +24,14 @@ export default {
     created() {
         this.load();
     },
+    watch: {
+        "field.hideRely": {
+            handler() {
+                this.pickHideFields();
+            },
+            deep: true,
+        }
+    },
     computed: {
         value: {
             get() {
