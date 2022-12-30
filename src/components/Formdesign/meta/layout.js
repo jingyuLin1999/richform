@@ -111,7 +111,7 @@ export const widgets = [
         name: "inputnumber",
         widget: "inputnumber",
         title: "计数器",
-        disabled: true,
+        disabled: false,
         step: 1, // 步数
         min: undefined,
         max: undefined,

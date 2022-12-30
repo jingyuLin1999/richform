@@ -30,7 +30,9 @@
           </div>
         </template>
       </div>
-      <Button slot="reference" :size="field.size"> {{ buttonLable }}</Button>
+      <Button slot="reference" :size="field.size" @click="onExpressionBtn">
+        {{ buttonLable }}</Button
+      >
       <Button type="primary" size="small" class="sure-exp" @click="onSureExp"
         >确定</Button
       >
@@ -162,6 +164,10 @@ export default {
         this.$set(this.value, this.field.index, this.expValue);
       } else this.value = this.expValue;
       this.$refs.popoverRef.doClose();
+    },
+    onExpressionBtn() {
+      if (!this.value || this.buttonLable == "请选择") return;
+      this.expValue = this.buttonLable;
     },
   },
   data() {
