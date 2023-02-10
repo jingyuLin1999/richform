@@ -1,8 +1,11 @@
 <template>
-  <div class="ip-input-container" :class="{disabled:disabled,focus:isFocus}">
+  <div
+    class="ip-input-container"
+    :class="{ disabled: disabled, focus: isFocus }"
+  >
     <div
       class="ip-segment"
-      :style="{visibility:disabled?'hidden':'visible'}"
+      :style="{ visibility: disabled ? 'hidden' : 'visible' }"
       v-for="(segment, index) in segments"
       :key="index"
     >
@@ -15,8 +18,9 @@
         v-on:keydown="onInputKeydown($event, index)"
         v-on:input="onInput($event, index)"
         v-on:blur="onInputBlur()"
-        v-on:focus="isFocus=true"
+        v-on:focus="isFocus = true"
         v-on:paste="onPaste($event, index)"
+        :style="{ color: colors.fontColor }"
       />
       <i v-show="index != segments.length - 1">.</i>
     </div>
@@ -94,20 +98,21 @@ function getRange(el) {
 export default {
   props: {
     ip: {
-      type: String
+      type: String,
     },
     placeholder: String,
     onChange: Function,
     onBlur: Function,
     disabled: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    colors: { type: Object, default: () => ({}) },
   },
   data() {
     return {
       isFocus: false,
-      segments: ["", "", "", ""]
+      segments: ["", "", "", ""],
     };
   },
   watch: {
@@ -116,7 +121,7 @@ export default {
         this.segments = ["", "", "", ""];
       }
       this.syncIp(ip);
-    }
+    },
   },
   methods: {
     onInputKeydown(event, index) {
@@ -200,7 +205,7 @@ export default {
           return segment;
         });
       }
-    }
+    },
   },
   mounted() {
     this.syncIp(this.ip);
@@ -220,7 +225,7 @@ export default {
         }
       }
     );
-  }
+  },
 };
 </script>
 

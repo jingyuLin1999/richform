@@ -5,6 +5,7 @@
       :ip="value"
       :placeholder="field.placeholder"
       :on-change="onIpChange"
+      :colors="colors"
     ></ipInput>
     <template slot="prepend" v-if="field.prepend">{{ field.prepend }}</template>
     <template slot="append" v-if="field.append">{{ field.append }}</template>
