@@ -7,7 +7,7 @@
       class="design-no-tabs"
       @click="onClickedItem(tabsItem)"
     ></div>
-    <Tabs v-model="activeTabName" @tab-click="clickTab(tabsItem)">
+    <Tabs v-model="activeTabName" @tab-click="clickTab">
       <TabPane
         v-for="(tab, index) in tabsItem.tabs"
         :key="index"
@@ -74,7 +74,9 @@ export default {
     this.$options.components.Layout = () => import("../layout.vue");
   },
   methods: {
-    clickTab() {},
+    clickTab(tab) {
+      this.emit("action", tab);
+    },
   },
 };
 </script>

@@ -13,7 +13,7 @@
       class="design-no-collapse"
       @click="onClickedItem(collapse)"
     ></div>
-    <Collapse v-model="openCollapseName">
+    <Collapse v-model="openCollapseName" @change="onChange">
       <CollapseItem :name="collapse.name" class="collapse-item">
         <template slot="title">
           <span :style="collapse.style" class="collapse-title">{{
@@ -93,6 +93,9 @@ export default {
       if (this.collapse.expand) {
         this.openCollapseName = this.collapse.name;
       }
+    },
+    onChange(activeName) {
+      this.emit("action", activeName);
     },
   },
 };
