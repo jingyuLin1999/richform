@@ -129,8 +129,8 @@ export default {
     },
     friendValue() {
       let value = this.values[this.field.name];
-      value = typeof value == "string" ? strToObj(value) : value; // 友好转换一下
       let { multiple, join } = this.field;
+      // vaue是string且配有join，则需根据join打散
       if (
         multiple &&
         join.length > 0 &&
@@ -138,19 +138,26 @@ export default {
         value.length > 0
       ) {
         value = value.split(join);
+      } else if (typeof value == "string") {
+        value = strToObj(value); // 友好转换一下
       }
       return value;
     },
     beforeChange(value) {
-      value =
-        this.schema.type == "number"
-          ? parseFloat(value)
-            ? parseFloat(value)
-            : value
-          : value;
-      let { multiple, join } = this.field;
-      if (multiple && join.length > 0 && Array.isArray(value))
+      let { multiple, join, forceType } = this.field;
+      if (
+        typeof value == "string" &&
+        (forceType == "number" || this.schema.type == "number")
+      ) {
+        value = parseFloat(value);
+      } else if (multiple && join.length > 0 && Array.isArray(value)) {
         value = value.join(join);
+      } else if (
+        Array.isArray(value) &&
+        (forceType == "string" || this.schema.type == "string")
+      ) {
+        value = JSON.stringify(value);
+      }
       return value;
     },
   },

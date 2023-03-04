@@ -79,7 +79,7 @@ export default {
             require: true,
           },
           selectMultiple: {
-            type: "array",
+            type: "string",
           },
           selectA: {
             type: "string",
@@ -171,7 +171,7 @@ export default {
         a: "",
         select: "",
         map: "阳新花园城",
-        selectMultiple: ["选项1", "选项2"],
+        selectMultiple: `["选项1", "选项2"]`,
         rate: 4,
         imageFile: [
           "http://192.168.100.12:9000/images/178a383967db4bc48bcf790282d5f19f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211210T013328Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7592596bef4cdb51eab88ea7713e7e423c23d21f8d822b8d9639f5917bbdb75a",
@@ -884,7 +884,6 @@ export default {
             multiple: true,
             filterable: true,
             clearable: true,
-            forceType: "string",
             dict: {
               "inputnumber == 2": [
                 {
