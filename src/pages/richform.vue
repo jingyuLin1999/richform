@@ -734,7 +734,7 @@ export default {
             rangeSeparator: "至", // 选择范围时的分隔符
             startPlaceholder: "开始时间",
             endPlaceholder: "结束时间",
-            mapValues: ["starttime", "endtime"],
+            mapValues: ["starttime1", "endtime1"],
             forceType: "null",
             pickerOptions: {
               disabledDate(time) {

@@ -324,7 +324,7 @@ export default {
             .join("/");
           fieldName = fieldName.replace("/", "."); // deepValues模式需要将/替换成.
           this.$set(this.fieldErrors, fieldName, errorItem.message);
-          fieldDom = document.querySelector(`.${fieldName}`);
+          if (fieldName) fieldDom = document.querySelector(`.${fieldName}`);
         });
         // 滚动到第一个错误位置
         let richformEl = this.$refs[this.formId].parentElement;

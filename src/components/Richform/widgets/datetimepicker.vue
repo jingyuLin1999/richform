@@ -91,7 +91,15 @@ export default {
       ) {
         this.values[mapValues[0]] = value[0];
         this.values[mapValues[1]] = value[1];
+      } else if ( // 清空值则对应的mapValues值也要同步清空
+        rangeType.includes(type) &&
+        value == null &&
+        mapValues.length > 0
+      ) {
+        this.values[mapValues[0]] = "";
+        this.values[mapValues[1]] = "";
       }
+      
       return value;
     },
     beforeChange(val) {
