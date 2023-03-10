@@ -506,7 +506,9 @@ export default {
                     append: "KB",
                     description: "C42G-YN-CNC2-1",
                     showError: false,
-                    hideRely: ["selectA==选项1"],
+                    clearable: true,
+                    forceType: "null",
+                    // hideRely: ["selectA==选项1"],
                   },
                   {
                     title: "字典过滤",

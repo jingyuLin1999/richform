@@ -64,12 +64,13 @@ export default {
       return value;
     },
     beforeChange(val) {
-      if (this.schema.type == "number")
+      if (this.schema.type == "number") {
         return val.indexOf(".") == val.length - 1
           ? val
           : val.indexOf("-") == 0 && val.length == 1
           ? val
           : parseFloat(val);
+      } else if (val.length == 0 && this.field.forceType == "null") return null;
       return val;
     },
   },
