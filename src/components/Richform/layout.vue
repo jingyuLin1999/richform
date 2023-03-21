@@ -16,6 +16,7 @@
         :form="form"
         :colors="colors"
         :fieldErrors="fieldErrors"
+        :isFriendValue="isFriendValue"
         :hideFields="hideFields"
         :isDark="isDark"
       />
@@ -30,6 +31,7 @@
           :tabsItem="item"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
+          :isFriendValue="isFriendValue"
           :hideFields="hideFields"
           :isDark="isDark"
         ></field-tabs>
@@ -46,6 +48,7 @@
           :gridItem="item"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
+          :isFriendValue="isFriendValue"
           :hideFields="hideFields"
           :isDark="isDark"
         ></field-grid>
@@ -63,6 +66,7 @@
           :colors="colors"
           :isDesign="isDesign"
           :fieldErrors="fieldErrors"
+          :isFriendValue="isFriendValue"
           :hideFields="hideFields"
           :isDark="isDark"
         ></field-collapse>
@@ -78,6 +82,7 @@
         :colors="colors"
         :isDesign="isDesign"
         :fieldErrors="fieldErrors"
+        :isFriendValue="isFriendValue"
         :hideFields="hideFields"
         :isDark="isDark"
       ></field>
@@ -115,6 +120,7 @@ export default {
     hideFields: { type: Object, default: () => ({}) },
     colors: { type: Object, default: () => ({}) },
     isDark: { type: Boolean, default: false },
+    isFriendValue: { type: Boolean, default: true },
   },
   methods: {},
 };

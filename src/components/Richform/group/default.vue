@@ -8,6 +8,7 @@
       :schema="schema"
       :fieldErrors="fieldErrors"
       :hideFields="hideFields"
+      :isFriendValue="isFriendValue"
       :isDark="isDark"
     ></layout>
   </div>
@@ -19,6 +20,7 @@ export default {
   props: {
     fields: { type: Array, default: () => [] },
     form: { type: Object, default: () => ({}) },
+    isFriendValue: { type: Boolean, default: true },
   },
   beforeCreate: function () {
     this.$options.components.Layout = () => import("../layout.vue");

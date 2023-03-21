@@ -81,6 +81,7 @@
         :values="values"
         :isDesign="isDesign"
         :form="form"
+        :isFriendValue="isFriendValue"
         :colors="friendForm.colors"
         :fieldErrors="fieldErrors"
         :hideFields="hideFields"
@@ -131,6 +132,7 @@ export default {
     showBtns: { type: Boolean, default: true }, // 是否显示按钮
     deepValues: { type: Boolean, default: false }, // 值是否开启深度编辑模式
     authorization: { type: Object, default: () => ({}) }, // 权限
+    isFriendValue: { type: Boolean, default: true }, // 是否友好值
   },
   provide() {
     return {
@@ -138,6 +140,7 @@ export default {
       dependencies: this.dependencies,
       requireds: this.requireds,
       isDeepValues: this.deepValues,
+
       globalVars: this.globalVars,
       regExpFields: this.regExpFields,
       hooks: this.hooks,

@@ -66,8 +66,8 @@ export default {
   data() {
     return {
       header: {
-        [sessionStorage.getItem("auth-key")]:
-          sessionStorage.getItem("auth-value"),
+        [sessionStorage.getItem("richform-key")]:
+          sessionStorage.getItem("richform-value"),
       },
       fileList: [], // 刚开始显示的图片
       dialogVisible: false,
@@ -106,9 +106,22 @@ export default {
     onFileList() {
       if (Array.isArray(this.value) && this.value.length > 0) {
         this.value.map((urlItem) => {
-          let ramdomName = Math.random().toString(16).slice(2, 12);
+          // 后端生成的uuid文件名
+          let filePath =
+            urlItem.indexOf("?") == -1
+              ? urlItem
+              : urlItem.slice(0, urlItem.indexOf("?"));
+          let fileName = filePath.slice(
+            filePath.lastIndexOf("/") + 1,
+            filePath.length
+          );
+          // 原始文件名
+          let mapValues = this.field.mapValues;
+          let originalFilename = mapValues.originalFilename;
+          originalFilename = this.values[originalFilename];
+          // 初始值
           this.fileList.push({
-            name: ramdomName + ".png",
+            name: originalFilename || fileName,
             url: urlItem,
           });
         });

@@ -34,8 +34,9 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       :isDesign="false"
       :hooks="hooks"
       :authorization="{
-        value: '21f16dcf98j09x40d3248448fE5J8abbtrE631n6K7179fd16edd17161Tgf',
+        value: 'G3f16dcf98D16oZ0d32P9448f4L68abb8lo8H98AKR179fd16edd17B3Hik8',
       }"
+      :isFriendValue="true"
       @action="formAction"
     ></RichForm>
   </div>
@@ -174,7 +175,7 @@ export default {
         selectMultiple: `["选项1", "选项2"]`,
         rate: 4,
         imageFile: [
-          "http://192.168.100.12:9000/images/178a383967db4bc48bcf790282d5f19f.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin%2F20211210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211210T013328Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=7592596bef4cdb51eab88ea7713e7e423c23d21f8d822b8d9639f5917bbdb75a",
+          "http://169.254.15.200:9000/images/cdfb2293e5464fd6b0ad2478b529d2ef.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ZMQY1L62EINI2N961HD0%2F20230321%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230321T012454Z&X-Amz-Expires=604799&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJaTVFZMUw2MkVJTkkyTjk2MUhEMCIsImV4cCI6MzYwMDAwMDAwMDAwMCwicG9saWN5IjoiY29uc29sZUFkbWluIn0.iDcwdGfSXmfvAph9T6gXOg6y1LwQxt804ySyRSnv1_O_rgBcpMqmEy8TYlsLL2NCn2kCmdp2rrmVulJUTGxtLw&X-Amz-SignedHeaders=host&versionId=null&X-Amz-Signature=1a820f4acded2a46973a4305904022745dd2d2a7818d598805296ec800e24be0",
         ],
         tree: "22",
         radioA: "radioA",

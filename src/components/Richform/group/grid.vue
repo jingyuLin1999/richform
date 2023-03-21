@@ -40,6 +40,7 @@
             :colors="colors"
             :schema="schema"
             :fieldErrors="fieldErrors"
+            :isFriendValue="isFriendValue"
             :hideFields="hideFields"
             :isDark="isDark"
           ></layout>

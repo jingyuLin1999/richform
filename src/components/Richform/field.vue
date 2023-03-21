@@ -161,6 +161,7 @@ export default {
     hideFields: { type: Object, default: () => ({}) },
     colors: { type: Object, default: () => ({}) },
     isDark: { type: Boolean, default: false },
+    isFriendValue: { type: Boolean, default: true },
   },
   data() {
     return {
@@ -268,6 +269,7 @@ export default {
         this.fieldGrandfatherSchema.required.push(schemaRequired);
     },
     createValue() {
+      if (!this.isFriendValue) return;
       // 深度模式收集键值
       if (
         this.isDeepValues &&

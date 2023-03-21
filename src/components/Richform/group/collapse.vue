@@ -30,6 +30,7 @@
             :schema="schema"
             :fieldErrors="fieldErrors"
             :hideFields="hideFields"
+            :isFriendValue="isFriendValue"
             :isDark="isDark"
           ></layout>
           <actions

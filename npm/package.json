@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.8.2",
+  "version": "0.8.7",
   "description": "基于element的表单、表单设计器",
   "main": "lib/richform.umd.min.js",
   "directories": {

@@ -9,6 +9,7 @@ export default {
         hideFields: { type: Object, default: () => ({}) },
         colors: { type: Object, default: () => ({}) },
         isDark: { type: Boolean, default: false },
+        isFriendValue: { type: Boolean, default: true },
     },
     inject: ["formId"],
     data() {
