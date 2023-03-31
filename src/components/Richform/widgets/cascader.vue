@@ -12,7 +12,6 @@
     :collapse-tags="field.collapseTags"
     :props="field.defaultProp"
     :show-all-levels="field.showAllLevels"
-    :style="{ '--bgcolor': colors.theme }"
   ></Cascader>
 </template>
 
@@ -26,6 +25,21 @@ export default {
     return {
       optionFlatMap: {}, // options扁平数据
     };
+  },
+  watch: {
+    "colors.theme": {
+      handler(theme) {
+        this.$nextTick(() => {
+          let cascaderEl = document.querySelector(
+            `#${this.widgetId} .el-cascader__search-input`
+          );
+          if (cascaderEl) {
+            cascaderEl.setAttribute("style", `background:${theme};`);
+          }
+        });
+      },
+      immediate: true,
+    },
   },
   computed: {
     options() {
@@ -152,10 +166,10 @@ export default {
 </script>
 
 <style lang="scss">
+.el-cascader__tags .el-tag {
+  min-width: 55px !important;
+}
 .cascader-widget {
   width: 100%;
-  .el-cascader__search-input {
-    background: var(--bgcolor) !important;
-  }
 }
 </style>

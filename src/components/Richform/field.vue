@@ -166,7 +166,7 @@ export default {
   data() {
     return {
       fieldSchema: {}, // 字段的schema
-      lableRightBorder: 0, // 标签右侧的边
+      lableRightBorder: 49, // 标签右侧的边
       errorFieldsHistory: [], // 记录上一次历史错误字段，用于消除本次必填和错误信息
       fieldGrandfatherSchema: null, // schema的爷爷对象
     };

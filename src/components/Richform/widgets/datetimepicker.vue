@@ -16,7 +16,6 @@
       :start-placeholder="field.startPlaceholder"
       :end-placeholder="field.endPlaceholder"
       :picker-options="field.pickerOptions"
-      :style="{ width: '100%', '--range-input-bgcolor': colors.theme }"
     ></DatePicker>
   </div>
 </template>
@@ -28,6 +27,20 @@ export default {
   name: "dataPickerWidget",
   mixins: [baseMixin],
   components: { DatePicker },
+  watch: {
+    "colors.theme": {
+      handler(theme) {
+        this.$nextTick(() => {
+          let elements = document.querySelectorAll(`#${this.widgetId} input`);
+          for (let index = 0; index < elements.length; index++) {
+            let item = elements[index];
+            if (item) item.setAttribute("style", `background:${theme};`);
+          }
+        });
+      },
+      immediate: true,
+    },
+  },
   methods: {
     defaultFieldAttr() {
       return {
@@ -91,7 +104,8 @@ export default {
       ) {
         this.values[mapValues[0]] = value[0];
         this.values[mapValues[1]] = value[1];
-      } else if ( // 清空值则对应的mapValues值也要同步清空
+      } else if (
+        // 清空值则对应的mapValues值也要同步清空
         rangeType.includes(type) &&
         value == null &&
         mapValues.length > 0
@@ -99,7 +113,7 @@ export default {
         this.values[mapValues[0]] = "";
         this.values[mapValues[1]] = "";
       }
-      
+
       return value;
     },
     beforeChange(val) {
@@ -117,8 +131,5 @@ export default {
 <style lang="scss">
 .date-picker-widget {
   width: 100%;
-  .el-range-input {
-    background: var(--range-input-bgcolor) !important;
-  }
 }
 </style>

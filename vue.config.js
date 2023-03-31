@@ -52,6 +52,23 @@ module.exports = {
     },
     // to handle element icon error in build. 
     chainWebpack: config => {
+        config.module.rule('compile')
+            .test(/\.js$/)
+            .include
+            .add(resolve('src'))
+            .add(resolve('test'))
+            .add(resolve('node_modules/webpack-dev-server/client'))
+            .add(resolve('node_modules'))
+            .end()
+            .use('babel')
+            .loader('babel-loader')
+            .options({
+                presets: [
+                    ['@babel/preset-env', {
+                        modules: false
+                    }]
+                ]
+            })
         config.module
             .rule("fonts")
             .test(/.(ttf|otf|eot|woff|woff2)$/)

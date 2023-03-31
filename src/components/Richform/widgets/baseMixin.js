@@ -19,7 +19,7 @@ export default {
             widgetId: "widget-" + Math.random().toString(15).slice(2, 15)
         }
     },
-    inject: ["dependencies", "globalVars", "regExpFields", "isDeepValues"],
+    inject: ["dependencies", "globalVars", "regExpFields", "isDeepValues","hooks"],
     mixins: [CommonMixin],
     created() {
         this.load();

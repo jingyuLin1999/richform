@@ -1,6 +1,23 @@
 <template>
   <div class="upload-widget" :id="widgetId">
+    <div class="upload-type" v-if="field.showType">
+      <span class="type-label" :style="{ color: colors.fontColor }"
+        >上传类型：</span
+      >
+      <el-switch
+        style="display: block"
+        v-model="field.type"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        active-text="文件夹"
+        inactive-text="文件"
+        active-value="folder"
+        inactive-value="file"
+      >
+      </el-switch>
+    </div>
     <Upload
+      ref="uploadWidget"
       :name="field.name"
       :list-type="field.listType"
       :file-list="fileList"
@@ -57,12 +74,18 @@
 
 <script>
 import baseMixin from "./baseMixin";
-import { Upload, Message, Button, Dialog } from "element-ui";
+import {
+  Upload,
+  Message,
+  Button,
+  Dialog,
+  Switch as elSwitch,
+} from "element-ui";
 import { loadDict } from "../utils/index";
 
 export default {
   mixins: [baseMixin],
-  components: { Upload, Message, Button, Dialog },
+  components: { Upload, Message, Button, Dialog, elSwitch },
   data() {
     return {
       header: {
@@ -76,12 +99,20 @@ export default {
   },
   mounted() {
     this.onFileList();
+    this.onSwitchType();
+  },
+  watch: {
+    "field.type"(newType) {
+      this.onSwitchType(newType);
+    },
   },
   methods: {
     defaultFieldAttr() {
       return {
         name: "file", // 上传文件字段名
         tips: "", // 提示
+        type: "file", // folder|file
+        showType: false, // 是否显示类型
         listType: "picture", // 可选 text/picture/picture-card
         actions: "http://127.0.0.1:8080/manage/minio/upload.do", // 上传路径
         deleteUrl: "http://127.0.0.1:8080/manage/minio/removeFile.do", // 删除路径
@@ -102,6 +133,14 @@ export default {
     pictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    // 改变上传的是文件夹还是文件
+    onSwitchType(newType = this.field.type) {
+      let isFolder = newType == "folder";
+      if (this.field.listType == "text") {
+        this.$refs.uploadWidget.$children[0].$refs.input.webkitdirectory =
+          isFolder;
+      }
     },
     onFileList() {
       if (Array.isArray(this.value) && this.value.length > 0) {
@@ -134,21 +173,26 @@ export default {
         fileList.splice(fileList.length - 1, 1);
         return;
       }
-      // 映射值
-      for (let key in payload) {
-        let mapValues = this.field.mapValues;
-        let valuesKey = mapValues[key];
-        if (valuesKey) this.values[valuesKey] = payload[key];
-      }
       Object.assign(file, payload);
       this.pickValues(fileList);
     },
     pickValues(fileList) {
-      const pickPath = [];
-      fileList.map((pathItem) => {
-        pickPath.push(pathItem.path || pathItem.url);
+      let pickPath = [],
+        fileSize = 0,
+        fileName = "";
+      fileList.map((fileItem, index) => {
+        let filesizeItem = fileItem.size || fileItem.fileSize;
+        if (filesizeItem) fileSize += fileItem.size || fileItem.fileSize;
+        fileName += fileItem.name || fileItem.fileName;
+        if (index != fileList.length - 1) fileName += ",";
+        pickPath.push(fileItem.path || fileItem.url);
       });
+      // 设置值
       this.changeValue(pickPath);
+      // 映射值
+      let mapValues = this.field.mapValues;
+      if (fileName) this.values[mapValues.originalFilename] = fileName;
+      if (fileSize) this.values[mapValues.fileSize] = fileSize;
     },
     getRemoveParams(file) {
       let url = file.path || file.url;
@@ -189,5 +233,14 @@ export default {
 .upload-widget {
   width: 100%;
   overflow: hidden;
+  .upload-type {
+    display: flex;
+    align-items: center;
+    height: 23px;
+    margin-bottom: 3px;
+    .type-label {
+      font-size: 12px;
+    }
+  }
 }
 </style>

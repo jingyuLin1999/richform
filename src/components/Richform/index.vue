@@ -140,7 +140,6 @@ export default {
       dependencies: this.dependencies,
       requireds: this.requireds,
       isDeepValues: this.deepValues,
-
       globalVars: this.globalVars,
       regExpFields: this.regExpFields,
       hooks: this.hooks,
@@ -220,6 +219,7 @@ export default {
       this.hooks.validate = this.globalValidate;
       this.hooks.reset = this.onReset;
       this.hooks.dirtyValues = this.dirtyValues;
+      this.hooks.uploads = {};
     },
     onAuthorize() {
       if (Object.keys(this.authorization).length == 0) return;
