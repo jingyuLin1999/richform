@@ -375,6 +375,67 @@ export default {
                 icon: "",
                 fields: [
                   {
+                    title: "设备下拉G",
+                    widget: "select",
+                    name: "selectG",
+                    clearable: true,
+                    filterable: true,
+                    dict: {
+                      // 当selectH变化了，有一种应用情况, 根据selectH选线({label,value,beRely})的某个字段的值到当前options过滤
+                      "selectH==any": {
+                        filterKey: "processid",
+                        beRelyFilterKey: "id",
+                      },
+                    },
+                    options: [
+                      {
+                        value: "G1",
+                        label: "G1",
+                        processid: "1",
+                      },
+                      {
+                        value: "G2",
+                        label: "G2",
+                        processid: "2",
+                      },
+                      {
+                        value: "G3",
+                        label: "G3",
+                        processid: "3",
+                      },
+                    ],
+                  },
+                  {
+                    title: "工序下拉H",
+                    widget: "select",
+                    name: "selectH",
+                    clearable: true,
+                    filterable: true,
+                    dict: {
+                      "selectG==any": {
+                        filterKey: "id",
+                        beRelyFilterKey: "processid",
+                      },
+                    },
+                    options: [
+                      {
+                        value: "H1",
+                        label: "H1",
+                        id: "1",
+                      },
+                      {
+                        value: "H2",
+                        label: "H2",
+                        id: "2",
+                      },
+                      {
+                        value: "H3",
+                        label: "H3",
+                        id: "3",
+                      },
+                    ],
+                  },
+                  {
                     title: "下拉选框A", // 优先级小于shema中定义的title
                     widget: "select",
                     name: "selectA",

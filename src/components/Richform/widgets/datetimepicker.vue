@@ -131,5 +131,8 @@ export default {
 <style lang="scss">
 .date-picker-widget {
   width: 100%;
+  // .el-input__inner {
+  //   width: 100%;
+  // }
 }
 </style>

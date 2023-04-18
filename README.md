@@ -156,7 +156,7 @@ dict: {
   [<字段名name> == 'A']: "https://shandawang.com/dict/province", // 字典，
   [<字段名name> == 'B']: [{},{}], // options
   [<字段名name> == 'any']: "https://shandawang.com/dict/province", // 若等于any且值是url，<字段名name>的值只要变化，就会带上<字段名name>值到后端过滤获取字典
-  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤
+  [<字段名name> == 'any']: {filterKey: "id"}, // 若等于any且值是对象，filterKey字段和options都必须有。<字段名name>的值只要变化，就会带上<字段名name>值到options中过滤。有一种特殊应用，当被依赖的字段值变化了，根据被依赖选项({label,value,other})的某个字段的值到当前options过滤，此时可配beRelyFilterKey如 {filterKey: "id",beRelyFilterKey: "other"}
 }
 ```
 2、字段隐藏依赖 

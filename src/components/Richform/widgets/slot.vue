@@ -1,6 +1,6 @@
 <template>
   <div class="slot-widget" :id="widgetId">
-    <div v-html="field.html"></div>
+    <div v-html="field.html" :style="{ color: colors.fontColor }"></div>
   </div>
 </template>
 

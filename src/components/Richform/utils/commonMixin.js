@@ -79,10 +79,20 @@ export default {
                         this.$set(dictItem.field, "options", dictItem.dictValue);
                     } else if (Object.prototype.toString.call(dictItem.dictValue) === '[object Object]') {
                         // 若是对象，则根据对象过滤出符合条件的options
-                        let filterKey = dictItem.dictValue.filterKey;
+                        let { filterKey, beRelyFilterKey } = dictItem.dictValue;
                         if (!filterKey || !dictItem.options.length) return;
-                        let filterOptions = dictItem.options.filter(item => (item[filterKey] == fieldValue));
-                        this.$set(dictItem.field, "options", filterOptions);
+                        // 有一种特殊应用，当被依赖的字段值变化了，根据被依赖选项({label,value,other})的某个字段的值到当前options过滤
+                        // 此时必须配beRelyFilterKey,如: "selectG==any":{ filterKey: "filterG", beRelyFilterKey: 'other' },
+                        let filterOptions = [];
+                        if (dictItem.beRelyKey && beRelyFilterKey && this.flatFields) {
+                            let beRelyField = this.flatFields[dictItem.beRelyKey];
+                            if (beRelyField && fieldValue) {
+                                let propValueKey = beRelyField.defaultProp.value;
+                                let beRelyOption = beRelyField.options.find(optionItem => (optionItem[propValueKey] == fieldValue));
+                                if (beRelyOption) filterOptions = dictItem.options.filter(item => (item[filterKey] == beRelyOption[beRelyFilterKey]));
+                            }
+                        } else filterOptions = dictItem.options.filter(item => (item[filterKey] == fieldValue)); // 未配置beRelyFilterKey，则根据filterKey过滤
+                        this.$set(dictItem.field, "options", fieldValue ? filterOptions : dictItem.options);
                     }
                     // 只有选项改变了且新的选项中没有对应值，那么对应值才应清零
                     let newOptions = JSON.stringify(dictItem.field.options);
@@ -95,6 +105,7 @@ export default {
                         // 只要有一个匹配成功，就不会清空
                         let pickMatchValue = [];
                         valueList.map((valItem) => {
+                            // valItem 可能是 {}，或者 string
                             let matchValue = type(valItem) == "Object" ? valItem[defaultProp.value] : valItem;
                             let hasMatch = matchValue ? dictItem.field.options.find(option => {
                                 let optionValue = type(option) == "Object" ? option[defaultProp.value] : option;

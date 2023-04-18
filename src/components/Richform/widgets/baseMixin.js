@@ -19,7 +19,7 @@ export default {
             widgetId: "widget-" + Math.random().toString(15).slice(2, 15)
         }
     },
-    inject: ["dependencies", "globalVars", "regExpFields", "isDeepValues","hooks"],
+    inject: ["dependencies", "globalVars", "regExpFields", "isDeepValues", "hooks", "flatFields"],
     mixins: [CommonMixin],
     created() {
         this.load();
@@ -59,6 +59,12 @@ export default {
             this.pickDependencies();
             this.pickRegExp();
             this.loadCompleteDispatch();
+            this.pickFlatField();
+        },
+        pickFlatField() {
+            if (this.field.name) {
+                this.flatFields[this.field.name] = this.field;
+            }
         },
         loadCompleteDispatch() {
             // 隐藏字段需要立马派发，不然视觉体验不友好
@@ -184,8 +190,9 @@ export default {
                     if (!hasExit) {
                         this.dependencies[relyKey].push({
                             name: this.field.name,
-                            keyValue: dictKeyVal[1].trim(), //   [<字段名name> == 'A'] 的值 即：A
-                            dictValue: dictItem,
+                            beRelyKey: relyKey, // [<字段名name> == 'A'] 的字段 即：<字段名name>
+                            keyValue: relyValue, // [<字段名name> == 'A'] 的值 即：A
+                            dictValue: dictItem, // dict[<字段名name> == 'A'] 的 值
                             field: this.field,
                             type: this.schema.type, // 在派发时为了友好值，需要知道字段类型
                             options: JSON.parse(JSON.stringify(this.field.options))

@@ -138,6 +138,7 @@ export default {
     return {
       formId: this.formId,
       dependencies: this.dependencies,
+      flatFields: this.flatFields,
       requireds: this.requireds,
       isDeepValues: this.deepValues,
       globalVars: this.globalVars,
@@ -151,6 +152,7 @@ export default {
       // 当加载完成手动进行赋值时，此时下拉选项要重新派发
       handler() {
         if (!this.globalVars.loadCompleted) return;
+        // todo 只有改变的name才需要派发
         for (let key in this.hideFields) this.dispatchHide(key);
         for (let key in this.dependencies) this.dispatchOptions(key);
       },
@@ -162,6 +164,7 @@ export default {
       formId: "richform-" + Math.random().toString(15).slice(2, 15), // 表单id,不能以数字开头，否则替换css会报错
       fieldErrors: {}, // 字段错误信息收集
       dependencies: {}, // 字段相互依赖信息
+      flatFields: {}, // 扁平的field，便于查询
       lastClicked: {}, // 记录最后的点击事件，用于取消事件
       requireds: [], // 收集必须字段
       hideFields: {}, // 收集隐藏的字段
