@@ -335,7 +335,7 @@ export default {
         // 滚动到第一个错误位置
         let richformEl = this.$refs[this.formId].parentElement;
         if (fieldDom && richformEl)
-          VueScrollTo.scrollTo(fieldDom, 50, { el: richformEl });
+          VueScrollTo.scrollTo(fieldDom, 50, { container: richformEl });
       }
       return valid;
     },
