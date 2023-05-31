@@ -1,4 +1,4 @@
-import { type, path, isEmpty } from "ramda"
+import { type, path, isEmpty, clone } from "ramda"
 import { isUrl, loadDict, deleteIteration } from "./";
 export default {
     methods: {
@@ -68,7 +68,9 @@ export default {
                                 const rqParams = Object.assign({ ...params }, pickValueMap, { [fieldName]: fieldValue });
                                 const response = await loadDict(dictItem.dictValue, rqParams, method);
                                 const payload = this.deepPick(respProp.split("."), response);
-                                if (Array.isArray(payload) && payload.length > 0) options = payload;
+                                if (Array.isArray(payload)) options = payload;
+                            } else {
+                                options = clone(dictItem.options)
                             }
                         } catch (e) {
                             console.error(e);

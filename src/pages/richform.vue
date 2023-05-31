@@ -588,7 +588,7 @@ export default {
                       "product_code == any":
                         "http://192.168.100.217:8899/ae_cnc/chk_detect/getProGroupList",
                     },
-                    options: [],
+                    options: ["a","b","c","d"],
                   },
                 ],
               },
