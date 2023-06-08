@@ -17,6 +17,8 @@
     * 已签核状态显示
     * 错误处理
 
+## 支持vue2.x  
+vue3.x 请见[richform-plus](https://github.com/jingyuLin1999/richform-plus)
 
 ## 预览
 
@@ -66,7 +68,7 @@ export default {
         form: {
             border: true, // 显示边框
             grid: false, // 表单内部栅栏
-            labelSuffix: true, // 字段标题后缀内容，默认' : '
+            labelSuffix: ":", // 字段标题后缀内容，默认' : '
             labelWidth: "110px", // 标签宽度,默认50px
             validator: "input", // submit
             labelAlign: "right", // 标签对齐, 默认右对齐, 可选左对齐left
