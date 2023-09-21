@@ -1,13 +1,15 @@
 {
   "name": "richform",
-  "version": "0.9.0",
-  "private": true,
+  "version": "0.10.6",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "product": "vue-cli-service build --target lib --name richform src/components/index.js",
+    "build:prod": "vue-cli-service build --target lib --name richform src/components/index.js",
     "lint": "vue-cli-service lint"
   },
+  "main": "dist/richform.umd.min.js",
+  "module": "dist/richform.umd.min.js",
   "dependencies": {
     "ajv": "^6.12.6",
     "ajv-errors": "^1.0.1",
@@ -20,6 +22,7 @@
     "ramda": "^0.27.1",
     "vue": "^2.6.11",
     "vue-baidu-map": "^0.21.22",
+    "vue-i18n": "^8.28.2",
     "vue-router": "^3.5.2",
     "vue-scrollto": "^2.20.0",
     "vue2-perfect-scrollbar": "^1.5.0",
@@ -62,8 +65,20 @@
       "no-debugger": "off"
     }
   },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md",
+    "src/i18n/lang"
+  ],
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "author": "ljy",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jingyuLin1999/echarts-designer"
+  }
 }

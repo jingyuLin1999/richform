@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const isBuild = process.argv.includes("build")
 
 function resolve(dir) {
     return path.join(__dirname, dir);
@@ -7,7 +8,7 @@ function resolve(dir) {
 
 module.exports = {
     publicPath: '',
-    outputDir: 'dist/lib',
+    outputDir: 'dist',
     assetsDir: 'static',
     productionSourceMap: false,
     css: { extract: false },
@@ -29,26 +30,24 @@ module.exports = {
             maxAssetSize: 600000,
         },
         plugins: [],
-        externals: {
-            // "ajv": "ajv",
-            // "ajv-errors": "ajv-errors",
-            // "ajv-i18n": "ajv-i18n",
-            // "axios": "axios",
-            // "element-resize-detector": "element-resize-detector",
-            // "core-js": "core-js",
-            // "element-ui": "element-ui",
-            // "jquery": "jquery",
-            // "ramda": "ramda",
-            // "vue": "vue",
-            // "vue-i18n": "vue-i18n",
-            // "vue-router": "vue-router",
-            // "vue-baidu-map": "vue-baidu-map",
-            // "vue-scrollto": "vue-scrollto",
-            // "vue2-perfect-scrollbar": "vue2-perfect-scrollbar",
-            // "vuedraggable": "vuedraggable",
-            // "vxe-table": "vxe-table",
-            // "xe-utils": "xe-utils"
-        }
+        externals: isBuild ? {
+            "ajv": "ajv",
+            "ajv-errors": "ajv-errors",
+            "ajv-i18n": "ajv-i18n",
+            "axios": "axios",
+            "element-resize-detector": "element-resize-detector",
+            "core-js": "core-js",
+            "element-ui": "element-ui",
+            "jquery": "jquery",
+            "ramda": "ramda",
+            "vue-i18n": "vue-i18n",
+            "vue-baidu-map": "vue-baidu-map",
+            "vue-scrollto": "vue-scrollto",
+            "vue2-perfect-scrollbar": "vue2-perfect-scrollbar",
+            "vuedraggable": "vuedraggable",
+            "vxe-table": "vxe-table",
+            "xe-utils": "xe-utils"
+        } : {}
     },
     // to handle element icon error in build. 
     chainWebpack: config => {
