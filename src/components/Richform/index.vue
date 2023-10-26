@@ -52,48 +52,23 @@
 
 -->
 <template>
-  <form
-    :class="[
-      'richform',
-      form.border ? 'richform-border' : '',
-      form.activeDesign && isDesign ? 'active-form-design' : '',
-    ]"
-    :id="formId"
-    :ref="formId"
-    :style="{ background: friendForm.colors.theme || '#fff' }"
-  >
+  <form :class="[
+    'richform',
+    form.border ? 'richform-border' : '',
+    form.activeDesign && isDesign ? 'active-form-design' : '',
+  ]" :id="formId" :ref="formId" :style="{ background: friendForm.colors.theme || '#fff' }">
     <!-- 画布遮罩，用于全局点击事件 -->
     <div class="canvas-mask" @click="onClickCanvas"></div>
-    <perfect-scrollbar
-      :style="{ 'min-height': '20px' }"
-      :ref="formId + '-scrollbar'"
-    >
+    <perfect-scrollbar :style="{ 'min-height': '20px' }" :ref="formId + '-scrollbar'">
       <!-- 顶部按钮 -->
-      <actions
-        v-if="showBtns"
-        :actions="topActions"
-        :isDesign="isDesign"
-      ></actions>
+      <actions v-if="showBtns" :actions="topActions" :isDesign="isDesign"></actions>
       <!-- 核心布局 -->
-      <form-layout
-        :schema="friendSchema"
-        :layout="friendForm.layout"
-        :values="values"
-        :isDesign="isDesign"
-        :form="form"
-        :isFriendValue="isFriendValue"
-        :colors="friendForm.colors"
-        :fieldErrors="fieldErrors"
-        :hideFields="hideFields"
-        :isDark="isDark"
-      >
+      <form-layout :schema="friendSchema" :layout="friendForm.layout" :values="values" :isDesign="isDesign" :form="form"
+        :isFriendValue="isFriendValue" :colors="friendForm.colors" :fieldErrors="fieldErrors" :hideFields="hideFields"
+        :isDark="isDark">
       </form-layout>
       <!-- 底部按钮 -->
-      <actions
-        v-if="showBtns"
-        :actions="buttomActions"
-        :isDesign="isDesign"
-      ></actions>
+      <actions v-if="showBtns" :actions="buttomActions" :isDesign="isDesign"></actions>
       <!-- 错误信息 -->
       <div class="no-ready" v-if="noReady()">
         <div>表单未初始化</div>
@@ -133,6 +108,7 @@ export default {
     deepValues: { type: Boolean, default: false }, // 值是否开启深度编辑模式
     authorization: { type: Object, default: () => ({}) }, // 权限
     isFriendValue: { type: Boolean, default: true }, // 是否友好值
+    language: { type: String, default: 'zh-cn' }, // 语言
   },
   provide() {
     return {
@@ -145,6 +121,7 @@ export default {
       regExpFields: this.regExpFields,
       hooks: this.hooks,
       pickDeepValueKeys: this.pickDeepValueKeys,
+      language: this.language,
     };
   },
   watch: {
@@ -320,7 +297,10 @@ export default {
       // https://ajv.js.org/api.html#api-validateschema
       let valid = AJV.validate(clone(this.friendSchema), this.values);
       if (!valid) {
-        localizeErrors(AJV.errors); // 将错误信息转化成中文
+
+        const language = localStorage.getItem("lang") || this.language;
+        console.log(localStorage.getItem("lang"),"sdf")
+        localizeErrors(AJV.errors, language); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);
         let fieldDom = null;
         AJV.errors.map((errorItem) => {
@@ -360,19 +340,23 @@ export default {
 <style lang="scss">
 @import "./vars.scss";
 @import "./utils/design.scss";
+
 .richform {
   font-size: $form-font-size;
   position: relative;
+
   .ps {
     // height: 800px;
   }
-  > .canvas-mask {
+
+  >.canvas-mask {
     width: 100%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
   }
+
   .no-ready {
     width: 100%;
     height: 100%;
@@ -383,10 +367,12 @@ export default {
     align-items: center;
   }
 }
+
 .richform-border {
   padding: 10px;
   border: 1px solid $form-border-color;
 }
+
 .active-form-design {
   border: 1px solid $active-border-color;
 }

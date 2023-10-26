@@ -4,13 +4,10 @@ Vue.use(VueI18n)
 
 const langFiles = require.context('./lang', true, /\.js$/)
 
-export const langOption = [];
-
 const langs = langFiles.keys().reduce((modules, modulePath) => {
     const moduleName = modulePath.replace(/^\.\/(.*)\.\w+$/, '$1')
     const value = langFiles(modulePath)
     modules[moduleName] = value.default;
-    langOption.unshift({ label: value.default.lang, value: moduleName })
     return modules
 }, {})
 

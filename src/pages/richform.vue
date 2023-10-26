@@ -23,22 +23,11 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
     <br />
     <Button type="info" size="small" @click="onSetValues">赋值values</Button>
     <Button type="primary" size="small" @click="changeTheme">改变主题</Button>
-    <Button type="success" size="small" @click="hooks.validate()"
-      >外部校验</Button
-    >
+    <Button type="success" size="small" @click="hooks.validate()">外部校验</Button>
     <Button type="danger" size="small" @click="onHidden">触发隐藏</Button>
-    <RichForm
-      :schema="schema"
-      :form="form"
-      :values="values"
-      :isDesign="false"
-      :hooks="hooks"
-      :authorization="{
-        value: '7Lf16dcf98x62c70d324m448fT578abb216Q081gw6179fd16edd17172482',
-      }"
-      :isFriendValue="true"
-      @action="formAction"
-    ></RichForm>
+    <RichForm :schema="schema" :form="form" :values="values" :isDesign="false" :hooks="hooks" :authorization="{
+      value: '7Lf16dcf98x62c70d324m448fT578abb216Q081gw6179fd16edd17172482',
+    }" :isFriendValue="true" @action="formAction"></RichForm>
   </div>
 </template>
 
@@ -47,6 +36,11 @@ import { Button } from "element-ui";
 import RichForm from "../components/Richform";
 export default {
   components: { RichForm, Button },
+  created() {
+
+    localStorage.setItem("lang", "vi");
+    
+  },
   data() {
     return {
       hooks: {},
@@ -588,7 +582,7 @@ export default {
                       "product_code == any":
                         "http://192.168.100.217:8899/ae_cnc/chk_detect/getProGroupList",
                     },
-                    options: ["a","b","c","d"],
+                    options: ["a", "b", "c", "d"],
                   },
                 ],
               },
@@ -1193,6 +1187,7 @@ export default {
 <style lang="scss">
 .rich-form-app {
   padding: 10px;
+
   .value-wrapper {
     word-break: break-all;
   }

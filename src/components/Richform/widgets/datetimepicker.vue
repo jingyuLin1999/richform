@@ -1,22 +1,10 @@
 <template>
   <div :id="widgetId" class="date-picker-widget">
-    <DatePicker
-      v-model="value"
-      :type="field.type"
-      :readonly="field.readOnly"
-      :placeholder="field.placeholder"
-      :disabled="field.disabled"
-      :clearable="field.clearable"
-      :size="field.size"
-      :editable="field.editable"
-      :format="field.format"
-      :value-format="field.valueFormat"
-      :arrow-control="field.arrowControl"
-      :range-separator="field.rangeSeparator"
-      :start-placeholder="field.startPlaceholder"
-      :end-placeholder="field.endPlaceholder"
-      :picker-options="field.pickerOptions"
-    ></DatePicker>
+    <DatePicker v-model="value" :type="field.type" :readonly="field.readOnly" :placeholder="field.placeholder"
+      :disabled="field.disabled" :clearable="field.clearable" :size="field.size" :editable="field.editable"
+      :format="field.format" :value-format="field.valueFormat" :arrow-control="field.arrowControl"
+      :range-separator="field.rangeSeparator" :start-placeholder="field.startPlaceholder"
+      :end-placeholder="field.endPlaceholder" :picker-options="field.pickerOptions"></DatePicker>
   </div>
 </template>
 
@@ -131,8 +119,10 @@ export default {
 <style lang="scss">
 .date-picker-widget {
   width: 100%;
-  // .el-input__inner {
-  //   width: 100%;
-  // }
+
+  .el-input__inner,
+  .el-date-editor {
+    width: 100%;
+  }
 }
 </style>

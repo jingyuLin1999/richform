@@ -8,7 +8,7 @@ function resolve(dir) {
 
 module.exports = {
     publicPath: '',
-    outputDir: 'dist',
+    outputDir: 'dist/lib',
     assetsDir: 'static',
     productionSourceMap: false,
     css: { extract: false },
@@ -33,15 +33,17 @@ module.exports = {
         externals: isBuild ? {
             "ajv": "ajv",
             "ajv-errors": "ajv-errors",
-            "ajv-i18n": "ajv-i18n",
+            // "ajv-i18n": "ajv-i18n",
             "axios": "axios",
             "element-resize-detector": "element-resize-detector",
             "core-js": "core-js",
             "element-ui": "element-ui",
             "jquery": "jquery",
             "ramda": "ramda",
-            "vue-i18n": "vue-i18n",
+            "vue": "vue",
             "vue-baidu-map": "vue-baidu-map",
+            "vue-i18n": "vue-i18n",
+            "vue-router": "vue-router",
             "vue-scrollto": "vue-scrollto",
             "vue2-perfect-scrollbar": "vue2-perfect-scrollbar",
             "vuedraggable": "vuedraggable",

@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.10.21",
+  "version": "0.10.24",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,22 +8,19 @@
     "build:prod": "vue-cli-service build --target lib --name richform src/components/index.js",
     "lint": "vue-cli-service lint"
   },
-  "main": "dist/richform.umd.min.js",
-  "module": "dist/richform.umd.min.js",
+  "main": "lib/richform.umd.min.js",
+  "module": "lib/richform.umd.min.js",
   "dependencies": {
     "ajv": "^6.12.6",
     "ajv-errors": "^1.0.1",
-    "ajv-i18n": "^3.3.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-resize-detector": "^1.2.4",
     "element-ui": "^2.15.6",
     "jquery": "^3.6.0",
     "ramda": "^0.27.1",
-    "vue": "^2.6.11",
     "vue-baidu-map": "^0.21.22",
     "vue-i18n": "^8.28.2",
-    "vue-router": "^3.5.2",
     "vue-scrollto": "^2.20.0",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3",

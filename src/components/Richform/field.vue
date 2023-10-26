@@ -4,127 +4,70 @@
 -->
 <template>
   <!-- 不能用v-if，否则若开始为隐藏，后续无法切换 -->
-  <div
-    v-show="!field.hide"
-    :class="['field-wrapper', field.name, form.grid ? 'field-border-top' : '']"
-  >
-    <div
-      :class="[
-        'field',
-        form.labelInline ? 'label-inline' : '',
-        form.grid ? 'field-border' : '',
-        field.activeDesign && isDesign ? 'active-design' : '',
-        form.labelInline && !form.grid ? 'inline-no-grid' : '',
-      ]"
-      @click="onClickedItem(field)"
-    >
-      <div
-        v-show="field.widget != 'button'"
-        ref="fieldTitle"
-        :class="[
-          'title-wrapper',
-          'label-' + (form.labelAlign || 'right'),
-          form.labelInline ? 'label-hori' : 'label-vert',
-        ]"
-        :style="{
-          width: form.labelInline
-            ? isShyTitle
-              ? form.labelWidth
-              : '0px'
-            : '100%',
-        }"
-      >
-        <div
-          ref="fieldLabel"
-          v-if="isShyTitle"
-          :class="[
-            'label-title',
-            fieldSchema.require || requireds.includes(field.name)
-              ? 'required-field'
-              : '',
-          ]"
-          :style="{ color: colors.fontColor }"
-        >
+  <div v-show="!field.hide" :class="['field-wrapper', field.name, form.grid ? 'field-border-top' : '']">
+    <div :class="[
+      'field',
+      form.labelInline ? 'label-inline' : '',
+      form.grid ? 'field-border' : '',
+      field.activeDesign && isDesign ? 'active-design' : '',
+      form.labelInline && !form.grid ? 'inline-no-grid' : '',
+    ]" @click="onClickedItem(field)">
+      <div v-show="field.widget != 'button'" ref="fieldTitle" :class="[
+        'title-wrapper',
+        'label-' + (form.labelAlign || 'right'),
+        form.labelInline ? 'label-hori' : 'label-vert',
+      ]" :style="{
+  width: form.labelInline
+    ? isShyTitle
+      ? form.labelWidth
+      : '0px'
+    : '100%',
+}">
+        <div ref="fieldLabel" v-if="isShyTitle" :class="[
+          'label-title',
+          fieldSchema.require || requireds.includes(field.name)
+            ? 'required-field'
+            : '',
+        ]" :style="{ color: colors.fontColor }">
           {{ fieldTitle }}
         </div>
-        <span
-          class="label-suffix"
-          :style="{ color: colors.fontColor }"
-          v-if="
-            isShyTitle &&
-            form.labelSuffix.length > 0 &&
-            Object.keys(this.field).length > 0
-          "
-          >{{ form.labelSuffix }}</span
-        >
-        <Tooltip
-          v-if="fieldSchema.description || field.description"
-          :content="fieldSchema.description || field.description"
-          class="field-question"
-          placement="bottom"
-          :effect="isDark ? 'dark' : 'light'"
-        >
+        <span class="label-suffix" :style="{ color: colors.fontColor }" v-if="isShyTitle &&
+          form.labelSuffix.length > 0 &&
+          Object.keys(this.field).length > 0
+          ">{{ form.labelSuffix }}</span>
+        <Tooltip v-if="fieldSchema.description || field.description"
+          :content="fieldSchema.description || field.description" class="field-question" placement="bottom"
+          :effect="isDark ? 'dark' : 'light'">
           <i class="el-icon-question"></i>
         </Tooltip>
       </div>
-      <div
-        v-if="form.grid && form.labelInline"
-        v-show="isShyTitle"
-        class="label-right-border"
-        :style="{ height: lableRightBorder + 'px' }"
-      ></div>
-      <div
-        ref="fieldValue"
-        :class="[
-          'field-value',
-          isDesign ? 'field-mask' : '',
-          !form.labelInline ? 'field-value-vert' : 'field-value-hori',
-        ]"
-      >
-        <component
-          :is="asyncComponent"
-          :form="form"
-          :schema="fieldSchema"
-          :values="values"
-          :field="field"
-          :colors="colors"
-          :fieldErrors="fieldErrors"
-          :hideFields="hideFields"
-          :isDark="isDark"
-          @change="onChange"
-          @buttonEvent="onButtonEvent"
-        />
+      <div v-if="form.grid && form.labelInline" v-show="isShyTitle" class="label-right-border"
+        :style="{ height: lableRightBorder + 'px' }"></div>
+      <div ref="fieldValue" :class="[
+        'field-value',
+        isDesign ? 'field-mask' : '',
+        !form.labelInline ? 'field-value-vert' : 'field-value-hori',
+      ]">
+        <component :is="asyncComponent" :form="form" :schema="fieldSchema" :values="values" :field="field"
+          :colors="colors" :fieldErrors="fieldErrors" :hideFields="hideFields" :isDark="isDark" @change="onChange"
+          @buttonEvent="onButtonEvent" />
         <!-- 错误信息 -->
-        <div
-          class="error-message"
-          v-if="fieldErrors[field.name] && field.showError != false"
-        >
+        <div class="error-message" v-if="fieldErrors[field.name] && field.showError != false">
           <i class="el-icon-warning-outline"></i>
           <span>{{ fieldErrors[field.name] }}</span>
         </div>
       </div>
     </div>
     <!--拖拽-->
-    <span
-      class="design-draggable design-handle-move"
-      v-if="isDesign && field.isClicked"
-    >
+    <span class="design-draggable design-handle-move" v-if="isDesign && field.isClicked">
       <i class="el-icon-rank design-handle-move"></i>
     </span>
     <!--复制-->
-    <span
-      class="design-copy"
-      @click="onCopyItem(schema)"
-      v-if="isDesign && field.isClicked"
-    >
+    <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && field.isClicked">
       <i class="el-icon-document-copy"></i>
     </span>
     <!--删除-->
-    <span
-      class="design-delete"
-      v-if="isDesign && field.isClicked"
-      @click="onDeleteItem(form, field)"
-    >
+    <span class="design-delete" v-if="isDesign && field.isClicked" @click="onDeleteItem(form, field)">
       <i class="el-icon-delete"></i>
     </span>
   </div>
@@ -150,6 +93,7 @@ export default {
     "regExpFields",
     "pickDeepValueKeys",
     "flatFields",
+    "language",
   ],
   mixins: [DesignMixin, CommonMixin],
   props: {
@@ -287,8 +231,8 @@ export default {
       let defaultValue = this.isDeepValues
         ? path(this.field.name.split("."), this.values)
         : this.values[this.field.name] ||
-          this.fieldSchema.default ||
-          this.field.default;
+        this.fieldSchema.default ||
+        this.field.default;
       // 生成默认值
       let friendValue =
         defaultValue != null && defaultValue != undefined
@@ -352,7 +296,8 @@ export default {
           }
         }
         let valid = AJV.validate(fieldSchema, this.values);
-        localizeErrors(AJV.errors); // 将错误信息转化成中文
+        const language = localStorage.getItem("lang") || this.language;
+        localizeErrors(AJV.errors, language); // 将错误信息转化成中文
         if (valid) this.$delete(this.fieldErrors, fieldName);
         // 验证正常需要从错误池中移除
         else {
@@ -391,10 +336,12 @@ export default {
 
 <style lang="scss">
 @import "./vars.scss";
+
 .field-wrapper {
   position: relative;
   color: $field-font-color;
   box-sizing: border-box;
+
   .required-field::before {
     content: "*";
     color: #f56c6c;
@@ -402,64 +349,77 @@ export default {
     font-family: Verdana, Arial, Tahoma;
     font-weight: 400;
   }
+
   // 控制标签和字段是否在一行显示
-  > .label-inline {
+  >.label-inline {
     display: flex;
   }
-  > .inline-no-grid {
+
+  >.inline-no-grid {
     margin-bottom: 4px;
   }
-  > .field-border {
+
+  >.field-border {
     border: 1px solid $form-border-color;
     border-top: 0;
   }
-  > .field {
+
+  >.field {
     align-items: center;
     position: relative;
     min-height: 48px;
     box-sizing: border-box;
-    > .title-wrapper {
+
+    >.title-wrapper {
       display: flex;
       align-items: center;
       word-break: break-all;
-      > .label-title {
+
+      >.label-title {
         margin-left: 5px;
         display: flex;
         align-items: center;
         overflow: hidden;
       }
-      > .field-question {
+
+      >.field-question {
         color: #13ce66;
         cursor: pointer;
         margin: 0 5px;
       }
     }
+
     // 标签右对齐
     .label-right {
       justify-content: flex-end;
       padding-right: 4px;
       box-sizing: border-box;
     }
+
     .label-center {
       justify-content: center;
       padding-right: 4px;
       box-sizing: border-box;
     }
+
     // 控制标签和字段垂直显示
-    > .label-vert {
+    >.label-vert {
       justify-content: flex-start;
       padding: 3px 0;
     }
-    > .label-hori {
+
+    >.label-hori {
       // min-height: 40px;
     }
+
     // 设计模式，开启遮罩
-    > .field-mask {
+    >.field-mask {
       width: 100%;
       position: relative;
     }
+
     // 设计模式是否开启遮罩，暂时去掉
-    > .field-mask::before {
+    >.field-mask::before {
       content: "";
       width: 100%;
       height: 100%;
@@ -468,18 +428,21 @@ export default {
       left: 0;
       top: 0;
     }
-    > .label-right-border {
+
+    >.label-right-border {
       width: 1px;
       background: $form-border-color;
     }
-    > .field-value {
+
+    >.field-value {
       display: flex;
       align-items: center;
       box-sizing: border-box;
       padding: 0 3px; // 边框,不能改成margin否则会溢出
       width: 100%;
       position: relative;
-      > .error-message {
+
+      >.error-message {
         font-size: 12px;
         height: 13px;
         line-height: 13px;
@@ -490,17 +453,20 @@ export default {
         z-index: 999;
       }
     }
+
     // 当是上下布局时，取消padding-top
-    > .field-value-vert {
+    >.field-value-vert {
       padding-top: 1px;
       padding-left: 4px;
       display: flex;
       align-items: flex-start;
       margin-bottom: 4px;
-      > .error-message {
+
+      >.error-message {
         bottom: -13px;
       }
     }
+
     // 去除element自带的margin-bottom
     .el-form-item {
       margin: 0;
