@@ -39,7 +39,7 @@ export default {
   created() {
 
     localStorage.setItem("lang", "vi");
-    
+
   },
   data() {
     return {
@@ -435,6 +435,7 @@ export default {
                     name: "selectA",
                     clearable: true,
                     // filter: { key: "isdelete", value: 1 },
+                    // suffixHtml: "<span>123</span>",
                     options: [
                       {
                         value: "选项1",

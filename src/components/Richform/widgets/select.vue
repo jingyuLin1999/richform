@@ -15,6 +15,7 @@
             :value="option[field.defaultProp.value]" :disabled="option.disabled">
             <span v-if="option.prefixHtml" v-html="option.prefixHtml"></span>
             {{ option[field.defaultProp.label] }}
+            <span v-if="option.suffixHtml" v-html="option.suffixHtml"></span>
           </Option>
         </template>
       </div>
@@ -28,6 +29,7 @@
         </OptionGroup>
       </div>
     </Select>
+    <span v-if="field.suffixHtml" v-html="field.suffixHtml"></span>
   </div>
 </template>
 
@@ -80,6 +82,7 @@ export default {
         defaultOption: -1, // 当字典从服务器加载后默认选中的选项下标
         forceType: null, // 重置数据类型
         join: "", // 说明： 当mutiple为true时，若设置了join,则会转换成字符串
+        suffixHtml: "", // 后缀添加html
         dictConfig: {
           // 字典配置
           method: "post",
@@ -148,6 +151,8 @@ export default {
 .select-widget-wrapper {
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
 
   >.select-widget {
     height: 100%;
