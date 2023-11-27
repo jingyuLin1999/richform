@@ -297,9 +297,7 @@ export default {
       // https://ajv.js.org/api.html#api-validateschema
       let valid = AJV.validate(clone(this.friendSchema), this.values);
       if (!valid) {
-
         const language = localStorage.getItem("lang") || this.language;
-        console.log(localStorage.getItem("lang"),"sdf")
         localizeErrors(AJV.errors, language); // 将错误信息转化成中文
         console.error("全局校验失败字段集：", AJV.errors);
         let fieldDom = null;

@@ -1,49 +1,29 @@
 <template>
   <div class="select-widget-wrapper" :id="widgetId">
-    <Select
-      v-model="value"
-      :class="[
-        'select-widget',
-        'el-form-item',
-        fieldErrors[field.name] ? 'is-error' : '',
-        widgetId,
-      ]"
-      :placeholder="field.placeholder"
-      :disabled="field.disabled"
-      :clearable="field.clearable"
-      :multiple="field.multiple"
-      :collapse-tags="field.collapseTags"
-      :allow-create="field.allowCreate"
-      :filterable="field.filterable"
-      :size="field.size"
-      @clear="clearOptions"
-    >
+    <Select v-model="value" :class="[
+      'select-widget',
+      'el-form-item',
+      fieldErrors[field.name] ? 'is-error' : '',
+      widgetId,
+    ]" :placeholder="field.placeholder" :disabled="field.disabled" :clearable="field.clearable"
+      :multiple="field.multiple" :collapse-tags="field.collapseTags" :allow-create="field.allowCreate"
+      :filterable="field.filterable" :size="field.size" @clear="clearOptions">
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
         <template v-for="(option, index) in friendOptions">
-          <Option
-            v-if="isFilter(option)"
-            :key="index"
-            :label="option[field.defaultProp.label]"
-            :value="option[field.defaultProp.value]"
-            :disabled="option.disabled"
-          ></Option>
+          <Option v-if="isFilter(option)" :key="index" :value="option[field.defaultProp.value]"
+            :disabled="option.disabled">
+            <span v-if="option.prefixHtml" v-html="option.prefixHtml"></span>
+            {{ option[field.defaultProp.label] }}
+          </Option>
         </template>
       </div>
       <!-- 分组 -->
       <div v-else>
-        <OptionGroup
-          v-for="(group, index) in friendOptions"
-          :key="index"
-          :label="group.label"
-        >
+        <OptionGroup v-for="(group, index) in friendOptions" :key="index" :label="group.label">
           <template v-for="option in group.options">
-            <Option
-              v-if="isFilter(option)"
-              :key="option[field.defaultProp.value]"
-              :label="option[field.defaultProp.label]"
-              :value="option[field.defaultProp.value]"
-            ></Option>
+            <Option v-if="isFilter(option)" :key="option[field.defaultProp.value]"
+              :label="option[field.defaultProp.label]" :value="option[field.defaultProp.value]"></Option>
           </template>
         </OptionGroup>
       </div>
@@ -76,9 +56,9 @@ export default {
         let option =
           typeof item == "string"
             ? {
-                [defaultProp.value]: item,
-                [defaultProp.label]: item,
-              }
+              [defaultProp.value]: item,
+              [defaultProp.label]: item,
+            }
             : item;
         friendOptions.push(option);
       });
@@ -168,7 +148,8 @@ export default {
 .select-widget-wrapper {
   width: 100%;
   height: 100%;
-  > .select-widget {
+
+  >.select-widget {
     height: 100%;
     width: 100%;
   }
