@@ -11,8 +11,8 @@
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
         <template v-for="(option, index) in friendOptions">
-          <Option v-if="isFilter(option)" :key="index" :value="option[field.defaultProp.value]"
-            :disabled="option.disabled">
+          <Option v-if="isFilter(option)" :key="index" :label="option[field.defaultProp.label]"
+            :value="option[field.defaultProp.value]" :disabled="option.disabled">
             <span v-if="option.prefixHtml" v-html="option.prefixHtml"></span>
             {{ option[field.defaultProp.label] }}
           </Option>

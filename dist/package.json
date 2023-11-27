@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.10.51",
+  "version": "0.10.52",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
