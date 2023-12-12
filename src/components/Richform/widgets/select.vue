@@ -107,7 +107,7 @@ export default {
       labelKeyArr.map((key, index) => {
         if (option[key] && toLabel == null) toLabel = option[key];
         else if (option[key]) toLabel += option[key];
-        if (index != labelKeyArr.length - 1) toLabel += (labelSeparator || '-')
+        if (option[key] && index != (labelKeyArr.length - 1)) toLabel += (labelSeparator || '-')
       })
       return toLabel;
     },
@@ -118,7 +118,7 @@ export default {
       valueKeyArr.map((key, index) => {
         if (option[key] && toValue == null) toValue = option[key];
         else if (option[key]) toValue += option[key];
-        if (index != valueKeyArr.length - 1) toValue += (valueSeparator || '-')
+        if (option[key] && index != (valueKeyArr.length - 1)) toValue += (valueSeparator || '-')
       })
       return toValue;
     },
