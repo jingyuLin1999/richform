@@ -434,22 +434,29 @@ export default {
                     widget: "select",
                     name: "selectA",
                     clearable: true,
+                    defaultProp: {
+                      label: "label,suffix", // {a:'a',b:'b',c:'c'} 显示可能需要 a-b 组合，所以改成 a,c
+                      value: "value"
+                    },
                     // filter: { key: "isdelete", value: 1 },
                     // suffixHtml: "<span>123</span>",
                     options: [
                       {
                         value: "选项1",
                         label: "黄金糕",
+                        suffix: "suffix1",
                         isdelete: 1,
                       },
                       {
                         value: "选项2",
                         label: "双皮奶",
+                        suffix: "suffix2",
                         isdelete: 0,
                       },
                       {
                         value: "选项3",
                         label: "蚵仔煎",
+                        suffix: "suffix3",
                         isdelete: 0,
                       },
                     ],

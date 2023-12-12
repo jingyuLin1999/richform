@@ -11,10 +11,10 @@
       <!-- 不分组 -->
       <div v-if="!field.isGroup">
         <template v-for="(option, index) in friendOptions">
-          <Option v-if="isFilter(option)" :key="index" :label="option[field.defaultProp.label]"
-            :value="option[field.defaultProp.value]" :disabled="option.disabled">
+          <Option v-if="isFilter(option)" :key="index" :label="getOptionLabel(option)" :value="getOptionValue(option)"
+            :disabled="option.disabled">
             <span v-if="option.prefixHtml" v-html="option.prefixHtml"></span>
-            {{ option[field.defaultProp.label] }}
+            {{ getOptionLabel(option) }}
             <span v-if="option.suffixHtml" v-html="option.suffixHtml"></span>
           </Option>
         </template>
@@ -23,8 +23,8 @@
       <div v-else>
         <OptionGroup v-for="(group, index) in friendOptions" :key="index" :label="group.label">
           <template v-for="option in group.options">
-            <Option v-if="isFilter(option)" :key="option[field.defaultProp.value]"
-              :label="option[field.defaultProp.label]" :value="option[field.defaultProp.value]"></Option>
+            <Option v-if="isFilter(option)" :key="option[field.defaultProp.value]" :label="getOptionLabel(option)"
+              :value="getOptionValue(option)"></Option>
           </template>
         </OptionGroup>
       </div>
@@ -91,11 +91,36 @@ export default {
           pickValues: [], // 获取values的数据做请求参数
         },
         defaultProp: {
-          label: "label",
-          value: "value",
+          label: "label", // {a:'a',b:'b',c:'c'} 显示可能需要 a-b 组合，所以改成 a,c
+          labelSeparator: "-",
+          splitSeparator: ',',
+          value: "value", // 上同
+          valueSeparator: "-",
         },
         filter: { key: null, value: null }, // 过滤掉符合条件的
       };
+    },
+    getOptionLabel(option) {
+      let toLabel = null;
+      let { label, labelSeparator, splitSeparator } = this.field.defaultProp;
+      let labelKeyArr = label.split(splitSeparator || ',')
+      labelKeyArr.map((key, index) => {
+        if (option[key] && toLabel == null) toLabel = option[key];
+        else if (option[key]) toLabel += option[key];
+        if (index != labelKeyArr.length - 1) toLabel += (labelSeparator || '-')
+      })
+      return toLabel;
+    },
+    getOptionValue(option) {
+      let toValue = null;
+      let { value, splitSeparator, valueSeparator } = this.field.defaultProp;
+      let valueKeyArr = value.split(splitSeparator || ',')
+      valueKeyArr.map((key, index) => {
+        if (option[key] && toValue == null) toValue = option[key];
+        else if (option[key]) toValue += option[key];
+        if (index != valueKeyArr.length - 1) toValue += (valueSeparator || '-')
+      })
+      return toValue;
     },
     // 清空的时候为"",后端要求最好是null,故强制转换一下
     clearOptions() {
