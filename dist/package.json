@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.10.60",
+  "version": "0.10.63",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -27,20 +27,6 @@
     "vxe-table": "^3.3.9",
     "xe-utils": "^3.3.0"
   },
-  "devDependencies": {
-    "@vue/babel-preset-app": "^5.0.8",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "babel-eslint": "^10.1.0",
-    "babel-polyfill": "^6.26.0",
-    "es6-promise": "^4.2.8",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^6.0.1",
-    "sass-loader": "^10.3.1",
-    "vue-template-compiler": "^2.6.11"
-  },
   "eslintConfig": {
     "root": true,
     "env": {
@@ -64,8 +50,6 @@
   },
   "files": [
     "dist",
-    "package.json",
-    "README.md",
     "src/i18n/lang"
   ],
   "browserslist": [
@@ -76,6 +60,6 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jingyuLin1999/echarts-designer"
+    "url": "git+https://github.com/jingyuLin1999/richform"
   }
 }

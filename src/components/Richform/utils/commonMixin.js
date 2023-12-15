@@ -42,6 +42,23 @@ export default {
             })
             return pickObj;
         },
+        deepDelete(keys = [], obj, deleteChildren = true) {
+            if (keys.length == 0 || !keys[0] || typeof obj != 'object') return;
+            let tempObj = obj
+            for (let index = 0; index < keys.length; index++) {
+                let key = keys[index]
+                let sObj = tempObj[key];
+                if (!sObj) break;
+                if (keys.length == index + 1) {
+                    if (deleteChildren) {
+                        for (let k in sObj) this.$delete(sObj, k)
+                    }
+                    else this.$delete(tempObj, key)
+                    return;
+                }
+                tempObj = sObj
+            }
+        },
         // 对依赖本字段的字典进行派发
         async dispatchOptions(fieldName) {
             let dicts = this.dependencies[fieldName];
@@ -173,46 +190,83 @@ export default {
                             let friendType = field.forceType || (type(this.values[name]).toLowerCase());
                             this.deepSetValue(name.split("."), this.values, this.friendDefaultValue(friendType));
                         }
-                        // 隐藏状态删除表达式的验证规则
-                        this.updateSchemaInHide(item);
+                        // 隐藏状态删除表达式的验证规则(schema)  
+                        this.dispatchRegExp(item.name);
                     } else if (hideHistory.includes(nameKey)) {
                         // 这种情况，表示重复的name和key已有一个验证通过
                     } else {
+                        // 显示字段
                         this.$set(item.field, "hide", isEquality);
+                        // 字段显示了需要添加schema 2023-12-14
+                        for (let key in this.regExpFields) this.dispatchRegExp(key)
                     }
                 }
-            }
-        },
-        // 更新schema当字段隐藏时
-        updateSchemaInHide(fieldItem) {
-            if (this.schema && this.schema.properties) {
-                const fieldSchema = path(this.schema.properties, fieldItem.name.split("."));
-                if (fieldItem.field.regExp && fieldSchema) // 删除
-                    deleteIteration(this.schema.properties, fieldItem.name.split("."));
-                // 你都不存在了，依赖你的表达式也不应该存在
-                const regExps = this.regExpFields[fieldItem.name];
-                if (!regExps) return;
-                regExps.map(item => {
-                    const { dispatchName } = item;
-                    const fieldSchema = path(this.schema.properties, dispatchName.split("."));
-                    if (fieldSchema) deleteIteration(this.schema.properties, dispatchName.split(".")); // 删除
-                })
             }
         },
         // 派发表达式，并修改schema
         dispatchRegExp(fieldName) {
             const regExps = this.regExpFields[fieldName];
-            if (!regExps) return;
+            // 父级fieldName隐藏了，依赖你的表达式也不应该存在
+            let fieldItem = this.flatFields[fieldName];
+            if (fieldItem && fieldItem.hide && this.schema && this.schema.properties) {
+                let fieldSchemaKeys = fieldName.split(".").join(".properties.").split(".");
+                let fieldSchema = path(fieldSchemaKeys, this.schema.properties);
+                this.deepDelete(fieldSchemaKeys, fieldSchema);
+            }
+            // 遍历子级依赖
+            if (!Array.isArray(regExps)) return
             regExps.map((item) => {
-                const { dispatchName, exp, field } = item;
-                const fieldSchema = path(
-                    dispatchName.split("."),
-                    this.schema.properties
-                );
-                if (fieldSchema) fieldSchema[exp] = this.values[fieldName]; // 找到更新
+                let { childrenName, exp, field } = item;
+                let schemaKeys = childrenName.split(".").join(".properties.").split(".");
+                let fieldSchema = path(schemaKeys, this.schema.properties);
+                let fieldValue = this.deepPick(fieldName.split("."), this.values)
+                if ((fieldSchema && field.hide) || (fieldItem && fieldItem.hide)) {  // 隐藏 2023-12-14
+                    // 条件设置为：字段A，小于字段B和小于字段C，B隐藏了，但是C不隐藏。还有C，这种情况就不能删除了
+                    let fieldCanBeDeleted = true;
+                    for (let key in this.regExpFields) {
+                        let regExpsArr = this.regExpFields[key]
+                        let fieldItem = this.flatFields[key]
+                        regExpsArr.map(item => {
+                            if (fieldCanBeDeleted &&
+                                item.childrenName == childrenName &&
+                                fieldItem && !fieldItem.hide) {
+                                fieldCanBeDeleted = false;
+                            }
+                        })
+                    }
+                    // 删除schema
+                    if (fieldCanBeDeleted) {
+                        let schema = this.schema.properties;
+                        this.deepDelete(schemaKeys, schema);
+                        if (this.fieldErrors[childrenName]) this.$delete(this.fieldErrors, childrenName) // 没有schema了，对应显示的错误信息也得去掉
+                    }
+                }
+                else if (fieldSchema && !field.hide) {
+                    // 条件设置为：字段A，小于字段B和小于字段C，那么要设置的值是【字段B】和【字段C】的最小值。大于同理
+                    let regExpValue = [];
+                    for (let key in this.regExpFields) {
+                        let regExpsArr = this.regExpFields[key]
+                        let fieldItem = this.flatFields[key]
+                        regExpsArr.map(item => {
+                            if (item.childrenName == childrenName && fieldItem && !fieldItem.hide) {
+                                let fieldValue = this.deepPick(key.split("."), this.values)
+                                regExpValue.push(fieldValue)
+                            }
+                        })
+                    }
+                    let value = fieldValue;
+                    // 根据exp，判断是大于或小于
+                    // 上限,即取最小值
+                    if (["maximum", "exclusiveMaximum"].includes(exp)) {
+                        value = Math.min(...regExpValue)
+                    }
+                    // 下限,即取最大值
+                    else if (["minimum", "exclusiveMinimum"].includes(exp)) {
+                        value = Math.max(...regExpValue)
+                    }
+                    fieldSchema[exp] = value; // 找到更新
+                }
                 else if (!fieldSchema && !field.hide) { // 有可能找不到
-                    let schemaKeys = dispatchName.split(".").join(".properties.").split(".");
-                    let fieldValue = this.deepPick(fieldName.split("."), this.values)
                     this.deepSetValue(schemaKeys, this.schema.properties, {
                         [exp]: fieldValue,
                     });

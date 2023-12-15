@@ -11,7 +11,7 @@ module.exports = {
     outputDir: 'dist/lib',
     assetsDir: 'static',
     productionSourceMap: false,
-    css: { extract: true },
+    css: { extract: false },
     configureWebpack: {
         // provide the app's title in webpack's name field, so that
         // it can be accessed in index.html to inject the correct title.

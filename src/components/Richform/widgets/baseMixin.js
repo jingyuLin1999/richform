@@ -208,12 +208,12 @@ export default {
             regExp.map(regItem => {
                 const { relyName } = regItem;
                 if (!this.regExpFields[relyName]) this.regExpFields[relyName] = [];
-                if (this.regExpFields[relyName].find(item => item.dispatchName == this.field.name
+                if (this.regExpFields[relyName].find(item => item.childrenName == this.field.name
                     && item.relyName == regItem.relyName)) return; // 确保只收取一个表达式，
                 // 正式收集
                 this.regExpFields[relyName].push({
                     ...regItem,
-                    dispatchName: this.field.name,
+                    childrenName: this.field.name,
                     field: this.field,
                 })
             })

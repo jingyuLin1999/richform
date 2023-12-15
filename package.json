@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.10.60",
+  "version": "0.10.63",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,7 +14,7 @@
     "ajv": "^6.12.6",
     "ajv-errors": "^1.0.1",
     "ajv-i18n": "^3.3.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "core-js": "^3.6.5",
     "element-resize-detector": "^1.2.4",
     "element-ui": "^2.15.6",
@@ -79,6 +79,6 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jingyuLin1999/echarts-designer"
+    "url": "git+https://github.com/jingyuLin1999/richform"
   }
 }

@@ -25,6 +25,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
     <Button type="primary" size="small" @click="changeTheme">改变主题</Button>
     <Button type="success" size="small" @click="hooks.validate()">外部校验</Button>
     <Button type="danger" size="small" @click="onHidden">触发隐藏</Button>
+    <!-- {{ schema }} -->
     <RichForm :schema="schema" :form="form" :values="values" :isDesign="false" :hooks="hooks" :authorization="{
       value: '7Lf16dcf98x62c70d324m448fT578abb216Q081gw6179fd16edd17172482',
     }" :isFriendValue="true" @action="formAction"></RichForm>
@@ -118,6 +119,9 @@ export default {
           radioNumber: {
             type: "number",
             default: 1,
+          },
+          intB: {
+            type: "number"
           },
           mode: {
             type: "object",
@@ -343,6 +347,7 @@ export default {
                   title: "数字A",
                   name: "intA",
                   widget: "inputnumber",
+                  min: -100,
                   regExp: [{ exp: "exclusiveMaximum", relyName: "intB" }],
                 },
               ],
@@ -357,6 +362,14 @@ export default {
                 },
               ],
             ],
+          },
+          {
+            title: "数字C",
+            name: "intC",
+            widget: "inputnumber",
+            min: -100,
+            description: "小于【数字A】和【数字B】",
+            regExp: [{ exp: "exclusiveMaximum", relyName: "intA" }, { exp: "exclusiveMaximum", relyName: "intB" },],
           },
           {
             widget: "tabs",
@@ -1112,7 +1125,7 @@ export default {
                       {
                         title: "单选",
                         widget: "radio",
-                        name: "radioB",
+                        name: "mode.radioB",
                         isGroup: true,
                         isButton: false,
                         disabled: false,
@@ -1141,7 +1154,7 @@ export default {
                       {
                         title: "输入框",
                         widget: "input",
-                        name: "networkInput",
+                        name: "mode.networkInput",
                       },
                     ],
                   },
