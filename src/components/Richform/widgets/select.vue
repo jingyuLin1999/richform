@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { type } from "ramda";
+import { type, isNil } from "ramda";
 import baseMixin from "./baseMixin";
 import { strToObj } from "../utils";
 import { Select, Option, OptionGroup } from "element-ui";
@@ -105,9 +105,9 @@ export default {
       let { label, labelSeparator, splitSeparator } = this.field.defaultProp;
       let labelKeyArr = label.split(splitSeparator || ',')
       labelKeyArr.map((key, index) => {
-        if (option[key] && toLabel == null) toLabel = option[key];
-        else if (option[key]) toLabel += option[key];
-        if (option[key] && index != (labelKeyArr.length - 1)) toLabel += (labelSeparator || '-')
+        if (!isNil(option[key]) && toLabel == null) toLabel = option[key];
+        else if (!isNil(option[key])) toLabel += option[key];
+        if (!isNil(option[key]) && index != (labelKeyArr.length - 1)) toLabel += (labelSeparator || '-')
       })
       return toLabel;
     },
@@ -116,9 +116,9 @@ export default {
       let { value, splitSeparator, valueSeparator } = this.field.defaultProp;
       let valueKeyArr = value.split(splitSeparator || ',')
       valueKeyArr.map((key, index) => {
-        if (option[key] && toValue == null) toValue = option[key];
-        else if (option[key]) toValue += option[key];
-        if (option[key] && index != (valueKeyArr.length - 1)) toValue += (valueSeparator || '-')
+        if (!isNil(option[key]) && toValue == null) toValue = option[key];
+        else if (!isNil(option[key])) toValue += option[key];
+        if (!isNil(option[key]) && index != (valueKeyArr.length - 1)) toValue += (valueSeparator || '-')
       })
       return toValue;
     },

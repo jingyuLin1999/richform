@@ -247,6 +247,23 @@ export default {
             },
           },
           {
+            title: "选择数字0",
+            widget: "select",
+            name: "selectNumber",
+            clearable: true,
+            filterable: true,
+            options: [
+              {
+                value: 0,
+                label: 0,
+              },
+              {
+                value: 1,
+                label: 1,
+              },
+            ],
+          },
+          {
             widget: "button",
             name: "button",
             title: "按钮",
