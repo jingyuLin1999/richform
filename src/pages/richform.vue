@@ -181,6 +181,7 @@ export default {
         selectA: "选项1",
         datetimepicker: ["2022-05-05 00:00:00", "2022-05-20 00:00:00"],
         selectB: "选项1",
+        timeselect: 127
       },
       form: {
         border: true, // 显示边框
@@ -227,6 +228,12 @@ export default {
           },
         ],
         layout: [
+          {
+            title: "时分秒选择器",
+            widget: "timeselect",
+            name: "timeselect",
+            valueFormat: "timestamp",
+          },
           {
             widget: "expression",
             name: "expression",
@@ -888,6 +895,7 @@ export default {
             title: "时间选择器",
             widget: "timepicker",
             name: "timepicker",
+            valueFormat: "timestamp",
           },
           {
             title: "评分",
