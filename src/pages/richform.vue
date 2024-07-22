@@ -1,4 +1,3 @@
-
 <!-- 
 @name: 表单组件
 @author: ljy
@@ -28,7 +27,11 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
     <!-- {{ schema }} -->
     <RichForm :schema="schema" :form="form" :values="values" :isDesign="false" :hooks="hooks" :authorization="{
       value: '7Lf16dcf98x62c70d324m448fT578abb216Q081gw6179fd16edd17172482',
-    }" :isFriendValue="true" @action="formAction"></RichForm>
+    }" :isFriendValue="true" @action="formAction">
+      <template #slot>
+        <div class="slot-info">132s</div>
+      </template>
+    </RichForm>
   </div>
 </template>
 
@@ -38,9 +41,7 @@ import RichForm from "../components/Richform";
 export default {
   components: { RichForm, Button },
   created() {
-
     localStorage.setItem("lang", "vi");
-
   },
   data() {
     return {
@@ -228,6 +229,12 @@ export default {
           },
         ],
         layout: [
+          {
+            title: "自定义插槽",
+            widget: "slot",
+            name: "slot",
+            slotName: "slot"
+          },
           {
             title: "时分秒选择器",
             widget: "timeselect",
@@ -973,9 +980,9 @@ export default {
             ],
           },
           {
-            title: "自定义插槽",
-            widget: "slot",
-            name: "slot",
+            title: "自定义文本",
+            widget: "text",
+            name: "text",
             html: "<a href='#'>richform你好</a><br>123",
           },
           // {
@@ -1237,6 +1244,9 @@ export default {
   .value-wrapper {
     word-break: break-all;
   }
+
+  .slot-info {
+    color: #f00;
+  }
 }
 </style>
-

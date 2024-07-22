@@ -1,4 +1,3 @@
-
 <!-- 
 @name: 表单组件
 @author: ljy
@@ -122,6 +121,7 @@ export default {
       hooks: this.hooks,
       pickDeepValueKeys: this.pickDeepValueKeys,
       language: this.language,
+      slots: this.$slots
     };
   },
   watch: {
