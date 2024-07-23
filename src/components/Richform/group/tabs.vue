@@ -2,55 +2,30 @@
 <template>
   <div :class="['tab-wrapper', tabsItem.activeDesign ? 'active-design' : '']">
     <!-- 点击区域，不影响tabs -->
-    <div
-      v-if="isDesign"
-      class="design-no-tabs"
-      @click="onClickedItem(tabsItem)"
-    ></div>
+    <div v-if="isDesign" class="design-no-tabs" @click="onClickedItem(tabsItem)"></div>
     <Tabs v-model="activeTabName" @tab-click="clickTab">
-      <TabPane
-        v-for="(tab, index) in tabsItem.tabs"
-        :key="index"
-        :label="tab.label"
-        :name="tab.name"
-      >
+      <TabPane v-for="(tab, index) in tabsItem.tabs" :key="index" :label="tab.label" :name="tab.name">
         <div class="tab-container">
-          <layout
-            :layout="tab.fields"
-            :isDesign="isDesign"
-            :form="form"
-            :values="values"
-            :colors="colors"
-            :schema="schema"
-            :fieldErrors="fieldErrors"
-            :isFriendValue="isFriendValue"
-            :hideFields="hideFields"
-            :isDark="isDark"
-          ></layout>
+          <layout :layout="tab.fields" :isDesign="isDesign" :form="form" :values="values" :colors="colors"
+            :schema="schema" :fieldErrors="fieldErrors" :isFriendValue="isFriendValue" :hideFields="hideFields"
+            :isDark="isDark">
+            <template v-for="(_, name) in $scopedSlots" v-slot:[name]="data">
+              <slot :name="name" v-bind="data" />
+            </template>
+          </layout>
         </div>
       </TabPane>
     </Tabs>
     <!--拖拽-->
-    <span
-      class="design-draggable design-handle-move"
-      v-if="isDesign && tabsItem.isClicked"
-    >
+    <span class="design-draggable design-handle-move" v-if="isDesign && tabsItem.isClicked">
       <i class="el-icon-rank design-handle-move"></i>
     </span>
     <!--复制-->
-    <span
-      class="design-copy"
-      @click="onCopyItem(schema)"
-      v-if="isDesign && tabsItem.isClicked"
-    >
+    <span class="design-copy" @click="onCopyItem(schema)" v-if="isDesign && tabsItem.isClicked">
       <i class="el-icon-document-copy"></i>
     </span>
     <!--删除-->
-    <span
-      class="design-delete"
-      @click="onDeleteItem(form, tabsItem)"
-      v-if="isDesign && tabsItem.isClicked"
-    >
+    <span class="design-delete" @click="onDeleteItem(form, tabsItem)" v-if="isDesign && tabsItem.isClicked">
       <i class="el-icon-delete"></i>
     </span>
   </div>
@@ -86,12 +61,14 @@ export default {
 .tab-wrapper {
   position: relative;
   box-sizing: border-box;
-  > .design-no-tabs {
+
+  >.design-no-tabs {
     width: 100%;
     height: 40px;
     position: absolute;
     z-index: 2;
   }
+
   .tab-container {
     min-height: 15px;
   }

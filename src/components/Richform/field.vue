@@ -6,35 +6,35 @@
   <!-- 不能用v-if，否则若开始为隐藏，后续无法切换 -->
   <div v-show="!field.hide" :class="['field-wrapper', field.name, form.grid ? 'field-border-top' : '']">
     <div :class="[
-      'field',
-      form.labelInline ? 'label-inline' : '',
-      form.grid ? 'field-border' : '',
-      field.activeDesign && isDesign ? 'active-design' : '',
-      form.labelInline && !form.grid ? 'inline-no-grid' : '',
-    ]" @click="onClickedItem(field)">
+    'field',
+    form.labelInline ? 'label-inline' : '',
+    form.grid ? 'field-border' : '',
+    field.activeDesign && isDesign ? 'active-design' : '',
+    form.labelInline && !form.grid ? 'inline-no-grid' : '',
+  ]" @click="onClickedItem(field)">
       <div v-show="field.widget != 'button'" ref="fieldTitle" :class="[
-        'title-wrapper',
-        'label-' + (form.labelAlign || 'right'),
-        form.labelInline ? 'label-hori' : 'label-vert',
-      ]" :style="{
-  width: form.labelInline
-    ? isShyTitle
-      ? form.labelWidth
-      : '0px'
-    : '100%',
-}">
+    'title-wrapper',
+    'label-' + (form.labelAlign || 'right'),
+    form.labelInline ? 'label-hori' : 'label-vert',
+  ]" :style="{
+    width: form.labelInline
+      ? isShyTitle
+        ? form.labelWidth
+        : '0px'
+      : '100%',
+  }">
         <div ref="fieldLabel" v-if="isShyTitle" :class="[
-          'label-title',
-          fieldSchema.require || requireds.includes(field.name)
-            ? 'required-field'
-            : '',
-        ]" :style="{ color: colors.fontColor }">
+    'label-title',
+    fieldSchema.require || requireds.includes(field.name)
+      ? 'required-field'
+      : '',
+  ]" :style="{ color: colors.fontColor }">
           {{ fieldTitle }}
         </div>
         <span class="label-suffix" :style="{ color: colors.fontColor }" v-if="isShyTitle &&
-          form.labelSuffix.length > 0 &&
-          Object.keys(this.field).length > 0
-          ">{{ form.labelSuffix }}</span>
+    form.labelSuffix.length > 0 &&
+    Object.keys(this.field).length > 0
+    ">{{ form.labelSuffix }}</span>
         <Tooltip v-if="fieldSchema.description || field.description"
           :content="fieldSchema.description || field.description" class="field-question" placement="bottom"
           :effect="isDark ? 'dark' : 'light'">
@@ -44,13 +44,17 @@
       <div v-if="form.grid && form.labelInline" v-show="isShyTitle" class="label-right-border"
         :style="{ height: lableRightBorder + 'px' }"></div>
       <div ref="fieldValue" :class="[
-        'field-value',
-        isDesign ? 'field-mask' : '',
-        !form.labelInline ? 'field-value-vert' : 'field-value-hori',
-      ]">
+    'field-value',
+    isDesign ? 'field-mask' : '',
+    !form.labelInline ? 'field-value-vert' : 'field-value-hori',
+  ]">
         <component :is="asyncComponent" :form="form" :schema="fieldSchema" :values="values" :field="field"
           :colors="colors" :fieldErrors="fieldErrors" :hideFields="hideFields" :isDark="isDark" @change="onChange"
-          @buttonEvent="onButtonEvent" />
+          @buttonEvent="onButtonEvent">
+          <template v-for="(_, name) in $scopedSlots" v-slot:[name]="data">
+            <slot :name="name" v-bind="data" />
+          </template>
+        </component>
         <!-- 错误信息 -->
         <div class="error-message" v-if="fieldErrors[field.name] && field.showError != false">
           <i class="el-icon-warning-outline"></i>
@@ -214,7 +218,7 @@ export default {
         this.fieldGrandfatherSchema.required.push(schemaRequired);
     },
     createValue() {
-      if (!this.isFriendValue) return;
+      if (!this.isFriendValue || ['slot'].includes(this.field.widget)) return;
       // 深度模式收集键值
       if (
         this.isDeepValues &&

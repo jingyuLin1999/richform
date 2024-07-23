@@ -65,6 +65,9 @@
       <form-layout :schema="friendSchema" :layout="friendForm.layout" :values="values" :isDesign="isDesign" :form="form"
         :isFriendValue="isFriendValue" :colors="friendForm.colors" :fieldErrors="fieldErrors" :hideFields="hideFields"
         :isDark="isDark">
+        <template v-for="(_, name) in $scopedSlots" v-slot:[name]="data">
+          <slot :name="name" v-bind="data" />
+        </template>
       </form-layout>
       <!-- 底部按钮 -->
       <actions v-if="showBtns" :actions="buttomActions" :isDesign="isDesign"></actions>
@@ -121,7 +124,6 @@ export default {
       hooks: this.hooks,
       pickDeepValueKeys: this.pickDeepValueKeys,
       language: this.language,
-      slots: this.$slots
     };
   },
   watch: {
