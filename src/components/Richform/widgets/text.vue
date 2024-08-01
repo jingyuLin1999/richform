@@ -10,7 +10,9 @@ export default {
   mixins: [baseMixin],
   methods: {
     defaultFieldAttr() {
-      return {};
+      return {
+        html: null,
+      };
     },
   },
 };

@@ -14,7 +14,7 @@
         <div :class="[
     'grid-column',
     form.grid ? 'grid-column-border' : '',
-    form.grid ? 'grid-column-padding' : '',
+    form.grid ? 'grid-column-padding' : 'no-gird',
   ]" v-for="(columnItem, index) in gridItem.fields" :key="index" :style="{ flex: ratio[index] || 1 }"
           v-show="isShowColumn(columnItem)">
           <layout :layout="columnItem" :isDesign="isDesign" :form="form" :values="values" :colors="colors"
@@ -125,6 +125,10 @@ export default {
     .grid-column-padding {
       padding: 6px;
       border-top: 1px solid $form-border-color;
+    }
+
+    .no-gird {
+      padding: 0 !important;
     }
 
     .grid-column-border:not(:last-child) {

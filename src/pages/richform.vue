@@ -29,7 +29,7 @@ schema是对字段的描述，包括依赖关系，但是依赖关系可能是
       value: '7Lf16dcf98x62c70d324m448fT578abb216Q081gw6179fd16edd17172482',
     }" :isFriendValue="true" @action="formAction">
       <template #slot="{ values, field }">
-        <div class="slot-info">132s{{ field }}<br />--{{ values }}</div>
+        <div class="slot-info">132s{{ field }}<br />--{{ values.map }}</div>
       </template>
     </RichForm>
   </div>
