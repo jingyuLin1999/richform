@@ -957,8 +957,9 @@ export default {
             widget: "tree",
             name: "tree",
             isShowCheckbox: false,
-            onlyCheckedKeys: true,
+            onlyCheckedKeys: false,
             nodeKey: "value",
+            addSibling: true,
             options: [
               {
                 id: 1,

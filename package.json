@@ -1,6 +1,6 @@
 {
   "name": "richform",
-  "version": "0.11.25",
+  "version": "0.11.50",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -27,8 +27,8 @@
     "vue-scrollto": "^2.20.0",
     "vue2-perfect-scrollbar": "^1.5.0",
     "vuedraggable": "^2.24.3",
-    "vxe-table": "^3.3.9",
-    "xe-utils": "^3.3.0"
+    "vxe-table": "^3.4.15",
+    "xe-utils": "^3.5.4"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "^5.0.8",

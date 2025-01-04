@@ -1,140 +1,56 @@
 <template>
-  <div
-    class="perfect-tree-wrapper"
-    :id="widgetId"
-    :style="{ '--theme': field.theme }"
-  >
-    <Input
-      v-if="field.isShowSearch"
-      placeholder="输入关键字进行过滤"
-      v-model="filterText"
-    >
+  <div class="perfect-tree-wrapper" :id="widgetId" :style="{ '--theme': field.theme }">
+    <Input v-if="field.isShowSearch" placeholder="输入关键字进行过滤" v-model="filterText">
     </Input>
-    <Input
-      v-if="field.showAddTemplate"
-      size="small"
-      placeholder="新增模板"
-      type="textarea"
-      v-model="field.template"
-    ></Input>
-    <Tree
-      ref="pefectTree"
-      :data="treeValue"
-      :node-key="field.nodeKey"
-      :default-expand-all="field.isExpandAll"
-      :expand-on-click-node="false"
-      :filter-node-method="filterNode"
-      :draggable="field.draggable"
-      :show-checkbox="field.isShowCheckbox"
-      :default-checked-keys="defaultCheckedKeys"
-      @check-change="onCheckedNode"
-      @node-click="onNodeClick"
-    >
-      <span
-        :class="[
-          'perfect-tree-node',
-          `perfect-tree-node_${data[field.nodeKey]}`,
-        ]"
-        :data="data[field.nodeKey]"
-        slot-scope="{ node, data }"
-        @dblclick="editNodeTitle(data, node, $event)"
-      >
+    <Input v-if="field.showAddTemplate" size="small" placeholder="新增模板" type="textarea"
+      v-model="field.template"></Input>
+    <Tree ref="pefectTree" :data="treeValue" :node-key="field.nodeKey" :default-expand-all="field.isExpandAll"
+      :expand-on-click-node="false" :filter-node-method="filterNode" :draggable="field.draggable"
+      :show-checkbox="field.isShowCheckbox" :default-checked-keys="defaultCheckedKeys" @check-change="onCheckedNode"
+      @node-click="onNodeClick">
+      <span :class="[
+        'perfect-tree-node',
+        `perfect-tree-node_${data[field.nodeKey]}`,
+      ]" :data="data[field.nodeKey]" slot-scope="{ node, data }" @dblclick="editNodeTitle(data, node, $event)">
         <!-- 标题 -->
-        <div
-          :class="['title-wrapper', onActiveNode(data) ? 'active-node' : '']"
-        >
+        <div :class="['title-wrapper', onActiveNode(data) ? 'active-node' : '']">
           <span v-if="field.isShowIcon">
             <!-- 张开和收缩图标-->
-            <i
-              v-if="node.childNodes.length > 0"
-              :class="[node.expanded ? field.expandIcon : field.narrowIcon]"
-            ></i>
+            <i v-if="node.childNodes.length > 0" :class="[node.expanded ? field.expandIcon : field.narrowIcon]"></i>
             <i v-else :class="['node-icon', field.leafIcon]"></i>
           </span>
-          <span
-            class="title"
-            :ref="'perfect-tree-node-input_' + data[field.nodeKey]"
-            :id="'perfect-tree-node-input_' + data[field.nodeKey]"
-          >
+          <span class="title" :ref="'perfect-tree-node-input_' + data[field.nodeKey]"
+            :id="'perfect-tree-node-input_' + data[field.nodeKey]">
             {{ data.label || data[field.defaultProps.label] }}
           </span>
         </div>
         <!-- 工具 -->
         <span class="tools">
-          <Tooltip
-            class="tool-item"
-            popper-class="perfect-tree-tool-tip"
-            :open-delay="200"
-            v-if="node.level == 1 && field.addSibling"
-            content="添加兄弟点"
-            :enterable="false"
-            placement="top-end"
-            effect="light"
-          >
+          <Tooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200"
+            v-if="node.level == 1 && field.addSibling" content="添加兄弟点" :enterable="false" placement="top-end"
+            effect="light">
             <i class="el-icon-circle-plus-outline" @click="addSibling()"></i>
           </Tooltip>
-          <Tooltip
-            class="tool-item"
-            popper-class="perfect-tree-tool-tip"
-            :open-delay="200"
-            v-if="field.addable"
-            content="添加"
-            :enterable="false"
-            placement="top-end"
-            effect="light"
-          >
+          <Tooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.addable"
+            content="添加" :enterable="false" placement="top-end" effect="light">
             <i class="el-icon-plus" @click="addNodeModal(data, node)"></i>
           </Tooltip>
-          <Tooltip
-            class="tool-item"
-            popper-class="perfect-tree-tool-tip"
-            :open-delay="200"
-            v-if="field.editable"
-            content="编辑"
-            :enterable="false"
-            placement="top-end"
-            effect="light"
-          >
-            <i
-              class="el-icon-edit-outline"
-              @click="editNodeModal(data, node, $event)"
-            ></i>
+          <Tooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.editable"
+            content="编辑" :enterable="false" placement="top-end" effect="light">
+            <i class="el-icon-edit-outline" @click="editNodeModal(data, node, $event)"></i>
           </Tooltip>
-          <Tooltip
-            class="tool-item"
-            popper-class="perfect-tree-tool-tip"
-            :open-delay="200"
-            v-if="field.deletable"
-            content="删除"
-            :enterable="false"
-            placement="top-end"
-            effect="light"
-          >
+          <Tooltip class="tool-item" popper-class="perfect-tree-tool-tip" :open-delay="200" v-if="field.deletable"
+            content="删除" :enterable="false" placement="top-end" effect="light">
             <i class="el-icon-delete" @click="onRemoveNode(data, node)"></i>
           </Tooltip>
         </span>
       </span>
     </Tree>
     <!-- 弹窗 -->
-    <Modal
-      v-model="isModal"
-      :showFooter="true"
-      :title="modalTitle"
-      resize
-      :width="600"
-    >
-      <div
-        v-for="(key, index) in Object.keys(template)"
-        :key="index"
-        class="field-row"
-      >
+    <Modal v-model="isModal" :showFooter="true" :title="modalTitle" resize :width="600">
+      <div v-for="(key, index) in Object.keys(template)" :key="index" class="field-row">
         <label v-if="key != 'children'" class="field-label">{{ key }}:</label>
-        <Input
-          v-if="key != 'children'"
-          size="small"
-          v-model="template[key]"
-          required
-        ></Input>
+        <Input v-if="key != 'children'" size="small" v-model="template[key]" required></Input>
       </div>
       <span slot="footer" class="dialog-footer">
         <Button @click="isModal = false" size="mini">取 消</Button>
@@ -147,7 +63,6 @@
 <script>
 import "xe-utils";
 import { Modal } from "vxe-table";
-import "vxe-table/lib/style.css";
 import baseMixin from "./baseMixin";
 import { Input, Button, Tree, Tooltip, MessageBox } from "element-ui";
 export default {
@@ -178,8 +93,8 @@ export default {
       return this.field.options.length > 0
         ? this.field.options
         : Array.isArray(this.value)
-        ? this.value
-        : [
+          ? this.value
+          : [
             {
               [this.field.nodeKey]: this.uuid(),
               [label]: this.value,
@@ -235,7 +150,7 @@ export default {
       else if (data[this.field.nodeKey] == this.value) return true;
       return false;
     },
-    editNodeTitle() {},
+    editNodeTitle() { },
     // 点击节点，即单选时使用
     onNodeClick(data) {
       if (this.field.isShowCheckbox || this.field.options.length == 0) return;
@@ -275,7 +190,7 @@ export default {
           );
           children.splice(index, 1);
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     onSureBtn() {
       switch (this.modalType) {
@@ -342,55 +257,69 @@ export default {
 </script>
 
 <style lang="scss">
+@import "vxe-table/styles/variable.scss";
+@import "vxe-table/styles/modal.scss";
+
 // adjust element css
 .perfect-tree-tool-tip {
   border-radius: 0;
   padding: 2px 4px;
 }
+
 // perfect-tree css
 .perfect-tree-wrapper {
   width: 100%;
   margin: 0 2px;
   background: #fff;
+
   .field-row {
     display: flex;
     margin-bottom: 3px;
     align-items: center;
+
     .field-label {
       width: 60px;
       text-align: right;
       margin-right: 4px;
     }
   }
+
   .perfect-tree-title {
     height: 35px;
     line-height: 35px;
     border-bottom: 1px solid #d6d6d6;
     font-size: 15px;
   }
+
   .perfect-tree-node {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 15px;
+
     .tools {
       display: flex;
+
       .tool-item {
         padding-left: 10px;
         display: none;
       }
     }
+
     .node-icon {
       margin-right: 1px;
     }
+
     .title {
       padding: 3px 0;
     }
+
     .active-node {
       color: #4f9ffe;
     }
   }
+
   .perfect-tree-node:hover .tool-item {
     display: block;
   }
