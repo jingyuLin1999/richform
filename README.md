@@ -24,9 +24,9 @@ vue3.x 请见[richform-plus](https://github.com/jingyuLin1999/richform-plus)
 
 ### 在线预览
 
-[表单设计器](http://117.73.12.76/demo/richform/#/ )  
+[表单设计器](http://156.232.10.2/richform/#/)  
 
-[富表单完整功能](http://117.73.12.76/demo/richform/#/form-design )   
+[富表单完整功能](http://156.232.10.2/richform/#/richform)   
 
 ### 本地预览
 ```
