@@ -126,7 +126,7 @@ export default {
     clearOptions() {
       let friendType =
         this.field.forceType ||
-        this.schema.type ||
+        this.fieldSchema.type ||
         type(this.values[this.field.name]).toLowerCase();
       this.values[this.field.name] = this.friendDefaultValue(friendType);
     },
@@ -155,14 +155,14 @@ export default {
       let { multiple, join, forceType } = this.field;
       if (
         typeof value == "string" &&
-        (forceType == "number" || this.schema.type == "number")
+        (forceType == "number" || this.fieldSchema.type == "number")
       ) {
         value = parseFloat(value);
       } else if (multiple && join.length > 0 && Array.isArray(value)) {
         value = value.join(join);
       } else if (
         Array.isArray(value) &&
-        (forceType == "string" || this.schema.type == "string")
+        (forceType == "string" || this.fieldSchema.type == "string")
       ) {
         value = JSON.stringify(value);
       }

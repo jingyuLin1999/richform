@@ -134,6 +134,7 @@ export default {
         // todo 只有改变的name才需要派发
         for (let key in this.hideFields) this.dispatchHide(key);
         for (let key in this.dependencies) this.dispatchOptions(key);
+        for (let key in this.regExpFields) this.dispatchRegExp(key);
       },
       deep: true,
     },
@@ -162,12 +163,16 @@ export default {
   },
   computed: {
     friendSchema() {
-      const friendSchema = Object.assign(clone(defaultSchema), this.schema);
-      const pickSpecSchema = pick(["allOf", "anyOf", "oneOf"], friendSchema);
-      for (let key in pickSpecSchema) {
-        if (pickSpecSchema[key].length == 0) this.$delete(friendSchema, key);
+      const cloneDefaultSchema = clone(defaultSchema);
+      for (let key in cloneDefaultSchema) {
+        if (!this.schema[key]) {
+          this.$set(this.schema, key, cloneDefaultSchema[key])
+        }
+        if (["allOf", "anyOf", "oneOf"].includes(key) && this.schema[key].length == 0) {
+          this.$delete(this.schema, key);
+        }
       }
-      return friendSchema;
+      return this.schema;
     },
     friendForm() {
       return mergeDeepRight(defaultForm, this.form);

@@ -6,6 +6,7 @@ export default {
     props: {
         field: { type: Object, default: () => ({}) },
         schema: { type: Object, default: () => ({}) },
+        fieldSchema: { type: Object, default: () => ({}) },
         values: { type: Object, default: () => ({}) },
         colors: { type: Object, default: () => ({}) },
         fieldErrors: { type: Object, default: () => ({}) },
@@ -75,6 +76,7 @@ export default {
             this.globalVars.loadCompletedTimeout = setTimeout(() => {
                 for (let key in this.dependencies) this.dispatchOptions(key);
                 this.globalVars.loadCompleted = true;
+                for (let key in this.regExpFields) this.dispatchRegExp(key);
             }, 500)
         },
         $setFieldAttr() {
@@ -84,20 +86,20 @@ export default {
                 this.$set(this.field, key, value)
         },
         beforeChange(value) {
-            return this.schema.type == "number"
+            return this.fieldSchema.type == "number"
                 ? parseFloat(value) ? parseFloat(value) : value
                 : value;
         },
         changeValue(value) {
             this.updateValue++;
-            this.$emit('change', this.field.name, value, this.schema)
+            this.$emit('change', this.field.name, value, this.fieldSchema)
         },
         friendValue() {
             // 做一些友好值处理
             let friendValue = null;
             let value = this.values[this.field.name];
             try {
-                switch (this.schema.type) {
+                switch (this.fieldSchema.type) {
                     case "array": friendValue = Array.isArray(value) ? value : strToObj(value); break;
                     case "number": friendValue = type(value) == "Number" ? value : parseFloat(value); break;
                     case "datetime": friendValue = new Date(value); break;
@@ -194,7 +196,7 @@ export default {
                             keyValue: relyValue, // [<字段名name> == 'A'] 的值 即：A
                             dictValue: dictItem, // dict[<字段名name> == 'A'] 的 值
                             field: this.field,
-                            type: this.schema.type, // 在派发时为了友好值，需要知道字段类型
+                            type: this.fieldSchema.type, // 在派发时为了友好值，需要知道字段类型
                             options: JSON.parse(JSON.stringify(this.field.options))
                         });
                     }

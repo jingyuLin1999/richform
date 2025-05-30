@@ -10,9 +10,7 @@
     <Collapse v-model="openCollapseName" @change="onChange">
       <CollapseItem :name="collapse.name" class="collapse-item">
         <template slot="title">
-          <span :style="collapse.style" class="collapse-title">{{
-    collapse.title
-  }}</span>
+          <span :style="collapse.style" class="collapse-title">{{ collapse.title}}</span>
         </template>
         <div class="collapse-container">
           <layout :layout="collapse.fields" :isDesign="isDesign" :form="form" :values="values" :colors="colors"

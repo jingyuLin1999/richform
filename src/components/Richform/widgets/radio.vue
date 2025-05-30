@@ -74,7 +74,7 @@ export default {
       return value;
     },
     beforeChange(val) {
-      return this.schema.type == "number" ? parseFloat(val) : val;
+      return this.fieldSchema.type == "number" ? parseFloat(val) : val;
     },
     onChange(val) {
       eventbus.$emit(`${this.formId}:action`, {

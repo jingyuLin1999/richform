@@ -119,7 +119,7 @@ export default {
       let curItem = this.optionFlatMap[id];
       if (!curItem) return parentId;
       if (curItem) {
-        switch (this.schema.type) {
+        switch (this.fieldSchema.type) {
           case "number":
             id = parseInt(id);
             break;
