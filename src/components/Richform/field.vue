@@ -17,12 +17,12 @@
         'label-' + (form.labelAlign || 'right'),
         form.labelInline ? 'label-hori' : 'label-vert',
       ]" :style="{
-    width: form.labelInline
-      ? isShyTitle
-        ? form.labelWidth
-        : '0px'
-      : '100%',
-  }">
+        width: form.labelInline
+          ? isShyTitle
+            ? form.labelWidth
+            : '0px'
+          : '100%',
+      }">
         <div ref="fieldLabel" v-if="isShyTitle" :class="[
           'label-title',
           fieldSchema.require || requireds.includes(field.name)
@@ -225,6 +225,13 @@ export default {
         !this.pickDeepValueKeys.includes(this.field.name)
       )
         this.pickDeepValueKeys.push(this.field.name);
+      // 存在regExp，删除上一次fieldschema的exp，由baseMixn的pickRegExp重新生成
+      if (Array.isArray(this.field.regExp) && this.field.regExp.length) {
+        this.field.regExp.map(regItem => {
+          const { exp } = regItem
+          if (exp) this.$delete(this.fieldSchema, exp);
+        })
+      }
       // 提供两种模式，树型结构或普通结构
       // 有值则不需要创建，即values的优先级大于default的值
       let fieldValue = this.isDeepValues
