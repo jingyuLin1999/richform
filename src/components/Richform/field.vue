@@ -47,7 +47,7 @@
         'field-value',
         isDesign ? 'field-mask' : '',
         !form.labelInline ? 'field-value-vert' : 'field-value-hori',
-      ]" :style="{ width: `calc(100% - ${form.labelWidth})` }">
+      ]" :style="{ width: `calc(100% - ${isShyTitle ? form.labelWidth : '0px'})` }">
         <component :is="asyncComponent" :form="form" :schema="schema" :fieldSchema="fieldSchema" :values="values"
           :field="field" :colors="colors" :fieldErrors="fieldErrors" :hideFields="hideFields" :isDark="isDark"
           @change="onChange" @buttonEvent="onButtonEvent">
