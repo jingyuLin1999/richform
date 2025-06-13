@@ -336,7 +336,7 @@ export default {
       this.emit("field:change", fieldName, value);
       this.removeErrorAndRequire();
       this.validateField(fieldName, schema, value);
-      this.onDispatch(fieldName);
+      // this.onDispatch(fieldName);
     },
     onButtonEvent(info) {
       this.emit("action", info);

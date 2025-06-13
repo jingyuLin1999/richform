@@ -93,7 +93,7 @@ import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 import "vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css";
 import AJV, { localize as localizeErrors } from "./utils/validator";
 import CommonMixin from "./utils/commonMixin";
-import { getRgbValueFromHex } from "./utils";
+import { getRgbValueFromHex, debounce } from "./utils";
 import elementResizeDetectorMaker from "element-resize-detector";
 
 export default {
@@ -132,9 +132,7 @@ export default {
       handler() {
         if (!this.globalVars.loadCompleted) return;
         // todo 只有改变的name才需要派发
-        for (let key in this.hideFields) this.dispatchHide(key);
-        for (let key in this.dependencies) this.dispatchOptions(key);
-        for (let key in this.regExpFields) this.dispatchRegExp(key);
+        if (this.globalVars.valuesDebounce) this.globalVars.valuesDebounce();
       },
       deep: true,
     },
@@ -154,7 +152,7 @@ export default {
       globalVars: {
         // 全局变量
         loadCompleted: false, // 是否加载完成
-        loadCompletedTimeout: null,
+        valuesDebounce: null, // 延迟函数句柄
       },
     };
   },
@@ -201,6 +199,13 @@ export default {
       this._registerEvents();
       this.initHooks();
       this.listenFormHeight();
+      this.globalVars.valuesDebounce = debounce(500, this.dispatchByValues)
+    },
+    dispatchByValues() {
+      this.globalVars.loadCompleted = true;
+      for (let key in this.hideFields) this.dispatchHide(key);
+      for (let key in this.dependencies) this.dispatchOptions(key);
+      for (let key in this.regExpFields) this.dispatchRegExp(key);
     },
     initHooks() {
       this.hooks.validate = this.globalValidate;

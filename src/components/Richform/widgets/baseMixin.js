@@ -70,14 +70,7 @@ export default {
         loadCompleteDispatch() {
             // 隐藏字段需要立马派发，不然视觉体验不友好
             for (let key in this.hideFields) this.dispatchHide(key);
-            // 等所有字段都渲染完成在派发options依赖
-            if (this.globalVars.loadCompletedTimeout)
-                clearTimeout(this.globalVars.loadCompletedTimeout);
-            this.globalVars.loadCompletedTimeout = setTimeout(() => {
-                for (let key in this.dependencies) this.dispatchOptions(key);
-                this.globalVars.loadCompleted = true;
-                for (let key in this.regExpFields) this.dispatchRegExp(key);
-            }, 500)
+            this.globalVars.valuesDebounce(); // 防抖函数，最后一个才触发
         },
         $setFieldAttr() {
             const defaultFieldAttr = this.defaultFieldAttr();

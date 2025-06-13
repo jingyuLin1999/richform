@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const isBuild = process.argv.includes("build")
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 
 function resolve(dir) {
     return path.join(__dirname, dir);
@@ -29,7 +30,9 @@ module.exports = {
             //生成文件的最大体积
             maxAssetSize: 600000,
         },
-        plugins: [],
+        plugins: [
+            new BundleAnalyzerPlugin()
+        ],
         externals: isBuild ? {
             "ajv": "ajv",
             "ajv-errors": "ajv-errors",

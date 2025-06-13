@@ -12,10 +12,10 @@
       <div class="drag-wrapper" @click="onClickedItem(gridItem)"></div>
       <div class="grid-flex" :style="{ flexWrap: gridItem.flexWrap ? 'wrap' : 'nowrap' }">
         <div :class="[
-    'grid-column',
-    form.grid ? 'grid-column-border' : '',
-    form.grid ? 'grid-column-padding' : 'no-gird',
-  ]" v-for="(columnItem, index) in gridItem.fields" :key="index" :style="{ flex: ratio[index] || 1 }"
+          'grid-column',
+          form.grid ? 'grid-column-border' : '',
+          form.grid ? 'grid-column-padding' : 'no-gird',
+        ]" v-for="(columnItem, index) in gridItem.fields" :key="index" :style="columnStyle(index)"
           v-show="isShowColumn(columnItem)">
           <layout :layout="columnItem" :isDesign="isDesign" :form="form" :values="values" :colors="colors"
             :schema="schema" :fieldErrors="fieldErrors" :isFriendValue="isFriendValue" :hideFields="hideFields"
@@ -66,6 +66,12 @@ export default {
         (item) => item.hide == false || item.hide == undefined
       );
       return needShow ? true : false;
+    },
+    columnStyle(colIndex) {
+      let isWidthType = (this.ratio[colIndex] || "").indexOf("px") != -1;
+      let style = isWidthType ? { width: this.ratio[colIndex] } :
+        { flex: this.ratio[colIndex] || 1, justifyContent: this.gridItem.justifyContent };
+      return style
     },
   },
 };
